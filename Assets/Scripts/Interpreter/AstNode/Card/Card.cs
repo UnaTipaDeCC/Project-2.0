@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using System;
 public class Card : ASTNode
 {
     //public string Id {get; set;}
@@ -77,20 +80,51 @@ public class Card : ASTNode
         return checkPower && checkFaction && checkName && checkType && checkRange && checkEffects;
     }
     
-    public void Evaluate()
+    public void Build()
     {
-        Power.Evaluate();
-        Type.Evaluate();
-        Name.Evaluate();
-        Faction.Evaluate();
-        foreach(var effect in Effects)
-        {
-            effect.Execute();
-        }
         foreach(var a in Range)
         {
             a.Evaluate();
         }
+        Power.Evaluate();
+        Type.Evaluate();
+        Name.Evaluate();
+        Faction.Evaluate();
+        
+        string name = (string)Name.Value;
+        string type = (string)Type.Value;
+        string faction = (string)Faction.Value;
+        int power = (int)Power.Value;
+        string range = (string)Range[0].Value;
+
+        string scriptableObjectPath = "Assets/Prefabs/Cards/UserCards/UserCardSO.asset";
+        string cardPath = "Assets/Prefabs/Cards/UserCards/UserCard.prefab";
+
+        CardGame card = ScriptableObject.CreateInstance<CardGame>();
+        card.Name = name;
+        card.Type = type;
+        card.Faction = faction;
+        card.Damage = power;
+        card.OriginalDamage = power;
+        card.Range = range;
+        card.Description = "Cartica creada por el usuario :)";
+        card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
+
+        
+        AssetDatabase.CreateAsset(card, scriptableObjectPath);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
+        GameObject cardCopy = GameObject.Instantiate(cardPrefab);
+        cardCopy.GetComponent<cardDisplay>().card = (CardGame)AssetDatabase.LoadAssetAtPath<ScriptableObject>(scriptableObjectPath);
+
+        PrefabUtility.SaveAsPrefabAsset(cardCopy, cardPath);
+        GameObject.DestroyImmediate(cardCopy);
+
+      
+        
+        
         //revisar que los range sean los permitidos
     }
 

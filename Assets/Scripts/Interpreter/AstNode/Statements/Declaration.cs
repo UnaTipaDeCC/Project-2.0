@@ -15,18 +15,6 @@ public class Declaration : Statement
         this.value = value;
         this.DeclarationScope = DeclarationScope;
         this.location = location;
-        /*switch (operatorToken.Value)
-        {
-            case TokenValues.Assign:
-            this.value = value;
-            break;
-            case TokenValues.AdditionAssignment:
-            this.value = new Add(value,new Token(TokenType.Symbol,"Addition",new CodeLocation()),new Variable(variable,new CodeLocation()),operatorToken.Location);
-            break;
-            case TokenValues.SubtractionAssignment:
-            this.value = new Sub(value,new Token(TokenType.Symbol,"Subtraction",new CodeLocation()),new Variable(variable,new CodeLocation()),operatorToken.Location);
-            break;
-        }*/
     }
     public override void Execute()
     {
@@ -52,7 +40,7 @@ public class Declaration : Statement
         catch(CompilingError){//Console.WriteLine("algo anda mal en lo de la declaracion");}
         }
     }
-    public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)//arreglar
+    public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         bool checkValue = value.CheckSemantic(context,scope,errors);
         DeclarationScope = scope;
@@ -63,13 +51,11 @@ public class Declaration : Statement
             {
                 //Console.WriteLine("EN EFECTO ERA UN =");
                 DeclarationScope.SetType(variable.ToString(),this.value.Type); 
-                
             }
             else if(operatorToken.Value == TokenValues.SubtractionAssignment || operatorToken.Value == TokenValues.AdditionAssignment)
             {
                 if(DeclarationScope.GetType(variable.ToString()) != ExpressionType.Number || value.Type != ExpressionType.Number)
                 {
-                    //Console.WriteLine();
                     errors.Add(new CompilingError(variable.Location,ErrorCode.Invalid,"The variable and the value must be a numbers for this operation ('+=' || '-=')"));
                     return false;
                 }

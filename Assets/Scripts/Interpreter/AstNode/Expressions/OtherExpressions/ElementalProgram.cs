@@ -30,7 +30,7 @@ public class ElementalProgram : ASTNode
     {
         foreach(Card card in Cards)
         {
-            card.Evaluate();
+            card.Build();
         }
     }
     public override string ToString()

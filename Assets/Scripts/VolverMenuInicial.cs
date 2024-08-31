@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,4 +9,4 @@ public class VolverMenuInicial : MonoBehaviour
     {
         SceneManager.LoadScene(0);     
     }
-}
+}*/
