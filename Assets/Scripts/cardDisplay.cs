@@ -1,4 +1,4 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -6,18 +6,19 @@ using UnityEngine.UI;
 
 public class cardDisplay : MonoBehaviour
 {
-    public Card card;
+    public CardGame card;
     public Text nameText;
-    public Text descriptionText;
-    public Image artworkImage;
+    public Text DescriptionText;
+    public Image ArtworkImage;
     public Text DamageText;
+    public Text Type;
     
     // Start is called before the first frame update
     void Start()
     {
         nameText.text = card.name;
-        descriptionText.text = card.description;
-        artworkImage.sprite = card.artwork;
+        DescriptionText.text = card.Description;
+        ArtworkImage.sprite = card.Artwork;
         DamageText.text = card.Damage.ToString();
     
         
@@ -28,4 +29,4 @@ public class cardDisplay : MonoBehaviour
     }
 
    
-}*/
+}
