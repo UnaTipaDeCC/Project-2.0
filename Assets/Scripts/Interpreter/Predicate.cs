@@ -1,4 +1,5 @@
-//un expression o un predicate??
+using System.Collections.Generic;
+using System;
 public class Predicate : Expression
 {
     Expression variable;

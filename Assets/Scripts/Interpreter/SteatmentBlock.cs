@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System;
+
 public class StatementBlock : Statement
 {
     List<Statement> statements;
@@ -26,7 +29,7 @@ public class StatementBlock : Statement
         Console.WriteLine("ejecutanding");
         foreach (var statement in statements)
         {
-            Console.WriteLine("hola estoy examinando: " + statement);
+            //Console.WriteLine("hola estoy examinando: " + statement);
             statement.Execute();
         }
     }

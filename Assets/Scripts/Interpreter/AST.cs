@@ -1,3 +1,6 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 public abstract class ASTNode
 {
     public CodeLocation Location { get; set; }

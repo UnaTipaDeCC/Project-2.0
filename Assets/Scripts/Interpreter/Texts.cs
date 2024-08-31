@@ -1,4 +1,5 @@
-
+using System.Collections.Generic;
+using System;
 public class Text : AtomExpression
 {
     public override ExpressionType Type { get {return ExpressionType.Text;} set { } }

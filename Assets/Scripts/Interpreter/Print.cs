@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 public class Print : Statement
 {
     public Expression Value { get; private set; }
@@ -11,7 +13,7 @@ public class Print : Statement
     public override void Execute()
     {
         Value.Evaluate();
-        Console.WriteLine(Value.Value);
+        //Console.WriteLine(Value.Value);
         //Console.WriteLine(Value.Value);
     }
 
@@ -19,7 +21,7 @@ public class Print : Statement
     {
         this.PrintScope = scope;
         bool a = Value.CheckSemantic(context,PrintScope,errors);
-        Console.WriteLine("chequeando el print: " + a);
+        //Console.WriteLine("chequeando el print: " + a);
         return true;
     }
     public override string ToString()

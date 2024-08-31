@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 public class Mul : BinaryExpression
 {
     Expression? Right{get; set;}
@@ -41,7 +42,7 @@ public class Mul : BinaryExpression
     {
         if (Value == null)
         {
-            return String.Format("({0} * {1})", Left, Right);
+            return $"({Left} * {Right})";
         }
         return Value.ToString();
     }

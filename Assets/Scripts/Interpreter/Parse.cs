@@ -68,10 +68,10 @@ public class Parse
     private Expression Comparation()
     {
         Expression expr = Term();
-        Console.WriteLine("comparanding");
+        //Console.WriteLine("comparanding");
         while(Stream.Match(TokenValues.Greater,TokenValues.Less,TokenValues.GraeterOrEqual,TokenValues.LessOrEqual))
         {
-            Console.WriteLine("algo");
+            //Console.WriteLine("algo");
             Token Operator = Stream.Previous();
             Expression right = Term();
             switch (Operator.Value)
@@ -95,19 +95,19 @@ public class Parse
     private Expression Term()
     {
         Expression expr = Factor();
-        Console.WriteLine("TERM");
+        //Console.WriteLine("TERM");
         while(Stream.Match(TokenValues.Add ,TokenValues.Sub)) 
         {
             Token Operator = Stream.Previous();
-            Console.WriteLine("{0}", Operator.Value);
+            //Console.WriteLine("{0}", Operator.Value);
             Expression right = Factor();
             if(Operator.Value == TokenValues.Add)
             {
-                Console.WriteLine("creanding");
+                //Console.WriteLine("creanding");
                  expr = new Add(expr,Operator,right,Operator.Location);
             }
             if(Operator.Value == TokenValues.Sub) expr = new Sub(expr,Operator,right,Operator.Location);
-            Console.WriteLine($"Created Binary node: {Operator.Value} with left: {expr} and right: {right}");
+            //Console.WriteLine($"Created Binary node: {Operator.Value} with left: {expr} and right: {right}");
         }
         return expr;
     }
@@ -172,7 +172,7 @@ public class Parse
     private Expression Concatenation()
     {
         Expression expr = Primary();
-        Console.WriteLine("concatenanding");
+        //Console.WriteLine("concatenanding");
         while(Stream.Match(TokenValues.ConcatenationWithSpace,TokenValues.ConcatenationWithoutSpace))
         {
             Token tokenoperator = Stream.Previous();
@@ -184,29 +184,29 @@ public class Parse
     {
         if (Stream.Match(TokenValues.False)) return new Bool(false,Stream.Previous().Location);
         if(Stream.Match(TokenValues.True)) return new Bool(true,Stream.Previous().Location); 
-        Console.WriteLine(Stream.Position);
-        Console.WriteLine("a ver si es un numero");
+        //Console.WriteLine(Stream.Position);
+        //Console.WriteLine("a ver si es un numero");
         if (!Stream.End && Stream.Match(TokenType.Number)) 
         {
-            Console.WriteLine("numero");
+            //Console.WriteLine("numero");
             return new Number(double.Parse(Stream.Previous().Value),Stream.Previous().Location);
         }
-        Console.WriteLine("no es un numero es un texto");
+        //Console.WriteLine("no es un numero es un texto");
         if(!Stream.End && Stream.Match(TokenType.Text))
         {
-            Console.WriteLine("es un texto");
+            //Console.WriteLine("es un texto");
             return new Text(Stream.Previous().Value,Stream.Previous().Location);
         }
         if(!Stream.End && Stream.Match(TokenType.Identifier))
         {
-            Console.WriteLine("es un identificador");
+            //Console.WriteLine("es un identificador");
             Token variable = Stream.Previous();
             return HandleIdentifier(variable);
         }
         if (Stream.Match(TokenValues.OpenBracket)) 
         { 
             Expression expr = Expression();
-            Console.WriteLine("en grouping " + expr);
+            //Console.WriteLine("en grouping " + expr);
             if( Stream.Match(TokenValues.ClosedBracket))
             {
                 Grouping exp = new Grouping(expr,expr.Location);
@@ -298,53 +298,53 @@ public class Parse
             try
             {
                 if(Stream.End) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid,"Invalid effect declaration, missing params");
-                else if(Stream.Match(TokenValues.Name)){ name = Assign(); Console.WriteLine("nombre");} 
+                else if(Stream.Match(TokenValues.Name)){ name = Assign();} 
                 else if(Stream.Match(TokenValues.Params))
                 {
-                    Console.WriteLine("params");
+                    //Console.WriteLine("params");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "Missing ':' ");
                     if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "Missing '{' ");
                     while(Stream.Match(TokenType.Identifier))
                     {
-                        Console.WriteLine("Hay algun param");
+                        //Console.WriteLine("Hay algun param");
                         paramsType.Add(Param());
-                        Console.WriteLine("Param agregado con exito");
+                        //Console.WriteLine("Param agregado con exito");
                     }
-                    Console.WriteLine(Stream.Previous().Value);
+                    //Console.WriteLine(Stream.Previous().Value);
                     if(!Stream.Match(TokenValues.ClosedCurlyBraces)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "Missing '}' after a param declaration");
                     if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "Missing ',' in param declaration ");
-                    Console.WriteLine(paramsType.Count());
-                    Console.WriteLine("param superado con exito");
+                    //Console.WriteLine(paramsType.Count());
+                    //Console.WriteLine("param superado con exito");
                 }  
                 else if(Stream.Match(TokenValues.Action))
                 {
-                    Console.WriteLine("action");
+                   // Console.WriteLine("action");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':' after 'Action'");
-                    Console.WriteLine("en efecto habian dos puntos");
+                    //Console.WriteLine("en efecto habian dos puntos");
                     if(!Stream.Match(TokenValues.OpenBracket)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '(' after 'Action'");
-                    Console.WriteLine("en efecto habia un (");
+                    //Console.WriteLine("en efecto habia un (");
                     if(Stream.Match(TokenType.Identifier))
                     { 
                         target = Stream.Previous(); 
-                        Console.WriteLine("habia un target");
+                        //Console.WriteLine("habia un target");
                     }
                     else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing target");
                     if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(location,ErrorCode.Expected, "Missing ',' after target");
-                    if(Stream.Match(TokenType.Identifier)) {context = Stream.Previous(); Console.WriteLine("habia un context");}
+                    if(Stream.Match(TokenType.Identifier)) context = Stream.Previous();
                     else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing context");
                     if(!Stream.Match(TokenValues.ClosedBracket)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ')' ");
-                    Console.WriteLine("habian un ) ");
+                    //Console.WriteLine("habian un ) ");
                     if(!Stream.Match(TokenValues.Lambda)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing '=>' in Action declaration ");
                     if(Stream.Match(TokenValues.OpenCurlyBraces)) 
                     {
                         action = Statements(); 
-                        Console.WriteLine("ya tengo el body"); 
+                        //Console.WriteLine("ya tengo el body"); 
                         Stream.MoveBack();
-                        Console.WriteLine(Stream.LookAhead().Value);
+                        //Console.WriteLine(Stream.LookAhead().Value);
                     }
                     else action = SimpleStatements();
-                    Console.WriteLine("termine el action");
-                    Console.WriteLine(Stream.LookAhead().Value);
+                    //Console.WriteLine("termine el action");
+                    //Console.WriteLine(Stream.LookAhead().Value);
                     if(action == null) throw new CompilingError(location,ErrorCode.Invalid, " An action must be declared");
                 }
             }
@@ -352,10 +352,10 @@ public class Parse
             {
                 Errors.Add(error);
 
-                Console.WriteLine(error);//"algo fue mal mientras declarabas el efecto");        
+                //Console.WriteLine(error);//"algo fue mal mientras declarabas el efecto");        
             }
         }while(!Stream.Match(TokenValues.ClosedCurlyBraces));
-        Console.WriteLine("fuera del action");
+        //Console.WriteLine("fuera del action");
         if(name == null) throw new CompilingError(location,ErrorCode.Invalid, "The name must be declared");
         if(action == null ) throw new CompilingError(location,ErrorCode.Invalid, "An Action must be declared");
         return new Effect(location, name, action,target,context,paramsType);
@@ -389,13 +389,13 @@ public class Parse
                 else if(Stream.Match(TokenValues.Faction)) faction = Assign();
                 else if(Stream.Match(TokenValues.Range))
                 {
-                    Console.WriteLine("en el range");
+                    //Console.WriteLine("en el range");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, " Missing ':' ");
                     
                     if(!Stream.Match(TokenValues.OpenBrace)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad Range declaration, missing '[' ");
                     do
                     {
-                        Console.WriteLine("todo bien hasta aqui");
+                        //Console.WriteLine("todo bien hasta aqui");
                         range.Add(Expression());
                         if(!Stream.Match(TokenValues.ClosedBrace))
                         {
@@ -409,18 +409,18 @@ public class Parse
                 }
                 else if(Stream.Match(TokenValues.OnActivation))
                 {
-                    Console.WriteLine("en   el onActivation");
+                    //Console.WriteLine("en   el onActivation");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "Missing ':' after OnActivadion declaration");
                     if(Stream.Match(TokenValues.OpenBrace))
                     {
                         do
                         {
                             effects.Add(EffectAssign());
-                            Console.WriteLine(Stream.LookAhead().Value + "Despues de agregar el effect");
+                            //Console.WriteLine(Stream.LookAhead().Value + "Despues de agregar el effect");
                             if(!Stream.Match(TokenValues.ClosedBrace))
                             {
                                 if(!Stream.Match(TokenValues.ValueSeparator))throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad Range declaration, missing ',' ");
-                                Console.WriteLine("si era un , ");
+                                //Console.WriteLine("si era un , ");
                             }
                             else Stream.MoveBack(1);   
                         }
@@ -438,7 +438,7 @@ public class Parse
             }
             catch(CompilingError error)//revisar lo de los errores
             {
-                Console.WriteLine("Algo no pincho bien" + error);
+                //Console.WriteLine("Algo no pincho bien" + error);
                 break;
             }    
         }
@@ -454,7 +454,7 @@ public class Parse
         Selector selector = null;
         EffectAction postAction = null;
         Effect effect = null;
-        Console.WriteLine(Stream.LookAhead().Value + "en el effect");
+        //Console.WriteLine(Stream.LookAhead().Value + "en el effect");
         if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '{'");
         do
         {
@@ -463,7 +463,7 @@ public class Parse
                 if(Stream.End) throw new CompilingError(effectLocation,ErrorCode.Invalid, "Unfinished declaration");
                 else if(Stream.Match(TokenValues.Effect))
                 {
-                    Console.WriteLine("bien senores y senoras, estamos en el effect");
+                    //Console.WriteLine("bien senores y senoras, estamos en el effect");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':'");
                     if(Stream.Match(TokenValues.OpenCurlyBraces)) EffectStatement(ref name,ref parameters);
                     else name = Expression();
@@ -471,31 +471,31 @@ public class Parse
                 }
                 else if(Stream.Match(TokenValues.Selector))
                 {
-                    Console.WriteLine("en el selector");
+                    //Console.WriteLine("en el selector");
                     CodeLocation selectorLocation = Stream.Previous().Location;
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':'");
                     if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '{'");
                     selector = Selector(selectorLocation);
-                    Console.WriteLine("termine el selector");
+                    //Console.WriteLine("termine el selector");
                 }
                 else throw new CompilingError(effectLocation,ErrorCode.Invalid,"Unfinished OnActivation declaration");
             }
             catch(CompilingError error)
             {
-                Console.WriteLine(error);
+                //Console.WriteLine(error);
                 break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
         if(name == null) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect name cant be null");
         if(selector != selector) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect selector cant be null");
-        Console.WriteLine("bue, to ok");
-        Console.WriteLine(Stream.LookAhead().Value);
+        //Console.WriteLine("bue, to ok");
+        //Console.WriteLine(Stream.LookAhead().Value);
         return new EffectAction(name,selector,parameters,postAction,effectLocation);        
     }
     private void EffectStatement(ref Expression name, ref List<(Token,Expression)> paramsValue)
     {
-        Console.WriteLine("dentro del effect");
+        //Console.WriteLine("dentro del effect");
         do
         {
             try
@@ -507,12 +507,12 @@ public class Parse
             }
             catch (CompilingError error)
             {
-                Console.WriteLine(error);
+                //Console.WriteLine(error);
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
-        Console.WriteLine("terminamos por aqui");
-        Console.WriteLine(Stream.LookAhead().Value);
+        //Console.WriteLine("terminamos por aqui");
+        //Console.WriteLine(Stream.LookAhead().Value);
     }
     private Selector Selector(CodeLocation location, Selector selectorParent = null)
     {
@@ -530,7 +530,7 @@ public class Parse
             }
             catch(CompilingError error)
             {
-                Console.WriteLine(error);
+                //Console.WriteLine(error);
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
@@ -551,7 +551,7 @@ public class Parse
     } 
     private Statement While()
     {
-        Console.WriteLine("estoy en el while");
+        //Console.WriteLine("estoy en el while");
         CodeLocation location = Stream.Previous().Location;
         Statement? body = null;
         if(!Stream.Match(TokenValues.OpenBracket)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing '(' ");

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System;
 public class Variable : AtomExpression
 {
     public string Name;

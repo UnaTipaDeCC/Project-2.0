@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 public class Pow : BinaryExpression
 {
     Expression? Right{get; set;}
