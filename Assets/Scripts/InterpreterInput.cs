@@ -2,14 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
+using UnityEngine.SceneManagement;
 
 public class InterpreterInput : MonoBehaviour
 {
     public TMP_InputField inputField; // Referencia al Input Field
     public TMP_Text messageText;// Referencia al Text para mensajes
-    
-    public void OnCompilerButtonClick()
+    public Button CompileButton;
+    public Button NextSceneButton;
+    public Button BackScenceButton;
+
+    private void Start()
+    {
+        CompileButton.onClick.AddListener(OnCompileButtonClick);
+        NextSceneButton.onClick.AddListener(OnNextSceneButtonClicked);
+        BackScenceButton.onClick.AddListener(OnBackSceneButtonClicked);
+        
+    }    
+    private void OnCompileButtonClick()
     {
         string inputText = inputField.text;
         LexicalAnalyzer lex = Compiling.Lexical;
@@ -59,13 +70,16 @@ public class InterpreterInput : MonoBehaviour
             }
         }
     }
-   
-    // Start is called before the first frame update
-    void Start()
+    private void OnNextSceneButtonClicked()
     {
-        
+        // Cambiar a la siguiente escena
+        SceneManager.LoadScene("Samplescene"); // Reemplaza con el nombre de tu escena
     }
-
+    private void OnBackSceneButtonClicked()
+    {
+        // Cambiar a la siguiente escena
+        SceneManager.LoadScene("Samplescene"); // Reemplaza con el nombre de tu escena
+    }
     // Update is called once per frame
     void Update()
     {
