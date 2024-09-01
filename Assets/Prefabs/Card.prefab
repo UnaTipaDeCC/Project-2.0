@@ -703,6 +703,7 @@ GameObject:
   - component: {fileID: 2287238148863546896}
   - component: {fileID: 7786736101134527453}
   - component: {fileID: 1382564866163311688}
+  - component: {fileID: -409759579887854406}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -793,3 +794,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &-409759579887854406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7186276944042064324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db511485909d6741b190825ef1fae64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  card: {fileID: 0}
+  nameText: {fileID: 121630183823745573}
+  DescriptionText: {fileID: 4650100220476509148}
+  ArtworkImage: {fileID: 8847321638807056695}
+  DamageText: {fileID: 5838411888244528846}
+  Type: {fileID: 294135425844786215}

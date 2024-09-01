@@ -97,8 +97,8 @@ public class Card : ASTNode
         int power = (int)Power.Value;
         string range = (string)Range[0].Value;
 
-        string scriptableObjectPath = "Assets/Prefabs/Cards/UserCards/UserCardSO.asset";
-        string cardPath = "Assets/Prefabs/Cards/UserCards/UserCard.prefab";
+        string scriptableObjectPath = "Assets/Prefabs/ScriptableObjets/UserCardSO.asset";
+        string cardPath = "Assets/Prefabs/Cartitas/UserCard.prefab";
 
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
         card.Name = name;

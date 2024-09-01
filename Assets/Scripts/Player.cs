@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public List<GameObject> Siege;
     public List<GameObject> Ranged;
     public List<GameObject> Cementery;
-    public Player id{ get{return this;} private set{} }
+    public int Id{get; private set;}
 
     // Start is called before the first frame update
     void Start()
