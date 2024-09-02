@@ -16,7 +16,16 @@ public class CardGame : ScriptableObject
     public bool AffectedByClimate = false;
     public bool Increased = false;
     public string Range;
+    //public int EffectsCount = Effects.Count;
+    public List<EffectAction> Effects;
     public string Faction;
     public string Type;
-    public List<EffectAction> Effects;
+    public int Owner
+    {
+        get
+        {
+            if(Faction == "Hormigas Bravas") return 1;
+            else return 2;
+        }
+    }
 }

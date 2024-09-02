@@ -32,13 +32,13 @@ class Property : Expression
     {
         caller.Evaluate();   
         Console.WriteLine("evaluando: " + name.Value);  
-        /*if (caller.Type == ExpressionType.Card)
+        if (caller.Value is CardGame card)
         {
-            Card card = (Card)caller.Value;
+            //CardGame card = (CardGame)caller.Value;
             switch(name.Value)
             {
                 case "Power":
-                Value = card.Power;
+                Value = card.Damage;
                 break;
                 case "Name":
                 Value = card.Name;
@@ -52,47 +52,42 @@ class Property : Expression
                 case "Type":
                 Value = card.Type;
                 break;
+                case "Owner":
+                Value = card.Owner;
+                break;
+                default: throw new Exception("Invalid property: " + name.Value);
             }  
         }
-        /*else if (caller.Type == ExpressionType.Context) //hay que agregarle las propiedades al contexto pa poder hacerlo
-         pero por lo pronto asi se queda
-        {
-            Context context = (Context)caller.Value;
+        else if (caller.Value is GameContext context){
             switch(name.Value)
             {
                 case "TriggerPlayer":
-                Value = context.TriggerPlayer;
+                Value = context.TriggerPlayer.Id;
                 break;
-                case "Name":
-                Value = card.Name;
+                case "Board":
+                Value = context.Board;
                 break;
-                case "Faction":
-                Value = card.Faction;
+                case "Hand":
+                Value = context.Hand;
                 break;
-                case "Range":
-                Value = card.Range;
+                case "Deck":
+                Value = context.Deck;
                 break;
-                case "Type":
-                Value = card.Type;
+                case "Graveryard":
+                Value = context.Graveryard;
                 break;
+                case "Field":
+                Value = context.Graveryard;
+                break;
+                default: throw new Exception("Invalid property: " + name.Value);
             }  
             
         }
-        else
-        {
-            // Usar reflexión para tipos no conocidos
-            Type callerType = caller?.GetType();
-            var propertyInfo = callerType?.GetProperty(name.Value);
-            if (propertyInfo != null)
-            {
-                Value = propertyInfo.GetValue(caller.Value);
-            }
-        }*/
     }
     public override ExpressionType Type { get; set; }
     public override object? Value { get; set;}
     public override string ToString()
     {
-        return String.Format("{0}.{1}",caller.Value,name.Value);
+        return String.Format("{0}.{1}",caller,name);
     }
 }
