@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 294834812}
   - component: {fileID: 294834811}
   - component: {fileID: 294834813}
+  - component: {fileID: 294834814}
   m_Layer: 5
   m_Name: Hand
   m_TagString: Untagged
@@ -343,6 +344,18 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &294834814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294834809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &376401075
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,6 +369,7 @@ GameObject:
   - component: {fileID: 376401079}
   - component: {fileID: 376401078}
   - component: {fileID: 376401077}
+  - component: {fileID: 376401081}
   m_Layer: 5
   m_Name: Melee Zone (1)
   m_TagString: Untagged
@@ -435,7 +449,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -489,6 +503,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376401075}
   m_CullTransparentMesh: 1
+--- !u!114 &376401081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376401075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &433308043
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +528,7 @@ GameObject:
   - component: {fileID: 433308045}
   - component: {fileID: 433308047}
   - component: {fileID: 433308048}
+  - component: {fileID: 433308049}
   m_Layer: 5
   m_Name: Melee Zone
   m_TagString: Untagged
@@ -595,7 +622,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -635,6 +662,18 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &433308049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433308043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,6 +974,7 @@ GameObject:
   - component: {fileID: 1264930376}
   - component: {fileID: 1264930375}
   - component: {fileID: 1264930377}
+  - component: {fileID: 1264930378}
   m_Layer: 5
   m_Name: Hand (1)
   m_TagString: Untagged
@@ -1023,6 +1063,18 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &1264930378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264930373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1306840259
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,6 +1088,7 @@ GameObject:
   - component: {fileID: 1306840263}
   - component: {fileID: 1306840262}
   - component: {fileID: 1306840261}
+  - component: {fileID: 1306840265}
   m_Layer: 5
   m_Name: Siege Zone (1)
   m_TagString: Untagged
@@ -1115,7 +1168,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1169,6 +1222,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1306840259}
   m_CullTransparentMesh: 1
+--- !u!114 &1306840265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306840259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1613372620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1681,6 +1746,7 @@ GameObject:
   - component: {fileID: 1958608362}
   - component: {fileID: 1958608361}
   - component: {fileID: 1958608360}
+  - component: {fileID: 1958608364}
   m_Layer: 5
   m_Name: Ranged Zone (1)
   m_TagString: Untagged
@@ -1760,7 +1826,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1814,6 +1880,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958608358}
   m_CullTransparentMesh: 1
+--- !u!114 &1958608364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1958608358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2037257506
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,6 +1905,7 @@ GameObject:
   - component: {fileID: 2037257510}
   - component: {fileID: 2037257509}
   - component: {fileID: 2037257508}
+  - component: {fileID: 2037257512}
   m_Layer: 5
   m_Name: Siege Zone
   m_TagString: Untagged
@@ -1906,7 +1985,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1960,6 +2039,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2037257506}
   m_CullTransparentMesh: 1
+--- !u!114 &2037257512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037257506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2097558788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,6 +2064,7 @@ GameObject:
   - component: {fileID: 2097558792}
   - component: {fileID: 2097558791}
   - component: {fileID: 2097558790}
+  - component: {fileID: 2097558794}
   m_Layer: 5
   m_Name: Ranged Zone
   m_TagString: Untagged
@@ -2052,7 +2144,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -2106,6 +2198,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2097558788}
   m_CullTransparentMesh: 1
+--- !u!114 &2097558794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097558788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

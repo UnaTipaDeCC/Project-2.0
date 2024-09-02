@@ -94,18 +94,23 @@ public class Card : ASTNode
         string name = (string)Name.Value;
         string type = (string)Type.Value;
         string faction = (string)Faction.Value;
-        int power = (int)Power.Value;
+        double power = (double)Power.Value;
         string range = (string)Range[0].Value;
+        Debug.Log(name);
+        Debug.Log(type);
+        Debug.Log(faction);
+        Debug.Log(range);
+        Debug.Log(power);
 
-        string scriptableObjectPath = "Assets/Prefabs/ScriptableObjets/UserCardSO.asset";
-        string cardPath = "Assets/Prefabs/Cartitas/UserCard.prefab";
+        string scriptableObjectPath = "Assets/ScriptableObjects/UserCardSO.asset";
+        string cardPath = "Assets/Prefabs/UserCard.prefab";
 
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
         card.Name = name;
         card.Type = type;
         card.Faction = faction;
-        card.Damage = power;
-        card.OriginalDamage = power;
+        card.Damage = Convert.ToInt32(power);
+        card.OriginalDamage = Convert.ToInt32(power);
         card.Range = range;
         card.Description = "Cartica creada por el usuario :)";
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
@@ -117,15 +122,10 @@ public class Card : ASTNode
 
         GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
         GameObject cardCopy = GameObject.Instantiate(cardPrefab);
-        cardCopy.GetComponent<cardDisplay>().card = (CardGame)AssetDatabase.LoadAssetAtPath<ScriptableObject>(scriptableObjectPath);
+        cardCopy.GetComponent<cardDisplay>().Card = (CardGame)AssetDatabase.LoadAssetAtPath<ScriptableObject>(scriptableObjectPath);
 
         PrefabUtility.SaveAsPrefabAsset(cardCopy, cardPath);
         GameObject.DestroyImmediate(cardCopy);
-
-      
-        
-        
-        //revisar que los range sean los permitidos
     }
 
     public override string ToString()

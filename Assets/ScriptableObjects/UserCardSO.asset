@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
+  m_Name: UserCardSO
+  m_EditorClassIdentifier: 
+  Name: Beluga
+  Description: Cartica creada por el usuario :)
+  Artwork: {fileID: 21300000, guid: cf60f9e3813bc6a45bea43ec743f9d9d, type: 3}
+  Played: 0
+  Damage: 10
+  OriginalDamage: 10
+  AffectedByClimate: 0
+  Increased: 0
+  Range: Melee
+  Faction: Hormigas Bravas
+  Type: Oro

@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card", menuName = "Card")]
 public class CardGame : ScriptableObject
 {
-    public new string Name;
+    public string Name;
     public string Description;
     public Sprite Artwork;
     public bool Played = false;

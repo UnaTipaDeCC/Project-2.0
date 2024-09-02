@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class cardDisplay : MonoBehaviour
 {
-    public CardGame card;
+    public CardGame Card;
     public TMP_Text nameText;
     public TMP_Text DescriptionText;
     public Image ArtworkImage;
@@ -17,13 +17,13 @@ public class cardDisplay : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        nameText.text = card.name;
-        DescriptionText.text = card.Description;
-        ArtworkImage.sprite = card.Artwork;
-        DamageText.text = card.Damage.ToString();
+        nameText.text = Card.name;
+        DescriptionText.text = Card.Description;
+        ArtworkImage.sprite = Card.Artwork;
+        DamageText.text = Card.Damage.ToString();
     }
     void Update()
     {
-        DamageText.text = card.Damage.ToString();
+        DamageText.text = Card.Damage.ToString();
     }   
 }

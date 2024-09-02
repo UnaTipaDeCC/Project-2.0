@@ -1104,7 +1104,7 @@ MonoBehaviour:
   messageText: {fileID: 1075790046}
   CompileButton: {fileID: 1403205961}
   NextSceneButton: {fileID: 66960469}
-  BackScenceButton: {fileID: 0}
+  BackScenceButton: {fileID: 546137734}
 --- !u!1 &861449363
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,8 +1291,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
