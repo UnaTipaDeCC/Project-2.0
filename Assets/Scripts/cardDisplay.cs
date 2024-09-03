@@ -4,8 +4,9 @@ using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class cardDisplay : MonoBehaviour
+public class CardDisplay : MonoBehaviour, IPointerClickHandler
 {
     public CardGame Card;
     public TMP_Text nameText;
@@ -14,6 +15,10 @@ public class cardDisplay : MonoBehaviour
     public TMP_Text DamageText;
     public TMP_Text Type;
     
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        CardsMove.Instance.MoveCard(this);
+    }
     // Start is called before the first frame update
     void Start()
     {

@@ -1,7 +1,7 @@
 //using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class GameContext : MonoBehaviour
 {
     public static GameContext Instance { get; private set; }
@@ -28,49 +28,56 @@ public class GameContext : MonoBehaviour
         else return LocasPlayer.GetComponent<Player>();
         }
     }
-    public List<GameObject> Board {get {return BoardCardas();}}
-    private List<GameObject> BoardCardas()//necesitara ser cartas tal vez? 
+    public Player ReturnPlayer(int id)
     {
-        List<GameObject> board = new List<GameObject>();
+        if(id == 1) return BravasPlayer.GetComponent<Player>();
+        else if(id == 2) return LocasPlayer.GetComponent<Player>();
+        else throw new Exception("Invalid id of player");
+
+    }
+    public List<CardDisplay> Board {get {return BoardCardas();}}
+    private List<CardDisplay> BoardCardas()//necesitara ser cartas tal vez? 
+    {
+        List<CardDisplay> board = new List<CardDisplay>();
         board.AddRange(BravasPlayer.GetComponent<Player>().Field);
         board.AddRange(LocasPlayer.GetComponent<Player>().Field);
         board.AddRange(WheatherZone.GetComponent<Zones>().CardsInZone);
         return board;
     }
-    public List<GameObject> HandOfPlayer(Player player) => player.Hand.GetComponent<Zones>().CardsInZone;
-    public List<GameObject> DeckOfPlayer(Player player) => player.Deck;
-    public List<GameObject> FieldOfPlayer(Player player) => player.Field;
-    public List<GameObject> GraveryardOfPlayer(Player player) => player.Cementery;
-    public List<GameObject> Field => FieldOfPlayer(TriggerPlayer);
-    public List<GameObject> Graveryard => GraveryardOfPlayer(TriggerPlayer);
-    public List<GameObject> Hand => HandOfPlayer(TriggerPlayer);
-    public List<GameObject> Deck => DeckOfPlayer(TriggerPlayer);
+    public List<CardDisplay> HandOfPlayer(Player player) => player.Hand.GetComponent<Zones>().CardsInZone;
+    public List<CardDisplay> DeckOfPlayer(Player player) => player.Deck;
+    public List<CardDisplay> FieldOfPlayer(Player player) => player.Field;
+    public List<CardDisplay> GraveryardOfPlayer(Player player) => player.Cementery;
+    public List<CardDisplay> Field => FieldOfPlayer(TriggerPlayer);
+    public List<CardDisplay> Graveryard => GraveryardOfPlayer(TriggerPlayer);
+    public List<CardDisplay> Hand => HandOfPlayer(TriggerPlayer);
+    public List<CardDisplay> Deck => DeckOfPlayer(TriggerPlayer);
     
-    public void Shuffle(List<GameObject> gameObjects)
+    public void Shuffle(List<CardDisplay> gameObjects)
     {
         for (int i = gameObjects.Count - 1; i > 0; i--)
         {
             // Selecciona un índice aleatorio entre 0 y i
-            int j = Random.Range(0, i + 1);
+            int j = UnityEngine.Random.Range(0, i + 1);
             // Intercambia gameObjects[i] con el elemento en el índice aleatorio
-            GameObject temp = gameObjects[i];
+            CardDisplay temp = gameObjects[i];
             gameObjects[i] = gameObjects[j];
             gameObjects[j] = temp;
         }
     }
-    public void Remove(List<GameObject> list, GameObject card) => list.Remove(card);
-    public GameObject Pop(List<GameObject> gameObjects)
+    public void Remove(List<CardDisplay> list, CardDisplay card) => list.Remove(card);
+    public CardDisplay Pop(List<CardDisplay> gameObjects)
     {
         if (gameObjects.Count == 0)
         {
             Debug.LogWarning("La lista está vacía. No se puede hacer pop.");
             return null; // O lanzar una excepción, según tu preferencia
         }
-        GameObject topObject = gameObjects[gameObjects.Count - 1];
+        CardDisplay topObject = gameObjects[gameObjects.Count - 1];
         gameObjects.RemoveAt(gameObjects.Count - 1);
         return topObject;
     }
-    public void Push(GameObject obj, List<GameObject> gameObjects) => gameObjects.Add(obj);
-    public void SendBottom(GameObject obj, List<GameObject> gameObjects)  => gameObjects.Insert(0, obj);
+    public void Push(CardDisplay obj, List<CardDisplay> gameObjects) => gameObjects.Add(obj);
+    public void SendBottom(CardDisplay obj, List<CardDisplay> gameObjects)  => gameObjects.Insert(0, obj);
     
 }

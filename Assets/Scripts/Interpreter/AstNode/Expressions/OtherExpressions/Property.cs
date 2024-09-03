@@ -30,8 +30,7 @@ class Property : Expression
     }
     public override void Evaluate()
     {
-        caller.Evaluate();   
-        Console.WriteLine("evaluando: " + name.Value);  
+        caller.Evaluate(); 
         if (caller.Value is CardGame card)
         {
             //CardGame card = (CardGame)caller.Value;
@@ -80,8 +79,7 @@ class Property : Expression
                 Value = context.Graveryard;
                 break;
                 default: throw new Exception("Invalid property: " + name.Value);
-            }  
-            
+            }
         }
     }
     public override ExpressionType Type { get; set; }

@@ -8,7 +8,8 @@ public class Context
     public Dictionary<string, ExpressionType> ContextReturnTypes { get; private set; }
     public Dictionary<string, ExpressionType> CardReturnTypes { get; private set; }
     public Dictionary<string, ExpressionType> ListReturnTypes { get; private set; }
-    public Dictionary<string,Effect> Effects{ get;set; }//the expressions will be the name of the effect
+    public Dictionary<string,Effect> Effects{ get;set; }
+    public Dictionary<string, ExpressionType> ParamsOfMethodsTypes { get; private set; }
     public string[] PossiblesSources { get; private set; }
     public string[] PossiblesTypes { get; private set; }
     public Context()
@@ -37,6 +38,13 @@ public class Context
             "board","hand", "otherHand", "deck", "otherDeck","field", "otherField","parent"
         };
         PossiblesTypes = new string[] {"Oro", "Plata", "Clima" , "Aumento", "Lider", "Líder"};
+        ParamsOfMethodsTypes = new Dictionary<string, ExpressionType>
+        {
+            {"HandOfPlayer", ExpressionType.Number}, {"FieldOfPlayer",ExpressionType.Number}, {"DeckOfPlayer",ExpressionType.Number},
+            {"GraveyardOfPlayer",ExpressionType.Number}, {"Push",ExpressionType.Card}, {"Remove",ExpressionType.Card},
+            {"SendBottom",ExpressionType.Card} // agregar el find
+
+        };
     }
     public bool Contains(string key) => CardReturnTypes.ContainsKey(key) || ListReturnTypes.ContainsKey(key) || ContextReturnTypes.ContainsKey(key);
     public bool ContainsSource(string key) =>   PossiblesSources.Contains(key);
