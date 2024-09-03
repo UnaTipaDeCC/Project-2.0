@@ -18,8 +18,21 @@ public class CardGame : ScriptableObject
     public string Range;
     //public int EffectsCount = Effects.Count;
     public List<EffectAction> Effects;
-    public string Faction;
-    public string Type;
+    public Faction Faction;
+    enum Faction
+    {
+        Hormigas Locas,
+        Hormigas Bravas,
+    }
+    public Type Type;
+    enum Type
+    {
+        Oro,
+        Plata,
+        Lider,
+        Clima,
+        Aumento
+    }
     public int Owner
     {
         get

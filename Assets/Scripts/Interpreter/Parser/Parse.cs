@@ -20,7 +20,7 @@ public class Parse
     {
         List<Effect> effects = new List<Effect>();
         List<Card> cards= new List<Card>();
-        while(!Stream.Chek(TokenType.End))
+        while(!Stream.Check(TokenType.End))
         {
             try
             {
@@ -275,7 +275,7 @@ public class Parse
         {
             try
             {
-                if(Stream.Chek(TokenType.End)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid,"Invalid effect declaration, missing params");
+                if(Stream.Check(TokenType.End)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid,"Invalid effect declaration, missing params");
                 else if(Stream.Match(TokenValues.Name)){ name = Assign();} 
                 else if(Stream.Match(TokenValues.Params))
                 {
@@ -411,14 +411,12 @@ public class Parse
                         effects.Add(EffectAssign());
                         if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(location,ErrorCode.Expected,"Missing ',' after de effect ");
                     }
-                    //Console.WriteLine("Despues del onActivation" + Stream.LookAhead().Value);
                 }
                 //else throw new CompilingError(location, ErrorCode.Invalid, "Missing params");
             }
             catch(CompilingError error)//revisar lo de los errores
             {
                 Errors.Add(error);
-                //Console.WriteLine("Algo no pincho bien" + error);
                 break;
             }    
         }
@@ -481,7 +479,7 @@ public class Parse
         {
             try
             {
-                if(Stream.Chek(TokenType.End)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Invalid,"Unfinished effect declaration");
+                if(Stream.Check(TokenType.End)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Invalid,"Unfinished effect declaration");
                 else if(Stream.Match(TokenValues.Name)) name = Assign();
                 else if(Stream.Match(TokenType.Identifier)) paramsValue.Add((Stream.Previous(),Assign()));
                 else throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid, "Invalid effect assignation");
@@ -630,7 +628,7 @@ public class Parse
         Errors.Add(error);
         while(!Stream.Match(Value))
         {
-            if(Stream.Chek(TokenType.End) || Stream.LookAhead().Value == TokenValues.ClosedCurlyBraces) return true;
+            if(Stream.Check(TokenType.End) || Stream.LookAhead().Value == TokenValues.ClosedCurlyBraces) return true;
             Stream.MoveNext();
         }
         return false;

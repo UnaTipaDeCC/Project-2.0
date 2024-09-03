@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 public class Selector : Statement
 {
@@ -19,15 +20,29 @@ public class Selector : Statement
 
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        this.SelectorScope = scope;
-        bool checkSource = Source.CheckSemantic(context, scope, errors);
-        bool checkSingle = Single.CheckSemantic(context, scope, errors);
-        bool checkPredicate = Predicate.CheckSemantic(context,scope,errors);
-        if(Single.Type != ExpressionType.Bool)
+        SelectorScope = scope.CreateChild();
+        bool checkSingle = true;
+        if(Single is null)
         {
-            errors.Add(new CompilingError(Single.Location,ErrorCode.Invalid,"The 'Single' must be boolean expression"));
+            Single.Type = ExpressionType.Bool;
+            Single.Value = false; // por defecto es false
+        }
+        else
+        {
+            checkSingle = Single.CheckSemantic(context, scope, errors);
+            if(ExpressionType.Bool != Single.Type)
+            {
+                errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The 'Single' must be boolean expression"));
+                return false;
+            }
+        }
+        bool checkPredicate = Predicate.CheckSemantic(context,scope,errors);
+        if(ExpressionType.Bool != Predicate.Type)
+        {
+            errors.Add(new CompilingError(Predicate.Location, ErrorCode.Invalid, "The 'Predicate' must be a boolean expression")); //quiza deberia identificarlo como un predicate
             return false;
         }
+        bool checkSource = Source.CheckSemantic(context, scope, errors);
         if(Source.Type != ExpressionType.Text)
         {
             errors.Add(new CompilingError(Single.Location,ErrorCode.Invalid,"The 'Source' must be boolean expression"));
@@ -44,8 +59,47 @@ public class Selector : Statement
 
     public override void Execute()
     {
-        Source.Evaluate();
-        Predicate.Evaluate();
+        //obtener la lista de cartas con las que se va a trabajar el efecto
+        List<CardGame> source = new List<CardGame>();
+        switch ((string)Source.Value)
+        {
+            case "hand":
+            source = GameContext.Instance.TriggerPlayer.Hand.GetComponent<Zones>().CardsInZone;
+            break;
+            case "otherHand":
+            source = GameContext.Instance.OtherPlayer.Hand.GetComponent<Zones>().CardsInZone;
+            break;
+            case "deck":
+            source = GameContext.Instance.TriggerPlayer.Deck;
+            break;
+            case "OtherDeck":
+            source = GameContext.Instance.OtherPlayer.Deck;
+            break;
+            case "field":
+            source = GameContext.Instance.TriggerPlayer.Field;
+            break;
+            case "otherFiled":
+            source = GameContext.Instance.OtherPlayer.Field;
+            break;
+            case "parent":
+            //manejar esta posibilidad mas adelante
+            break;
+            default: throw new ArgumentException("Invalid source");
+        }
+        List<CardGame> resultList = new List<CardGame>();
         Single.Evaluate();
-    }
+        bool single = (bool)Single.Value;
+        Predicate predicate = (Predicate)Predicate; // revisar si hay otra forma para acceder a su scope
+        /*foreach(var card in source)
+        {
+            predicate.Scope.Set("unit", card);
+            predicate.Evaluate();
+            if((bool)predicate.Value)
+            {
+                resultList.Add(card);
+                if(single) break;
+            }
+        }
+        //PENSAR como en el effect ACTION ESTA LISTA SE CONVIERTE EN EL TARGET
+    /*}
 }

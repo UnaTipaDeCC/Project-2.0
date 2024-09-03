@@ -23,9 +23,18 @@ public class GameContext : MonoBehaviour
     public GameObject WheatherZone; // revisar despues esta parte
     public Player TriggerPlayer
     {
-        get{
-        if(GameManager.gameManager.CurrentPlayer) return BravasPlayer.GetComponent<Player>() ;
-        else return LocasPlayer.GetComponent<Player>();
+        get
+        {
+            if(GameManager.gameManager.CurrentPlayer) return BravasPlayer.GetComponent<Player>() ;
+            else return LocasPlayer.GetComponent<Player>();
+        }
+    }
+    public Player OtherPlayer
+    {
+        get
+        {
+            if(GameManager.gameManager.CurrentPlayer) return LocasPlayer.GetComponent<Player>() ;
+            else return BravasPlayer.GetComponent<Player>();
         }
     }
     public Player ReturnPlayer(int id)

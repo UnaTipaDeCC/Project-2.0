@@ -107,8 +107,11 @@ public class Card : ASTNode
 
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
         card.Name = name;
-        card.Type = type;
-        card.Faction = faction;
+        // convertirlo a sus respectivos valores del enum
+        // en el checkSemantick se comprueba que tanto el tipo como la faccion sean los permitidos por lo que no es necesario
+        // manejar esa posibilidad
+        card.Type = (CardType)Enum.Parse(typeof(CardType), (string)Type.Value);
+        card.Faction = (Faction)Enum.Parse(typeof(Faction), (string)Faction.Value);
         card.Damage = Convert.ToInt32(power);
         card.OriginalDamage = Convert.ToInt32(power);
         card.Range = range;

@@ -8,20 +8,22 @@ public class EffectAction : Statement
     //public Dictionary<Token,ExpressionType> ParamsType {get;private set;}
     public List<(Token,Expression)> Params {get;private set;}
     public CodeLocation Location{get;private set;}
-    public EffectAction(Expression name,Selector selector,List<(Token,Expression)> _paramas, EffectAction postAction, CodeLocation location) : base(location)
+    public Scope Scope{get;private set;}
+    public EffectAction(Expression name,Selector selector,List<(Token,Expression)> Paramas, EffectAction postAction, CodeLocation location) : base(location)
     {
         Selector = selector;
         PostAction = postAction;
         Name = name;
         Location = location;
-        Params = _paramas;
+        this.Params = Paramas;
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
+        Scope = scope.CreateChild();
         bool checkName = Name.CheckSemantic(context, scope, errors);
         if(Name.Type != ExpressionType.Text)
         {
-            errors.Add(new CompilingError(Name.Location,ErrorCode.Expected, "The name must be a text"));
+            errors.Add(new CompilingError(Name.Location,ErrorCode.Expected, "The 'name' must be a text"));
             return false;
         }
         Name.Evaluate();
@@ -36,16 +38,10 @@ public class EffectAction : Statement
         foreach (var param in Params)
         {
             checkParams = checkParams && param.Item2.CheckSemantic(context,scope,errors);
-            /*foreach(var par in Effect.paramsType)
-            {
-                Console.WriteLine(par.Key);
-                Console.WriteLine(par.Key == param.Item1.Value);
-            }*/
             
             if(!Effect.paramsType.ContainsKey(param.Item1.Value))
             {
-                //Console.WriteLine(param.Item1.Value);
-                errors.Add(new CompilingError(Location,ErrorCode.Invalid,"The params of the card effect must be the same as those previously defined in the effect"));
+                errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The params of the card effect must be the same as those previously defined in the effect"));
                 return false;
             }
             else if(param.Item2.Type != Effect.paramsType[param.Item1.Value])
@@ -56,12 +52,13 @@ public class EffectAction : Statement
         }
         bool checkPostaction = true;
         if(!(PostAction is null)) checkPostaction = PostAction.CheckSemantic(context,scope,errors);
-        bool checkSelector = Selector.CheckSemantic(context,scope,errors); 
+        bool checkSelector = true;
+        if(!(Selector is null))  checkSelector = Selector.CheckSemantic(context,scope,errors); //revisar si elselector puede ser null
+        
         return checkPostaction && checkSelector && checkName;
     }
     public override void Execute()
     {
         Effect.Execute();
-        //if(postAction != null) postAction.Execute();
     }
 }

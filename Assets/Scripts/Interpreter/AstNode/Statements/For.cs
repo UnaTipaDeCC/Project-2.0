@@ -19,15 +19,13 @@ class For : Statement
     }
     public override void Execute()
     {
-        forScope.variables.Add(item.Value,null); 
-        forScope.variables.Add(collection.Value,null);
-        body.Execute();
-        /*for(int i = 0; i < collection.Count;i++)
+        List<CardGame> list = (List<CardGame>)forScope.Get(collection.Value);
+        foreach(CardGame card in list)
         {
-            forScope.Set(item,collection[i]);
-            itemExpression.Evaluate();
+            forScope.Set(item.Value,card);
+            //itemExpression.Evaluate();
             body.Execute();
-        }*/
+        }
         
     }
     public override bool CheckSemantic(Context context,Scope scope, List<CompilingError> errors)
@@ -40,22 +38,17 @@ class For : Statement
             return false;
         }
         else forScope.types.Add(item.Value,ExpressionType.Card); 
-        if(forScope.Contains(collection.Value))
+        if(!forScope.Contains(collection.Value))
         {
-            errors.Add(new CompilingError(location, ErrorCode.Invalid, "The variable " + item.Value + "already exist"));
+            errors.Add(new CompilingError(location, ErrorCode.Invalid, "The collection " + item.Value + "must be already declared"));
             return false;
         }
-        else forScope.types.Add(collection.Value,ExpressionType.List); 
-
-        //bool checkColection = collection.CheckSemantic(context, scope, errors);
-
-        bool checkBody = body.CheckSemantic(context, scope,errors);
-        forScope.types.Add(collection.ToString(),ExpressionType.List);//en realidad deberia valorar anteriormente que ese nombre sea uno ya definido anteriormente como lista
-        /*if(collection.Type != ExpressionType.List)
+        else if(forScope.GetType(collection.Value) != ExpressionType.List)
         {
-            errors.Add(new CompilingError(collection.Location, ErrorCode.Invalid, "The " + collection.Value +  "must be a collection"));
+            errors.Add(new CompilingError(location,ErrorCode.Invalid, $"The collection '{collection.Value}' must be a list"));
             return false;
-        }*/
+        }
+        bool checkBody = body.CheckSemantic(context, scope,errors);
         return checkBody;
     }
 }

@@ -15,13 +15,24 @@ public class TokenStream : IEnumerable<Token>
         position = 0;
     }
     public bool End => position >= tokens.Count;
-    public void MoveNext(int k = 1)
-    {
-        position += k;
-    }
+    public void MoveNext(int k = 1) => position += k;
     public void MoveBack(int k = 1)
     {
         if(position != -1) position -= k;
+    }
+    
+    public bool CanLookAhead(int k = 0) => tokens.Count - position > k;
+    
+    public Token LookAhead(int k = 0) => tokens[position + k];
+    
+    public Token Previous() =>  tokens[position -1];
+    
+    public Token NextToken() => tokens[position + 1];
+    
+    public bool Check(TokenType type)
+    {
+        if(position > tokens.Count - 1) return false;
+        return type == tokens[position].Type;
     }
      /* The next methods are used to scroll through the token list 
      if a condition is satisfied */
@@ -35,17 +46,7 @@ public class TokenStream : IEnumerable<Token>
         }
         return position < tokens.Count;
     }
-    public bool Chek(TokenType type)
-    {
-        if(position > tokens.Count - 1) return false;
-        return type == tokens[position].Type;
-    }
-    /*public bool Chek(string value)
-    {
-        if(position > tokens.Count - 1) return false;
-        if(value == tokens[position].Value)
-        ;
-    }*/
+
     public bool Match(params string[] value)
     {
         if (position > tokens.Count-1)
@@ -63,32 +64,16 @@ public class TokenStream : IEnumerable<Token>
         }
         return false;
     }
-    /*public bool Match(TokenType type)
-    {
-        if (position < tokens.Count-1 && LookAhead(1).Type == type)
-        {
-            position++;
-            return true;
-        }
-        return false;
-    }*/
     public bool Match(TokenType type)
-{
+    {
     if (position < tokens.Count && tokens[position].Type == type)
     {
         position++;
         return true;
     }
     return false;
-}
-    public Token Previous()
-    {
-        return tokens[position -1];
     }
-    public Token NextToken()
-    {
-        return tokens[position + 1];
-    }
+    
     public bool Next( TokenType type )
     {
         if (position < tokens.Count-1 && LookAhead(1).Type == type)
@@ -108,14 +93,7 @@ public class TokenStream : IEnumerable<Token>
         }
         return false;
     }
-    public bool CanLookAhead(int k = 0)
-    {
-        return tokens.Count - position > k;
-    }
-    public Token LookAhead(int k = 0)
-    {
-        return tokens[position + k];
-    }
+    
     public IEnumerator<Token> GetEnumerator()
     {
         for (int i = position; i < tokens.Count; i++)

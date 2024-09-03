@@ -4,22 +4,40 @@ using System.Collections.Generic;
 public class Effect : Statement
 {
     public CodeLocation location;
-    public Scope scope;
-    public Expression name;
-    public Statement action;
-    public Dictionary<string, ExpressionType> paramsType ;
-    public Token targets;
-    public Token context;//mas adelante sera un contexto o sea una clase contexto, creo
+    public Scope Scope {get; private set;}
+    public Expression Name{get; private set;}
+    public Statement Action{get; private set;}
+    public Dictionary<string, ExpressionType> paramsType {get; private set;}
+    public Token Targets {get; private set;}
+    public Token Context{get; private set;}
+    List<(Token,Token)> list;
     public Effect(CodeLocation location, Expression name, Statement action,Token targets, Token context, List<(Token,Token)> paramsType = null): base(location)
     {
         this.paramsType = new Dictionary<string, ExpressionType>();
         this.location = location;
-        this.name = name;
-        this.action = action;
-        this.targets = targets;
-        this.context = context;
-        //this.paramsType = paramsType.ToDictionary(pair => pair.Item1, pair => pair.Item2);
-        foreach(var par in paramsType)
+        Name = name;
+        Action = action;
+        Targets = targets;
+        Context = context;  
+        list = paramsType;
+    }
+    public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
+    {
+        this.scope = scope.CreateChild();
+        bool namecheck = Name.CheckSemantic(context, scope, errors);
+        bool actioncheck = Action.CheckSemantic(context, scope,errors);
+        if(Name.Type != ExpressionType.Text)
+        {
+            errors.Add(new CompilingError(Name.Location,ErrorCode.Invalid,"The effects name must be a text"));
+            return false;
+        }
+        Name.Evaluate();
+        if(context.Effects.ContainsKey((string)Name.Value))
+        {
+            errors.Add(new CompilingError(location,ErrorCode.Invalid,$"An effect with the name {(string)Name.Value} was already declared"));
+        }
+        
+        foreach(var par in list)
         {
             ExpressionType type;
             switch(par.Item2.Value)
@@ -35,59 +53,33 @@ public class Effect : Statement
                 break;
                 default: throw new CompilingError(location,ErrorCode.Invalid, "The params type must be: string, number or bool");
             }
-            this.paramsType.Add(par.Item1.Value,type);
+            paramsType.Add(par.Item1.Value,type);
         }
-    }
-    public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
-    {
-        this.scope = scope;
-        /*if(!scope.Contains(targets.Value))
+        if(scope.Contains(Targets.Value) )
         {
-            scope.types.Add(targets.Value,ExpressionType.List);
-            Console.WriteLine(targets.Value + "la agregamos con exito");
+            scope.types.Add(Targets.Value,ExpressionType.List);
         }
         else
         {
-            errors.Add(new CompilingError(targets.Location,ErrorCode.Invalid, "The name " + targets.Value + " was already declared"));
-            return false;
-        }*/
-       /* if(!scope.Contains(this.context.Value)) scope.types.Add(this.context.Value,ExpressionType.Context);
-        else
-        {
-            errors.Add(new CompilingError(targets.Location,ErrorCode.Invalid, "The name " + this.context.Value + "was already declared"));
-            return false;
-        } //supongo que una vez que se crea una una instancia se crea el contexto*/
-        bool namecheck = name.CheckSemantic(context, scope, errors);
-        bool actioncheck = action.CheckSemantic(context, scope,errors);
-        if(name.Type != ExpressionType.Text)
-        {
-            errors.Add(new CompilingError(name.Location,ErrorCode.Invalid,"The effects name must be a text"));
+            errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Targets.Value + " was already declared"));
             return false;
         }
-        /*foreach(var par in paramsType)
+        if(!scope.Contains(Context.Value)) scope.types.Add(Context.Value,ExpressionType.Context);
+        else
         {
-            if(par.Value.Value != "Bool" && par.Value.Value != "Number" && par.Value.Value != "String")
-            errors.Add(new CompilingError(name.Location,ErrorCode.Invalid,"The params type must be: string, number o bool"));
+            errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Context.Value + "was already declared"));
             return false;
-        }*/
-        name.Evaluate();
-        /*foreach(var par in context.Effects)
-        {
-            Console.WriteLine("vamos a ver que hay en el contexto");
-            Console.WriteLine(par.Key);
-        }*/
-        context.Effects.Add((string)name.Value,this);
+        } 
+        context.Effects.Add((string)Name.Value,this);
         return namecheck && actioncheck;
 
     }
     public override void Execute()
     {
-        name.Evaluate();
-        action.Execute();
-        scope.Set(targets.Value,null);       
+        Action.Execute();      
     }
     public override string ToString()
     {
-        return $"Effect: \n\t Name: {name} \n\t Action : ({targets.Value}, {this.context.Value}) => \n\t {action}";
+        return $"Effect: \n\t Name: {Name} \n\t Action : ({Targets.Value}, {Context.Value}) => \n\t {Action}";
     }
 }
