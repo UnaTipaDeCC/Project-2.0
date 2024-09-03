@@ -94,6 +94,7 @@ public class LexicalAnalyzer
                  var unkOp = stream.ReadAny();//NO ENTIENDO BIEN
                 errors.Add(new CompilingError(stream.Location, ErrorCode.Unknown, unkOp.ToString()));
             }
+            tokens.Add(new Token(TokenType.End,"End",stream.Location));
             return tokens;
         }
 

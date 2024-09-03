@@ -35,49 +35,49 @@ public class GameContext : MonoBehaviour
         else throw new Exception("Invalid id of player");
 
     }
-    public List<CardDisplay> Board {get {return BoardCardas();}}
-    private List<CardDisplay> BoardCardas()//necesitara ser cartas tal vez? 
+    public List<CardGame> Board {get {return BoardCardas();}}
+    private List<CardGame> BoardCardas()//necesitara ser cartas tal vez? 
     {
-        List<CardDisplay> board = new List<CardDisplay>();
+        List<CardGame> board = new List<CardGame>();
         board.AddRange(BravasPlayer.GetComponent<Player>().Field);
         board.AddRange(LocasPlayer.GetComponent<Player>().Field);
         board.AddRange(WheatherZone.GetComponent<Zones>().CardsInZone);
         return board;
     }
-    public List<CardDisplay> HandOfPlayer(Player player) => player.Hand.GetComponent<Zones>().CardsInZone;
-    public List<CardDisplay> DeckOfPlayer(Player player) => player.Deck;
-    public List<CardDisplay> FieldOfPlayer(Player player) => player.Field;
-    public List<CardDisplay> GraveryardOfPlayer(Player player) => player.Cementery;
-    public List<CardDisplay> Field => FieldOfPlayer(TriggerPlayer);
-    public List<CardDisplay> Graveryard => GraveryardOfPlayer(TriggerPlayer);
-    public List<CardDisplay> Hand => HandOfPlayer(TriggerPlayer);
-    public List<CardDisplay> Deck => DeckOfPlayer(TriggerPlayer);
+    public List<CardGame> HandOfPlayer(Player player) => player.Hand.GetComponent<Zones>().CardsInZone;
+    public List<CardGame> DeckOfPlayer(Player player) => player.Deck;
+    public List<CardGame> FieldOfPlayer(Player player) => player.Field;
+    public List<CardGame> GraveryardOfPlayer(Player player) => player.Cementery;
+    public List<CardGame> Field => FieldOfPlayer(TriggerPlayer);
+    public List<CardGame> Graveryard => GraveryardOfPlayer(TriggerPlayer);
+    public List<CardGame> Hand => HandOfPlayer(TriggerPlayer); 
+    public List<CardGame> Deck => DeckOfPlayer(TriggerPlayer);
     
-    public void Shuffle(List<CardDisplay> gameObjects)
+    public void Shuffle(List<CardGame> gameObjects)
     {
         for (int i = gameObjects.Count - 1; i > 0; i--)
         {
             // Selecciona un índice aleatorio entre 0 y i
             int j = UnityEngine.Random.Range(0, i + 1);
             // Intercambia gameObjects[i] con el elemento en el índice aleatorio
-            CardDisplay temp = gameObjects[i];
+            CardGame temp = gameObjects[i];
             gameObjects[i] = gameObjects[j];
             gameObjects[j] = temp;
         }
     }
-    public void Remove(List<CardDisplay> list, CardDisplay card) => list.Remove(card);
-    public CardDisplay Pop(List<CardDisplay> gameObjects)
+    public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
+    public CardGame Pop(List<CardGame> gameObjects)
     {
         if (gameObjects.Count == 0)
         {
             Debug.LogWarning("La lista está vacía. No se puede hacer pop.");
             return null; // O lanzar una excepción, según tu preferencia
         }
-        CardDisplay topObject = gameObjects[gameObjects.Count - 1];
+        CardGame topObject = gameObjects[gameObjects.Count - 1];
         gameObjects.RemoveAt(gameObjects.Count - 1);
         return topObject;
     }
-    public void Push(CardDisplay obj, List<CardDisplay> gameObjects) => gameObjects.Add(obj);
-    public void SendBottom(CardDisplay obj, List<CardDisplay> gameObjects)  => gameObjects.Insert(0, obj);
+    public void Push(CardGame obj, List<CardGame> gameObjects) => gameObjects.Add(obj);
+    public void SendBottom(CardGame obj, List<CardGame> gameObjects)  => gameObjects.Insert(0, obj);
     
 }

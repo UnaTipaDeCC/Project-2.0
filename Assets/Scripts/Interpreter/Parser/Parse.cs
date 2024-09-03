@@ -20,16 +20,17 @@ public class Parse
     {
         List<Effect> effects = new List<Effect>();
         List<Card> cards= new List<Card>();
-        while(!Stream.End)
+        while(!Stream.Chek(TokenType.End))
         {
             try
             {
                 if(Stream.Match(TokenValues.declareEffect) && Stream.Match(TokenValues.OpenCurlyBraces)) effects.Add(ParseEffect(Stream.LookAhead(-2).Location));
-                else if(Stream.Match(TokenValues.card) && Stream.Match(TokenValues.OpenCurlyBraces)) cards.Add(ParseCards());
+                else if(Stream.Match(TokenValues.card) && Stream.Match(TokenValues.OpenCurlyBraces)) cards.Add(ParseCards(Stream.LookAhead().Location));
+                else throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid,"Invaid declaration, expected card or effect declaration");
             }
             catch(CompilingError error)
             {
-                //Console.WriteLine(error);
+                if(ErrorsControl(error)) break;
             }
         }
         return new ElementalProgram(effects,cards,Errors,new CodeLocation());
@@ -274,7 +275,7 @@ public class Parse
         {
             try
             {
-                if(Stream.End) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid,"Invalid effect declaration, missing params");
+                if(Stream.Chek(TokenType.End)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid,"Invalid effect declaration, missing params");
                 else if(Stream.Match(TokenValues.Name)){ name = Assign();} 
                 else if(Stream.Match(TokenValues.Params))
                 {
@@ -317,13 +318,14 @@ public class Parse
                     Debug.Log("termine el action");
                     Debug.Log(Stream.LookAhead().Value);
                     if(action == null) throw new CompilingError(location,ErrorCode.Invalid, " An action must be declared");
+                //falta alguna coma?
                 }
+                else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Invalid, "Expected 'name',params o action");
             }
             catch(CompilingError error)
             {
-                Errors.Add(error);
-
-                //Console.WriteLine(error);//"algo fue mal mientras declarabas el efecto");        
+                if(ErrorsControl(error,TokenValues.ValueSeparator))
+                break; 
             }
         }while(!Stream.Match(TokenValues.ClosedCurlyBraces));
         Debug.Log("fuera del action");
@@ -342,9 +344,9 @@ public class Parse
     }
     #endregion
     #region Card
-    public Card ParseCards()
+    public Card ParseCards(CodeLocation location)
     {
-        CodeLocation location = new CodeLocation();//Stream.LookAhead(-2).Location;
+        //CodeLocation location = new CodeLocation();//Stream.LookAhead(-2).Location;
         Expression power = null;
         Expression name = null;
         Expression faction = null;
@@ -355,7 +357,7 @@ public class Parse
         {
             try
             {
-                if(Stream.End) break;
+                if(Stream.End) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "Declaration wasnt finished");
                 else if(Stream.Match(TokenValues.Power)) power = Assign(); 
                 else if(Stream.Match(TokenValues.Name)) name = Assign();
                 else if(Stream.Match(TokenValues.Type)) type = Assign();
@@ -411,7 +413,7 @@ public class Parse
                     }
                     //Console.WriteLine("Despues del onActivation" + Stream.LookAhead().Value);
                 }
-                else throw new CompilingError(location, ErrorCode.Invalid, "Missing params");
+                //else throw new CompilingError(location, ErrorCode.Invalid, "Missing params");
             }
             catch(CompilingError error)//revisar lo de los errores
             {
@@ -456,17 +458,18 @@ public class Parse
                     selector = Selector(selectorLocation);
                     Debug.Log("termine el selector");
                 }
+                //REVISAR EL POST aCTION
                 else throw new CompilingError(effectLocation,ErrorCode.Invalid,"Unfinished OnActivation declaration");
             }
             catch(CompilingError error)
             {
-                Errors.Add(error);//Console.WriteLine(error);
+                if(ErrorsControl(error,TokenValues.ValueSeparator))
                 break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
         if(name == null) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect name cant be null");
-        if(selector != selector) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect selector cant be null");
+        if(selector is null) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect selector cant be null");
         Debug.Log("bue, to ok");
         Debug.Log(Stream.LookAhead().Value);
         return new EffectAction(name,selector,parameters,postAction,effectLocation);        
@@ -478,15 +481,16 @@ public class Parse
         {
             try
             {
-                if(Stream.End) throw new CompilingError(Stream.Previous().Location,ErrorCode.Invalid,"Unfinished effect declaration");
+                if(Stream.Chek(TokenType.End)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Invalid,"Unfinished effect declaration");
                 else if(Stream.Match(TokenValues.Name)) name = Assign();
                 else if(Stream.Match(TokenType.Identifier)) paramsValue.Add((Stream.Previous(),Assign()));
+                else throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid, "Invalid effect assignation");
                 //falta la manera de manejar el post action
             }
             catch (CompilingError error)
             {
-                Errors.Add(error);
-                //Console.WriteLine(error);
+                if(ErrorsControl(error,TokenValues.ValueSeparator))
+                break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
@@ -510,8 +514,7 @@ public class Parse
             }
             catch(CompilingError error)
             {
-                Errors.Add(error);
-                //Console.WriteLine(error);
+                if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
@@ -586,10 +589,6 @@ public class Parse
         if(Stream.Match(TokenValues.StatementSeparator)) Debug.Log(Stream.LookAhead().Value + " al salir del state");
         block = new StatementBlock(stmts,location);
         return block;
-        /*Debug.Log(stmts.Count());
-        Console.WriteLine(Stream.LookAhead().Value);
-        Console.WriteLine("VOY A RETORNAR ESTA HISTORIA");*/
-       
     }
     private Statement SimpleStatements()
     {
@@ -621,20 +620,20 @@ public class Parse
         {
             operatorToken = Stream.Previous();
             expr = Expression(); 
-           //if(!Stream.Match(TokenValues.StatementSeparator))throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "Missing ';' after a declaration");
             return new Declaration(variable, variable.Location, operatorToken,expr);
         }
         Debug.Log("es aqui");
         throw new CompilingError(variable.Location, ErrorCode.Invalid,"Bad declaration of the variable " + variable.Value);
     }
-    /*private bool ErrorsControl(CompilingError error, string Value)
+    private bool ErrorsControl(CompilingError error, string Value = TokenValues.ClosedCurlyBraces)
     {
         Errors.Add(error);
         while(!Stream.Match(Value))
         {
-            if(Stream.End) return true;
-                if(Stream.)
+            if(Stream.Chek(TokenType.End) || Stream.LookAhead().Value == TokenValues.ClosedCurlyBraces) return true;
+            Stream.MoveNext();
         }
-    }*/
+        return false;
+    }
     #endregion
 }

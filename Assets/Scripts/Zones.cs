@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Zones : MonoBehaviour
 {
-    public List<CardDisplay> CardsInZone;
+    public List<CardGame> CardsInZone;
 //
     private void OnTriggerEnter(Collider collider)
     {
-        GameObject card = collider.gameObject;
+        GameObject card = collider.gameObject; 
         
     //if (other.CompareTag("Carta"))
     //{
-        CardsInZone.Add(card.GetComponent<CardDisplay>());
+        CardsInZone.Add(card.GetComponent<CardDisplay>().Card);
     //}
     }
     // Start is called before the first frame update

@@ -37,6 +37,7 @@ public enum TokenType
     Keyword,
     Symbol,
     Identifier,
+    End,
     Unknown
 }
 public class TokenValues

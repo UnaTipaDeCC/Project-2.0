@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: UserCardSO
+  m_Name: Hormigatrix
   m_EditorClassIdentifier: 
-  Name: Beluga
-  Description: Cartica creada por el usuario :)
-  Artwork: {fileID: 21300000, guid: cf60f9e3813bc6a45bea43ec743f9d9d, type: 3}
+  Name: Hormigatrix
+  Description: 
+  Artwork: {fileID: 21300000, guid: 146a7eab6e50de940953aac93759c98e, type: 3}
   Played: 0
   Damage: 10
   OriginalDamage: 10
@@ -22,4 +22,4 @@ MonoBehaviour:
   Increased: 0
   Range: Melee
   Faction: Hormigas Bravas
-  Type: Oro
+  Type: Plata

@@ -102,8 +102,8 @@ public class Card : ASTNode
         Debug.Log(range);
         Debug.Log(power);
 
-        string scriptableObjectPath = "Assets/ScriptableObjects/UserCardSO.asset";
-        string cardPath = "Assets/Prefabs/UserCard.prefab";
+        /*string scriptableObjectPath = "Assets/ScriptableObjects/UserCardSO.asset";
+        string cardPath = "Assets/Prefabs/UserCard.prefab";*/
 
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
         card.Name = name;
@@ -114,18 +114,24 @@ public class Card : ASTNode
         card.Range = range;
         card.Description = "Cartica creada por el usuario :)";
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
+        
+        if(faction == "Hormigas Locas") CreatedCards.LocasCards.Add(card);
+        else {Debug.Log(card.Faction); CreatedCards.BravasCards.Add(card);}
+        
 
         
-        AssetDatabase.CreateAsset(card, scriptableObjectPath);
+        /*AssetDatabase.CreateAsset(card, scriptableObjectPath);
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
         GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
         GameObject cardCopy = GameObject.Instantiate(cardPrefab);
-        cardCopy.GetComponent<cardDisplay>().Card = (CardGame)AssetDatabase.LoadAssetAtPath<ScriptableObject>(scriptableObjectPath);
-
+        cardCopy.GetComponent<CardDisplay>().Card = (CardGame)AssetDatabase.LoadAssetAtPath<ScriptableObject>(scriptableObjectPath);
+        CardDisplay cardDisplay = cardCopy.GetComponent<CardDisplay>();
+        Debug.Log(card.Owner);
+        //GameContext.Instance.ReturnPlayer(card.Owner).Deck.Add(cardDisplay);
         PrefabUtility.SaveAsPrefabAsset(cardCopy, cardPath);
-        GameObject.DestroyImmediate(cardCopy);
+        GameObject.DestroyImmediate(cardCopy);*/
     }
 
     public override string ToString()

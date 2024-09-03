@@ -80,12 +80,13 @@ public class InterpreterInput : MonoBehaviour
     private void OnNextSceneButtonClicked()
     {
         // Cambiar a la siguiente escena
-        SceneManager.LoadScene("Samplescene"); // Reemplaza con el nombre de tu escena
+        SceneManager.LoadScene("Samplescene");
+        Debug.Log(CreatedCards.BravasCards.Count);
     }
     private void OnBackSceneButtonClicked()
     {
         // Cambiar a la siguiente escena
-        SceneManager.LoadScene("Samplescene"); // Reemplaza con el nombre de tu escena
+        SceneManager.LoadScene("SampleScene"); // Reemplaza con el nombre de tu escena
     }
     // Update is called once per frame
     void Update()

@@ -72,15 +72,15 @@ class Method : Expression
 
             }
         }
-        else if(caller.Value is List<CardDisplay> list) 
+        else if(caller.Value is List<CardGame> list) 
         {
             switch(name.Value)
             {
                 case "Push":
-                GameContext.Instance.Push((CardDisplay)argument.Value,list);
+                GameContext.Instance.Push((CardGame)argument.Value,list);
                 break;
                 case "SendBottom":
-                GameContext.Instance.SendBottom((CardDisplay)argument.Value,list);
+                GameContext.Instance.SendBottom((CardGame)argument.Value,list);
                 break;
                 case "Pop":
                 Value = GameContext.Instance.Pop(list);
