@@ -20,9 +20,9 @@ public class GameManager : MonoBehaviour
     public bool CurrentPlayer = true; // true: player 1 (Hormigas Bravas) and false: player 2 (Hormigas Locas)
     private void Start()
     {
-        Debug.Log("hiah");
         CreatedCards.AddToDeck();
-        foreach(var card in GameContext.Instance.TriggerPlayer.Deck) Debug.Log(card.Name);
+        GameContext.Instance.BravasPlayer.GetComponent<Player>().Stole(1);
+        GameContext.Instance.LocasPlayer.GetComponent<Player>().Stole(1);
 
     }
 }

@@ -86,7 +86,7 @@ public class InterpreterInput : MonoBehaviour
     private void OnBackSceneButtonClicked()
     {
         // Cambiar a la siguiente escena
-        SceneManager.LoadScene("SampleScene"); // Reemplaza con el nombre de tu escena
+        SceneManager.LoadScene("Menu Principal"); // Reemplaza con el nombre de tu escena
     }
     // Update is called once per frame
     void Update()

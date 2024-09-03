@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Unity;
 public class Selector : Statement
 {
     public Expression Source { get; private set; }
@@ -8,7 +10,7 @@ public class Selector : Statement
     public Selector? Parent { get; private set; }
     public CodeLocation Location;
     public Scope SelectorScope{ get; private set;}
-
+ 
     public Selector(Expression source, Expression single, Expression predicate, CodeLocation location, Selector parent = null) : base(location)
     {
         this.Source = source;
@@ -29,20 +31,25 @@ public class Selector : Statement
         }
         else
         {
-            checkSingle = Single.CheckSemantic(context, scope, errors);
+            checkSingle = Single.CheckSemantic(context, SelectorScope, errors);
             if(ExpressionType.Bool != Single.Type)
             {
                 errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The 'Single' must be boolean expression"));
                 return false;
             }
         }
-        bool checkPredicate = Predicate.CheckSemantic(context,scope,errors);
+        if(!(Predicate is Predicate))
+        {
+            errors.Add(new CompilingError(Predicate.Location, ErrorCode.Invalid, "The 'Predicate' must recive a lamnda expression"));
+            return false;
+        } 
+        bool checkPredicate = Predicate.CheckSemantic(context,SelectorScope,errors);
         if(ExpressionType.Bool != Predicate.Type)
         {
-            errors.Add(new CompilingError(Predicate.Location, ErrorCode.Invalid, "The 'Predicate' must be a boolean expression")); //quiza deberia identificarlo como un predicate
+            errors.Add(new CompilingError(Predicate.Location, ErrorCode.Invalid, "The 'Predicate' must be a boolean expression")); 
             return false;
-        }
-        bool checkSource = Source.CheckSemantic(context, scope, errors);
+        } 
+        bool checkSource = Source.CheckSemantic(context, SelectorScope, errors);
         if(Source.Type != ExpressionType.Text)
         {
             errors.Add(new CompilingError(Single.Location,ErrorCode.Invalid,"The 'Source' must be boolean expression"));
@@ -63,7 +70,7 @@ public class Selector : Statement
         List<CardGame> source = new List<CardGame>();
         switch ((string)Source.Value)
         {
-            case "hand":
+            case "hand":  
             source = GameContext.Instance.TriggerPlayer.Hand.GetComponent<Zones>().CardsInZone;
             break;
             case "otherHand":
@@ -101,5 +108,5 @@ public class Selector : Statement
             }
         }
         //PENSAR como en el effect ACTION ESTA LISTA SE CONVIERTE EN EL TARGET
-    /*}
+    */}
 }

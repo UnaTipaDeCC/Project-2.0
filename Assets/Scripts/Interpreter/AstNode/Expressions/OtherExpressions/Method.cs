@@ -1,6 +1,7 @@
 //using System.Reflection.Metadata;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine;
 class Method : Expression
 {
     Expression caller;
@@ -86,7 +87,7 @@ class Method : Expression
                 Value = GameContext.Instance.Pop(list);
                 break;
                 case "Suffle":
-                GameContext.Instance.Shuffle(list);
+                GameContext.Instance.Shuffle(list); 
                 break;
                 case "Find"://implementar cuando implemente el find del otro lado
                 break;

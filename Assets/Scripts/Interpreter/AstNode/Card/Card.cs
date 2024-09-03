@@ -26,15 +26,16 @@ public class Card : ASTNode
 
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        bool checkPower = Power.CheckSemantic(context, scope, errors);
-        bool checkType = Type.CheckSemantic(context,scope,errors);
-        bool checkName = Name.CheckSemantic(context,scope, errors);
-        bool checkFaction = Faction.CheckSemantic(context,scope,errors);
+        Scope Scope = scope.CreateChild();
+        bool checkPower = Power.CheckSemantic(context, Scope, errors);
+        bool checkType = Type.CheckSemantic(context,Scope,errors);
+        bool checkName = Name.CheckSemantic(context,Scope, errors);
+        bool checkFaction = Faction.CheckSemantic(context,Scope,errors);
         bool checkEffects = true;
         bool checkRange = true;
         foreach(Expression range in Range)
         {
-            checkRange = checkRange && range.CheckSemantic(context,scope,errors);
+            checkRange = checkRange && range.CheckSemantic(context,Scope,errors);
             range.Evaluate();
             if(range.Type != ExpressionType.Text)
             {
@@ -102,39 +103,40 @@ public class Card : ASTNode
         Debug.Log(range);
         Debug.Log(power);
 
-        /*string scriptableObjectPath = "Assets/ScriptableObjects/UserCardSO.asset";
-        string cardPath = "Assets/Prefabs/UserCard.prefab";*/
+        string scriptableObjectPath = $"Assets/ScriptableObjects/{name}.asset";
+        string cardPath = $"Assets/Prefabs/{name}.prefab";
 
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
         card.Name = name;
         // convertirlo a sus respectivos valores del enum
-        // en el checkSemantick se comprueba que tanto el tipo como la faccion sean los permitidos por lo que no es necesario
+        // en el checkSemantick se comprueba que tanto el tipo sea el permitido por lo que no es necesario
         // manejar esa posibilidad
-        card.Type = (CardType)Enum.Parse(typeof(CardType), (string)Type.Value);
-        card.Faction = (Faction)Enum.Parse(typeof(Faction), (string)Faction.Value);
+        card.Type = (CardGame.type)Enum.Parse(typeof(CardGame.type), (string)Type.Value);
+        card.Faction = faction == "Hormigas Bravas" ? CardGame.faction.HormigasBravas : CardGame.faction.HormigasLocas;
         card.Damage = Convert.ToInt32(power);
         card.OriginalDamage = Convert.ToInt32(power);
         card.Range = range;
         card.Description = "Cartica creada por el usuario :)";
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
-        
         if(faction == "Hormigas Locas") CreatedCards.LocasCards.Add(card);
         else {Debug.Log(card.Faction); CreatedCards.BravasCards.Add(card);}
         
+       
+         
+        //AssetDatabase.CreateAsset(card, scriptableObjectPath);
+        //AssetDatabase.SaveAssets();
+        //AssetDatabase.Refresh();
 
-        
-        /*AssetDatabase.CreateAsset(card, scriptableObjectPath);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-
-        GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
+       /* GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
         GameObject cardCopy = GameObject.Instantiate(cardPrefab);
-        cardCopy.GetComponent<CardDisplay>().Card = (CardGame)AssetDatabase.LoadAssetAtPath<ScriptableObject>(scriptableObjectPath);
-        CardDisplay cardDisplay = cardCopy.GetComponent<CardDisplay>();
+        cardCopy.GetComponent<CardDisplay>().Card = card;
+         if(faction == "Hormigas Locas") CreatedCards.LocasCards.Add(cardCopy);
+        else {Debug.Log(card.Faction); CreatedCards.BravasCards.Add(cardCopy);}
+        
+        //CardDisplay cardDisplay = cardCopy.GetComponent<CardDisplay>();
         Debug.Log(card.Owner);
-        //GameContext.Instance.ReturnPlayer(card.Owner).Deck.Add(cardDisplay);
-        PrefabUtility.SaveAsPrefabAsset(cardCopy, cardPath);
-        GameObject.DestroyImmediate(cardCopy);*/
+        //PrefabUtility.SaveAsPrefabAsset(cardCopy, cardPath);
+        GameObject.Destroy(cardCopy);//si no eso destroy*/
     }
 
     public override string ToString()

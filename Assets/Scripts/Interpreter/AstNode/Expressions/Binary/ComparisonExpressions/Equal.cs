@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 public class Equal : BinaryExpression
 {
     Expression? Right{get; set;}
@@ -18,7 +19,8 @@ public class Equal : BinaryExpression
         bool left = Left.CheckSemantic(context,scope, errors);
         if((Right.Type == ExpressionType.Number && Left.Type == ExpressionType.Number) || (Right.Type == ExpressionType.Text && Left.Type == ExpressionType.Text) || (Right.Type == ExpressionType.Bool && Left.Type == ExpressionType.Bool))
         {
-        Type = ExpressionType.Bool;
+            Debug.Log("EN EFECTO EL == ES UN BOOL");
+            Type = ExpressionType.Bool;
             return right && left;
         }
         errors.Add(new CompilingError(Location, ErrorCode.Invalid, "No son del mismo tipo"));

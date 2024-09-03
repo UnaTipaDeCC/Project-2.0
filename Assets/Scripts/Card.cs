@@ -16,16 +16,15 @@ public class CardGame : ScriptableObject
     public bool AffectedByClimate = false;
     public bool Increased = false;
     public string Range;
-    //public int EffectsCount = Effects.Count;
-    public List<EffectAction> Effects;
-    public Faction Faction;
-    enum Faction
+    public List<EffectAction> Effects;//REVISAR DESPUES ESTE TEMA
+    public faction Faction;
+    public enum faction
     {
-        Hormigas Locas,
-        Hormigas Bravas,
+        HormigasLocas,
+        HormigasBravas,
     }
-    public Type Type;
-    enum Type
+    public type Type;
+    public enum type
     {
         Oro,
         Plata,
@@ -37,7 +36,7 @@ public class CardGame : ScriptableObject
     {
         get
         {
-            if(Faction == "Hormigas Bravas") return 1;
+            if(Faction == faction.HormigasLocas) return 1;
             else return 2;
         }
     }

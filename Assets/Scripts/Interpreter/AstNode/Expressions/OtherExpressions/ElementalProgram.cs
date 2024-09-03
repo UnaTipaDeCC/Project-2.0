@@ -16,7 +16,7 @@ public class ElementalProgram : ASTNode
         bool checkEffects = true;
         foreach(Effect effect in Effects)
         {
-            effect.name.Evaluate();
+            effect.Name.Evaluate();
             //Console.WriteLine(effect.name.Value);
             checkEffects = checkEffects && effect.CheckSemantic(context, scope, errors);
         }

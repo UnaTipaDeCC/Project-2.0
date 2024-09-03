@@ -1,4 +1,4 @@
-//using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -47,11 +47,12 @@ public class GameContext : MonoBehaviour
     public List<CardGame> Board {get {return BoardCardas();}}
     private List<CardGame> BoardCardas()//necesitara ser cartas tal vez? 
     {
+
         List<CardGame> board = new List<CardGame>();
         board.AddRange(BravasPlayer.GetComponent<Player>().Field);
         board.AddRange(LocasPlayer.GetComponent<Player>().Field);
-        board.AddRange(WheatherZone.GetComponent<Zones>().CardsInZone);
-        return board;
+        //board.AddRange(WheatherZone.GetComponent<Zones>().CardsInZone);
+        return board; 
     }
     public List<CardGame> HandOfPlayer(Player player) => player.Hand.GetComponent<Zones>().CardsInZone;
     public List<CardGame> DeckOfPlayer(Player player) => player.Deck;
@@ -72,7 +73,7 @@ public class GameContext : MonoBehaviour
             CardGame temp = gameObjects[i];
             gameObjects[i] = gameObjects[j];
             gameObjects[j] = temp;
-        }
+        } 
     }
     public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
     public CardGame Pop(List<CardGame> gameObjects)

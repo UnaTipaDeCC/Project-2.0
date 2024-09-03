@@ -1,10 +1,10 @@
-/*using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CardZoom : MonoBehaviour
 {
-    private GameObject zoomCard;
+    private GameObject zoomCard; 
     private GameObject padre;//gameObject en la escena encima del cual se instancia la zoomcard
     private Vector2 zoomScale = new Vector2(2, 3);
 
@@ -23,4 +23,4 @@ public class CardZoom : MonoBehaviour
         Destroy(zoomCard);
 
     }
-}*/
+}

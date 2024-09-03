@@ -37,17 +37,17 @@ class For : Statement
             errors.Add(new CompilingError(location, ErrorCode.Invalid, "The variable " + item.Value + "already exist"));
             return false;
         }
-        else forScope.types.Add(item.Value,ExpressionType.Card); 
-        if(!forScope.Contains(collection.Value))
+        else forScope.types.Add(item.Value,ExpressionType.Card);
+        /*if(!forScope.Contains(collection.Value))
         {
-            errors.Add(new CompilingError(location, ErrorCode.Invalid, "The collection " + item.Value + "must be already declared"));
+            errors.Add(new CompilingError(location, ErrorCode.Invalid, "The collection " + item.Value + " must be already declared"));
             return false;
         }
         else if(forScope.GetType(collection.Value) != ExpressionType.List)
         {
             errors.Add(new CompilingError(location,ErrorCode.Invalid, $"The collection '{collection.Value}' must be a list"));
             return false;
-        }
+        }*/
         bool checkBody = body.CheckSemantic(context, scope,errors);
         return checkBody;
     }

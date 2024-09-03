@@ -17,7 +17,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        CardsMove.Instance.MoveCard(this);
+        CardsMove.Instance.MoveCard(Card);
     }
     // Start is called before the first frame update
     void Start()

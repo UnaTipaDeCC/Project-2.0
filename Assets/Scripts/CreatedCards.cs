@@ -9,7 +9,11 @@ public static class CreatedCards
 
     public static void AddToDeck()
     {
-        foreach (var card in BravasCards) GameContext.Instance.BravasPlayer.GetComponent<Player>().Deck.Add(card);
+        
+        foreach (var card in BravasCards)
+        {
+            GameContext.Instance.BravasPlayer.GetComponent<Player>().Deck.Add(card);
+        }
         foreach (var card in LocasCards) GameContext.Instance.LocasPlayer.GetComponent<Player>().Deck.Add(card);
     }
 

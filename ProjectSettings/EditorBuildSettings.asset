@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu Principal.unity
+    guid: b78df9a825070744d9c43518f4a5e8ea
+  - enabled: 1
     path: Assets/Scenes/CreateCards.unity
     guid: 1b59f843607c0824e813249aa11fc017
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/BravasWins.unity
+    guid: b3deff5199fad524ab9f1f412bb90faa
+  - enabled: 1
+    path: Assets/Scenes/LocasWins.unity
+    guid: dff74f0386ba43b469b5d224a0d3c31d
   m_configObjects: {}

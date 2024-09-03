@@ -23,9 +23,9 @@ public class Effect : Statement
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        this.scope = scope.CreateChild();
-        bool namecheck = Name.CheckSemantic(context, scope, errors);
-        bool actioncheck = Action.CheckSemantic(context, scope,errors);
+        Scope = scope.CreateChild();
+        bool namecheck = Name.CheckSemantic(context, Scope, errors);
+        bool actioncheck = Action.CheckSemantic(context, Scope,errors);
         if(Name.Type != ExpressionType.Text)
         {
             errors.Add(new CompilingError(Name.Location,ErrorCode.Invalid,"The effects name must be a text"));
@@ -55,16 +55,16 @@ public class Effect : Statement
             }
             paramsType.Add(par.Item1.Value,type);
         }
-        if(scope.Contains(Targets.Value) )
+        if(!Scope.Contains(Targets.Value) )
         {
-            scope.types.Add(Targets.Value,ExpressionType.List);
+            Scope.types.Add(Targets.Value,ExpressionType.List);
         }
         else
         {
             errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Targets.Value + " was already declared"));
             return false;
         }
-        if(!scope.Contains(Context.Value)) scope.types.Add(Context.Value,ExpressionType.Context);
+        if(!Scope.Contains(Context.Value)) Scope.types.Add(Context.Value,ExpressionType.Context);
         else
         {
             errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Context.Value + "was already declared"));
