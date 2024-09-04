@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: New Card
+  m_Name: Intelectual
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Intelectual
   Description: 
-  Artwork: {fileID: 0}
+  Artwork: {fileID: 21300000, guid: af8f73d8c5f6940469c26e4f5edcaf16, type: 3}
   Played: 0
-  Damage: 0
-  OriginalDamage: 0
+  Damage: 6
+  OriginalDamage: 6
   AffectedByClimate: 0
   Increased: 0
-  Range: 
-  Faction: 
-  Type: 
+  Range: Ranged
+  Faction: 0
+  Type: 1

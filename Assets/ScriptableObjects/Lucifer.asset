@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: Hormigatrix
+  m_Name: Lucifer
   m_EditorClassIdentifier: 
-  Name: Hormigatrix
+  Name: Lucifer
   Description: 
-  Artwork: {fileID: 21300000, guid: 1d8fe7d9578cabf40b46eb3655752877, type: 3}
+  Artwork: {fileID: 21300000, guid: ee27439931eb4f74cb71e02f98021885, type: 3}
   Played: 0
-  Damage: 4
-  OriginalDamage: 4
+  Damage: 3
+  OriginalDamage: 3
   AffectedByClimate: 0
   Increased: 0
-  Range: Ranged
-  Faction: 1
+  Range: Siege
+  Faction: 0
   Type: 1

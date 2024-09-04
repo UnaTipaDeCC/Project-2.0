@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: Hormigatrix
+  m_Name: Tormenta 1
   m_EditorClassIdentifier: 
-  Name: Hormigatrix
+  Name: Tormenta
   Description: 
-  Artwork: {fileID: 21300000, guid: 1d8fe7d9578cabf40b46eb3655752877, type: 3}
+  Artwork: {fileID: 21300000, guid: dad07a187acc67e4d965ac7042991f4f, type: 3}
   Played: 0
-  Damage: 4
-  OriginalDamage: 4
+  Damage: 0
+  OriginalDamage: 0
   AffectedByClimate: 0
   Increased: 0
-  Range: Ranged
-  Faction: 1
-  Type: 1
+  Range: Melee
+  Faction: 0
+  Type: 3

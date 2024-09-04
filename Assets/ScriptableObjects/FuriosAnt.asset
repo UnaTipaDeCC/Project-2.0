@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: Hormigatrix
+  m_Name: FuriosAnt
   m_EditorClassIdentifier: 
-  Name: Hormigatrix
+  Name: 
   Description: 
-  Artwork: {fileID: 21300000, guid: 1d8fe7d9578cabf40b46eb3655752877, type: 3}
+  Artwork: {fileID: 21300000, guid: 7c6430ec901706b4f8ab23a09392eaf4, type: 3}
   Played: 0
-  Damage: 4
-  OriginalDamage: 4
+  Damage: 2
+  OriginalDamage: 2
   AffectedByClimate: 0
   Increased: 0
-  Range: Ranged
+  Range: Melee
   Faction: 1
   Type: 1

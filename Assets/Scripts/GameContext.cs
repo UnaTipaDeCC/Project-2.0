@@ -20,7 +20,7 @@ public class GameContext : MonoBehaviour
     }
     public GameObject BravasPlayer;
     public GameObject LocasPlayer;
-    public GameObject WheatherZone; // revisar despues esta parte
+    public GameObject WeatherZone;
     public Player TriggerPlayer
     {
         get
@@ -51,7 +51,7 @@ public class GameContext : MonoBehaviour
         List<CardGame> board = new List<CardGame>();
         board.AddRange(BravasPlayer.GetComponent<Player>().Field);
         board.AddRange(LocasPlayer.GetComponent<Player>().Field);
-        //board.AddRange(WheatherZone.GetComponent<Zones>().CardsInZone);
+        board.AddRange(WeatherZone.GetComponent<Zones>().CardsInZone);
         return board; 
     }
     public List<CardGame> HandOfPlayer(Player player) => player.Hand.GetComponent<Zones>().CardsInZone;
@@ -89,5 +89,38 @@ public class GameContext : MonoBehaviour
     }
     public void Push(CardGame obj, List<CardGame> gameObjects) => gameObjects.Add(obj);
     public void SendBottom(CardGame obj, List<CardGame> gameObjects)  => gameObjects.Insert(0, obj);
-    
+    public void CleanField()
+    {
+        CleanZone(BravasPlayer.GetComponent<Player>().Cementery,BravasPlayer.GetComponent<Player>().Melee);
+        CleanZone(BravasPlayer.GetComponent<Player>().Cementery,BravasPlayer.GetComponent<Player>().Siege);
+        CleanZone(BravasPlayer.GetComponent<Player>().Cementery,BravasPlayer.GetComponent<Player>().Ranged);
+        CleanZone(BravasPlayer.GetComponent<Player>().Cementery,BravasPlayer.GetComponent<Player>().SiegeIncrement);
+        CleanZone(BravasPlayer.GetComponent<Player>().Cementery,BravasPlayer.GetComponent<Player>().MeleeIncrement);
+        CleanZone(BravasPlayer.GetComponent<Player>().Cementery,BravasPlayer.GetComponent<Player>().RangedIncrement);
+        CleanWeatherZone();
+        CleanZone(LocasPlayer.GetComponent<Player>().Cementery,LocasPlayer.GetComponent<Player>().Melee);
+        CleanZone(LocasPlayer.GetComponent<Player>().Cementery,LocasPlayer.GetComponent<Player>().Siege);
+        CleanZone(LocasPlayer.GetComponent<Player>().Cementery,LocasPlayer.GetComponent<Player>().Ranged);
+        CleanZone(LocasPlayer.GetComponent<Player>().Cementery,LocasPlayer.GetComponent<Player>().SiegeIncrement);
+        CleanZone(LocasPlayer.GetComponent<Player>().Cementery,LocasPlayer.GetComponent<Player>().MeleeIncrement);
+        CleanZone(LocasPlayer.GetComponent<Player>().Cementery,LocasPlayer.GetComponent<Player>().RangedIncrement);
+    }
+    private void CleanZone(List<CardGame> cementery, GameObject zone )
+    {
+        List<CardGame> cards = zone.GetComponent<Zones>().CardsInZone;
+        foreach (CardGame game in cards)
+        {
+            cementery.Add(game);
+            zone.GetComponent<Zones>().CardsInZone.Remove(game);
+        }
+        zone.GetComponent<Zones>().RefreshZone();
+    }
+    public void CleanWeatherZone()
+    {
+        foreach (CardGame game in WeatherZone.GetComponent<Zones>().CardsInZone)
+        {
+            ReturnPlayer(game.Owner).Cementery.Add(game);
+        }
+        WeatherZone.GetComponent<Zones>().RefreshZone();
+    }
 }

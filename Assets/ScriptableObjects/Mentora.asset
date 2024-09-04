@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: Hormigatrix
+  m_Name: Mentora
   m_EditorClassIdentifier: 
-  Name: Hormigatrix
+  Name: Mentora
   Description: 
-  Artwork: {fileID: 21300000, guid: 1d8fe7d9578cabf40b46eb3655752877, type: 3}
+  Artwork: {fileID: 21300000, guid: 668f2d96e568f744183eedb26be3e6ce, type: 3}
   Played: 0
-  Damage: 4
-  OriginalDamage: 4
+  Damage: 2
+  OriginalDamage: 2
   AffectedByClimate: 0
   Increased: 0
   Range: Ranged
-  Faction: 1
+  Faction: 0
   Type: 1

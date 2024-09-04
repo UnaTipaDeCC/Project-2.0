@@ -29,6 +29,23 @@ public class CardsMove : MonoBehaviour
     public void MoveCard(CardGame card)
     {
         Player owner = GameContext.Instance.ReturnPlayer(card.Owner);
+        GameObject zone ;
+        switch (card.Type)
+        {
+            case CardGame.type.Aumento:
+            if(card.Range == "Melee") zone = owner.MeleeIncrement;
+            else if (card.Range == "Siege") zone = owner.SiegeIncrement;
+            else if(card.Range == "Ranged") zone = owner.RangedIncrement;
+            break;
+            case CardGame.type.Clima:
+            zone = GameContext.Instance.WeatherZone;
+            break;
+            default: 
+            if(card.Range == "Melee") zone = owner.Melee;
+            else if (card.Range == "Siege") zone = owner.Siege;
+            else if(card.Range == "Ranged") zone = owner.Ranged;
+            break;
+        }
         switch (card.Range)
         {
             case "Melee":

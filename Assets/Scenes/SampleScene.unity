@@ -1513,13 +1513,109 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2097558788}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: MeleeIncrement
+      value: 
+      objectReference: {fileID: 1006088440}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: SiegeIncrement
+      value: 
+      objectReference: {fileID: 1147437010}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: Deck.Array.size
-      value: 1
+      value: 22
       objectReference: {fileID: 0}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: RangedIncrement
+      value: 
+      objectReference: {fileID: 371276787}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: Deck.Array.data[0]
       value: 
+      objectReference: {fileID: 11400000, guid: 5d8adcd2eb8708b48bab2c8e5433d46a, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 10c9c10ad54820a49afeebca1c045a5d, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: fc12c02010bffec4c99556a0dcd869ef, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2b530e409ede6224d8b1e09fd4f002c4, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1bb1d773da9167447ac1a46167bf6904, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: e0bc18170409357449d26350dd806fc1, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: acdd8f68ce07a854c9ffcc53bd200d0d, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1e3b081522bc31c45905e6b8619d8874, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 03f73d5dea6abc446a294c5b49f4856b, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 41c7cab3cd184854daf98e7376b65125, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[10]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a57a2c562804f64b9c265b63ceeae6d, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[11]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4bc38c8f86fffa94f92b350b60e5e4ec, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[12]
+      value: 
       objectReference: {fileID: 11400000, guid: 11af848d161568946b9b5104f494f434, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[13]
+      value: 
+      objectReference: {fileID: 11400000, guid: 01e7d57004db2c34696930ed4a185429, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[14]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4006f4c49fc730740bfde996748f926c, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[15]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7deaf0ba1a1411248a2ca99201905627, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[16]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6bdebb4779fa2c848a2a7966c02186ea, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[17]
+      value: 
+      objectReference: {fileID: 11400000, guid: c66f06546a0c76f4eb2218821683f1dd, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[18]
+      value: 
+      objectReference: {fileID: 11400000, guid: a21c7d6b3e7133847a9353b0140585ec, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[19]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9e47b77b8434cea43bc55c2f24a525b1, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[20]
+      value: 
+      objectReference: {fileID: 11400000, guid: 457f4126dd90ac3439e6210203da1e17, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[21]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9a690157f849f434eac6e88e812d0a82, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2321,6 +2417,110 @@ PrefabInstance:
       propertyPath: Ranged
       value: 
       objectReference: {fileID: 1958608358}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: MeleeIncrement
+      value: 
+      objectReference: {fileID: 1083232755}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: SiegeIncrement
+      value: 
+      objectReference: {fileID: 1358458765}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.size
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: RangedIncrement
+      value: 
+      objectReference: {fileID: 1573599948}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 43d010603560d7d4e9f5f8b9c34bbdb8, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 56bb348f0eab59048bc50f28df99e055, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: b11b8b83ea7538942b2520796197a520, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7d6f9a30713f0844897a811ffc4b480e, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3886014f2adc8bd4b8803266ad0f9d68, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: a877dd5aeb965af4396a844dfbf25fdb, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: eee2a4b4d76aa684f9acfb88e704034b, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: fd6910057e4c55447946ba68be2c7f8b, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: fa27c7a58e08e224a9f40014bf713612, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: c333eb64bc414ab47a21da6f58365212, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[10]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4bae70f8b208e0b449826cb219f9e890, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[11]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1094121e8907b5c419a17eeabeaad1e9, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[12]
+      value: 
+      objectReference: {fileID: 11400000, guid: 802da49175208c4418a313512ab86489, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[13]
+      value: 
+      objectReference: {fileID: 11400000, guid: c3d484dc908a9754899b131092aa2e53, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[14]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e13d789344ade543ba1fe6ea3c6191b, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[15]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1e7e9e5408fdf824caa80d3ba6e52074, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[16]
+      value: 
+      objectReference: {fileID: 11400000, guid: b651505247686194b9eb1f240653dc15, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[17]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7691ee6adb7bcf948a23070753580f3f, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[18]
+      value: 
+      objectReference: {fileID: 11400000, guid: dd966fe3fd6c83549b3307e60cba68a9, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[19]
+      value: 
+      objectReference: {fileID: 11400000, guid: 93fbfa85da850b94abd99f9205ffc39a, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[20]
+      value: 
+      objectReference: {fileID: 11400000, guid: bf93ec0e500872e468a5ec2a2047e58c, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[21]
+      value: 
+      objectReference: {fileID: 11400000, guid: d92600fbbd575cb4ea09ec3d2b9d4411, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4085,6 +4285,10 @@ PrefabInstance:
       propertyPath: BravasPlayer
       value: 
       objectReference: {fileID: 885974952}
+    - target: {fileID: 2009906578240401896, guid: 07c5f7934d4f93f4b9e8b3fb668cb9ca, type: 3}
+      propertyPath: WheatherZone
+      value: 
+      objectReference: {fileID: 230212397}
     - target: {fileID: 8468497041924187104, guid: 07c5f7934d4f93f4b9e8b3fb668cb9ca, type: 3}
       propertyPath: m_Name
       value: GameContext

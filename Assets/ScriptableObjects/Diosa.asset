@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
-  m_Name: Hormigatrix
+  m_Name: Diosa
   m_EditorClassIdentifier: 
-  Name: Hormigatrix
+  Name: Diosa
   Description: 
-  Artwork: {fileID: 21300000, guid: 1d8fe7d9578cabf40b46eb3655752877, type: 3}
+  Artwork: {fileID: 21300000, guid: a5b626f74823b024eaf4594e1ccb37e8, type: 3}
   Played: 0
-  Damage: 4
-  OriginalDamage: 4
+  Damage: 2
+  OriginalDamage: 2
   AffectedByClimate: 0
   Increased: 0
-  Range: Ranged
-  Faction: 1
-  Type: 1
+  Range: Melee
+  Faction: 0
+  Type: 0
