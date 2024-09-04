@@ -30,7 +30,7 @@ public class Zones : MonoBehaviour
         {
             GameObject child = layoutGroup.transform.GetChild(i).gameObject;
             Debug.Log("Destruyendo: " + child.name);
-            Destroy(child);
+            DestroyImmediate(child);
         }
     }
 

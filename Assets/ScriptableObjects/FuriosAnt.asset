@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c6ba6865cf6a64eb998dcd2d75df6d, type: 3}
   m_Name: FuriosAnt
   m_EditorClassIdentifier: 
-  Name: 
+  Name: FuriosAnt
   Description: 
   Artwork: {fileID: 21300000, guid: 7c6430ec901706b4f8ab23a09392eaf4, type: 3}
   Played: 0

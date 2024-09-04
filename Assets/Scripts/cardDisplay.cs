@@ -17,7 +17,13 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        CardsMove.Instance.MoveCard(Card);
+        //Verificar que sea el turno correcto y la carta no haya sido jugada
+        if(GameContext.Instance.TriggerPlayer == GameContext.Instance.ReturnPlayer(Card.Owner) && !Card.Played)
+        {
+            CardsMove.Instance.MoveCard(Card);
+            GameManager.gameManager.ChangeTurn();
+            //Card.ActivateEffect();
+        }    
     }
     // Start is called before the first frame update
     void Start()
@@ -26,6 +32,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
         DescriptionText.text = Card.Description;
         ArtworkImage.sprite = Card.Artwork;
         DamageText.text = Card.Damage.ToString();
+        Type.text = Card.Type.ToString();
     }
     void Update()
     {

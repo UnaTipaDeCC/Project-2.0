@@ -29,7 +29,7 @@ public class CardsMove : MonoBehaviour
     public void MoveCard(CardGame card)
     {
         Player owner = GameContext.Instance.ReturnPlayer(card.Owner);
-        GameObject zone ;
+        GameObject zone = new GameObject();
         switch (card.Type)
         {
             case CardGame.type.Aumento:
@@ -46,25 +46,17 @@ public class CardsMove : MonoBehaviour
             else if(card.Range == "Ranged") zone = owner.Ranged;
             break;
         }
-        switch (card.Range)
-        {
-            case "Melee":
-            Move(owner.Melee, card,owner);
-            break;
-            case "Ranged":
-            Move(owner.Ranged, card,owner);
-            break;
-            case "Siege":
-            Move(owner.Siege, card,owner);
-            break;
-            //LAS DE AUMENTO Y LAS CLIMAS 
-        }
+        Move(zone,card,owner);
+        
         Debug.Log("Moviendo la carta: " + card.Name);
     }
     public void Move(GameObject zone, CardGame cardGame, Player owner)
     {
         zone.GetComponent<Zones>().CardsInZone.Add(cardGame);
+        zone.GetComponent<Zones>().RefreshZone();
         owner.Hand.GetComponent<Zones>().CardsInZone.Remove(cardGame);
+        owner.Hand.GetComponent<Zones>().RefreshZone();
+
         //update zonde 
         
         

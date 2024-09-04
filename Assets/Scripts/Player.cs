@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     public int WonRounds = 0;
     public int Points = 0;
-    public bool Passed;
+    public bool Passed = false;
     public GameObject Hand;
     public List<CardGame> Deck;
     public GameObject Melee;

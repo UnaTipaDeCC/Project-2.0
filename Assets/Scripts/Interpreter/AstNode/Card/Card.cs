@@ -118,6 +118,8 @@ public class Card : ASTNode
         card.Range = range;
         card.Description = "Cartica creada por el usuario :)";
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
+        card.EffectsList = Effects;
+        card.Effect = CardGame.effects.Especial;
         if(faction == "Hormigas Locas") CreatedCards.LocasCards.Add(card);
         else {Debug.Log(card.Faction); CreatedCards.BravasCards.Add(card);}
         

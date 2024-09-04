@@ -16,7 +16,20 @@ public class CardGame : ScriptableObject
     public bool AffectedByClimate = false;
     public bool Increased = false;
     public string Range;
-    public List<EffectAction> Effects;//REVISAR DESPUES ESTE TEMA
+    public effects Effect;
+    public enum effects
+    {
+        None,
+        Especial,
+        Stole,
+        RemoveLowestPowerCardFromOpponent,
+        RemoveGreatestPowerCardFromOpponent,
+        EqualizeCardPowerToAverageOfOwnFieldCards,
+        WeatherEffect,
+        ClearListWithLeastCards
+
+    }
+    public List<EffectAction> EffectsList;//REVISAR DESPUES ESTE TEMA
     public faction Faction;
     public enum faction
     {
@@ -36,8 +49,12 @@ public class CardGame : ScriptableObject
     {
         get
         {
-            if(Faction == faction.HormigasLocas) return 1;
+            if(Faction == faction.HormigasBravas) return 1;
             else return 2;
         }
+    }
+    public void ActivateEffect()
+    {
+        Effects.Instance.ExecuteEffect(this);
     }
 }
