@@ -21,5 +21,6 @@ MonoBehaviour:
   AffectedByClimate: 0
   Increased: 0
   Range: Siege
+  Effect: 6
   Faction: 1
   Type: 3

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SuperHormiga
   m_EditorClassIdentifier: 
   Name: Super Hormiga
-  Description: 
+  Description: Carta lider de la faccion Hormigas Bravas
   Artwork: {fileID: 21300000, guid: bac844fcc9f622440b1ddd5f39105677, type: 3}
   Played: 0
   Damage: 0
@@ -21,5 +21,6 @@ MonoBehaviour:
   AffectedByClimate: 0
   Increased: 0
   Range: 
+  Effect: 0
   Faction: 1
   Type: 2

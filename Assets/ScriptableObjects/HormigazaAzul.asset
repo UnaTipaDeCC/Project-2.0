@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HormigazaAzul
   m_EditorClassIdentifier: 
   Name: Hormigaza Azul
-  Description: 
+  Description: Carta lider de la faccio Hormigas Locas
   Artwork: {fileID: 21300000, guid: ddb7a347cfe08bd48b4daca47541d2f0, type: 3}
   Played: 0
   Damage: 0
@@ -21,5 +21,6 @@ MonoBehaviour:
   AffectedByClimate: 0
   Increased: 0
   Range: 
+  Effect: 0
   Faction: 0
   Type: 2

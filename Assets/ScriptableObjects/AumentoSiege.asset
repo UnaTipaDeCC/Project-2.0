@@ -21,5 +21,6 @@ MonoBehaviour:
   AffectedByClimate: 0
   Increased: 0
   Range: Ranged
+  Effect: 9
   Faction: 0
   Type: 4

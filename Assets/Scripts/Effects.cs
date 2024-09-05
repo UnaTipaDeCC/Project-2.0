@@ -45,6 +45,21 @@ public class Effects : MonoBehaviour
         break;
         case CardGame.effects.None:
         break;
+        case CardGame.effects.MultiplyCardPowerByCount:
+        MultiplyCardPowerByCount(card);
+        break;
+        case CardGame.effects.WeatherEffect:
+        WeatherEffect(card.Range); 
+        break;
+        case CardGame.effects.IncreasEffect:
+        IncreasEffect(card);
+        break;
+        case CardGame.effects.BravasLiderEffect:
+        BravasLiderEffect();
+        break;
+        case CardGame.effects.LocasLiderEffect:
+        LocasLiderEffect();
+        break;
         }
     }
     #region  BravasEffects
@@ -53,17 +68,42 @@ public class Effects : MonoBehaviour
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         CardGame lowestCard = new CardGame();
         GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,lowestCard, true);
-        player.Cementery.Add(lowestCard);
-        zone.GetComponent<Zones>().CardsInZone.Remove(lowestCard);
-        zone.GetComponent<Zones>().RefreshZone();
+        if(lowestCard.Type == CardGame.type.Plata)
+        {
+            player.Cementery.Add(lowestCard);
+            zone.GetComponent<Zones>().CardsInZone.Remove(lowestCard);
+            zone.GetComponent<Zones>().RefreshZone();
+        }  
     }
     private void RemoveGreatestPowerCardFromOpponent()
     {
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
-        CardGame lowestCard = new CardGame();
-        GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone,lowestCard, false);
-        player.Cementery.Add(lowestCard);
-        zone.GetComponent<Zones>().CardsInZone.Remove(lowestCard);
+        CardGame greatestCard = new CardGame();
+        GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone,greatestCard, false);
+        {
+            player.Cementery.Add(greatestCard);
+            zone.GetComponent<Zones>().CardsInZone.Remove(greatestCard);
+            zone.GetComponent<Zones>().RefreshZone();
+        }
+    }
+    private void MultiplyCardPowerByCount(CardGame card)
+    {
+        Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        int contador = 0; // cero o uno
+        foreach(CardGame cardGame in player.Ranged.GetComponent<Zones>().CardsInZone)
+        {
+            if(cardGame.Name == "Hormigatrix")
+            {
+                contador++;
+            }
+        } 
+        card.Damage *= contador;   
+    }
+    private void BravasLiderEffect() //amuenta en tres el dano de las cartas de plata de la zona del jugador propio que menos cartas tiene
+    {
+        Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        GameObject zone = GetZoneWithLeastCards(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone);
+        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,3,false,true);
         zone.GetComponent<Zones>().RefreshZone();
     }
     #endregion
@@ -72,48 +112,104 @@ public class Effects : MonoBehaviour
     {
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         int averagePower = CalculateAveragePower(player.Melee.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone);
-        SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true);
-        SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true);
-        SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true);
+        SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true,false);
+        SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true,false);
+        SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true,false);
         player.Melee.GetComponent<Zones>().RefreshZone();
         player.Ranged.GetComponent<Zones>().RefreshZone();
         player.Siege.GetComponent<Zones>().RefreshZone();
     }
-    private void ClearListWithLeastCards()
+   /* private void ClearListWithLeastCards()
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         GameObject zone = GetZoneWithLeastCards(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone);
-        foreach(CardGame card in zone.GetComponent<Zones>().CardsInZone) player.Cementery.Add(card);
+        foreach(CardGame card in zone.GetComponent<Zones>().CardsInZone) 
+        {
+            if(card.Type == CardGame.type.Plata)
+            {}
+            player.Cementery.Add(card);
+        }
+        zone.GetComponent<Zones>().RefreshZone();
+    }*/
+    private void ClearListWithLeastCards()
+    {
+        // Obtener el jugador
+        Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        // Obtener la zona con menos cartas
+        GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Melee.GetComponent<Zones>().CardsInZone);
+        // Obtener la lista de cartas en la zona seleccionada
+        List<CardGame> cardsInZone = zone.GetComponent<Zones>().CardsInZone;
+        
+        // Iterar a través de las cartas en la zona
+        for (int i = cardsInZone.Count - 1; i >= 0; i--) // Iterar hacia atrás para evitar modificar la lista mientras se itera
+        {
+            CardGame card = cardsInZone[i];
+            
+            // Verificar si el tipo de carta es Plata
+            if (card.Type == CardGame.type.Plata)
+            {
+                // Agregar la carta al cementerio
+                player.Cementery.Add(card);
+                
+                // Eliminar la carta de la zona actual
+                cardsInZone.RemoveAt(i);
+            }
+        }
+        // Actualizar la zona después de las modificaciones
         zone.GetComponent<Zones>().RefreshZone();
     }
-
+    private void LocasLiderEffect()//aumenta en uno el dano de todas las cartas de plata del campo del jugador
+    {
+        Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
+        GameObject melee = player.Melee;
+        GameObject siege = player.Siege;
+        GameObject ranged = player.Ranged;
+        SetCardPowerToValue(melee.GetComponent<Zones>().CardsInZone,1,false,true);
+        SetCardPowerToValue(siege.GetComponent<Zones>().CardsInZone,1,false,true);
+        SetCardPowerToValue(ranged.GetComponent<Zones>().CardsInZone,1,false,true);
+        //ACTUALIZAR LOS PUNTOS DE CADA ZONA
+        melee.GetComponent<Zones>().RefreshZone();
+        siege.GetComponent<Zones>().RefreshZone();
+        ranged.GetComponent<Zones>().RefreshZone();
+    }
     #endregion
+    #region CommonEffects
+    public void IncreasEffect(CardGame cardGame)
+    {
+        Player player = GameContext.Instance.ReturnPlayer(cardGame.Owner);
+        GameObject zone = new GameObject();
+        DetermineZone(cardGame.Range, zone, player);
+        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false,true);
+    }
     private void WeatherEffect(string zone)
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         Player player1 = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         GameObject zone1 = new GameObject();
         GameObject zone2 = new GameObject();
-        switch(zone)
+        DetermineZone(zone,zone1,player);
+        DetermineZone(zone,zone2, player1);
+        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,1,false,false);
+        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,1,false,false);
+    }
+    #endregion
+    #region Utils
+    private void DetermineZone(string zoneName, GameObject zone, Player player)
+    {
+        switch(zoneName)
         {
             case "Melee":
-            zone1 = player.Melee;
-            zone2 = player1.Melee;
+            zone = player.Melee;
             break;
             case "Ranged":
-            zone1 = player.Ranged;
-            zone2 = player1.Ranged;
+            zone = player.Ranged;
             break;
             case "Siege":
-            zone1 = player.Siege;
-            zone2 = player1.Siege;
+            zone = player.Siege;
             break;
             default: throw new ArgumentException("Invalid range");
         }
-        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,1,false);
-        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,1,false);
     }
-
     private GameObject GetCard(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList, CardGame card, bool isLowest)
     {
         GameObject Zone;
@@ -146,24 +242,31 @@ public class Effects : MonoBehaviour
         }
         throw new Exception("Card not found");
     }
-    private void SetCardPowerToValue(List<CardGame> cards, int powerValue, bool igualate)
+    private void SetCardPowerToValue(List<CardGame> cards, int powerValue, bool igualate, bool increas)
     {
-        if(igualate)
+        if(!igualate) //significa que debe ser tratada como un efecto de clima
+        {
+           foreach (CardGame card in cards)
+            {
+                if(card.Type == CardGame.type.Plata)
+                {
+                    if(!increas) // verificar que no es un aumento y que por defecto seria un clima
+                    {
+                        if(!card.AffectedByClimate) 
+                        card.Damage += powerValue; // Actualiza el poder de cada carta
+                    }
+                    else card.Damage += powerValue; // Actualiza el poder de cada carta
+                }
+            }
+        }
+        else
         {
             foreach (CardGame card in cards)
             {
-                card.Damage = powerValue; // Asigna el poder a cada carta
+                if(card.Type == CardGame.type.Plata) 
+                    card.Damage = powerValue; // Asigna el poder a cada carta 
             }
-        }
-        else 
-        {
-            foreach (CardGame card in cards)
-            {
-                if(!card.AffectedByClimate) card.Damage += powerValue; // Actualiza el poder de cada carta
-                
-            }
-        }
-        
+        } 
     }
     private int CalculateAveragePower(List<CardGame> meleeCards, List<CardGame> rangedCards, List<CardGame> siegeCards)
     {
@@ -172,16 +275,12 @@ public class Effects : MonoBehaviour
         allCards.AddRange(meleeCards);
         allCards.AddRange(rangedCards);
         allCards.AddRange(siegeCards);
-
         // Calcular la suma total del poder de todas las cartas
         int totalPower = allCards.Sum(card => card.Damage);
-
         // Calcular el número total de cartas
         int totalCards = allCards.Count;
-
         // Calcular el promedio del poder
         int averagePower = totalCards > 0 ? totalPower / totalCards : 0;
-
         return averagePower;
     }
     private GameObject GetZoneWithLeastCards(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList)
@@ -212,16 +311,5 @@ public class Effects : MonoBehaviour
         }
         throw new Exception("No se encontró ninguna zona válida.");
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }

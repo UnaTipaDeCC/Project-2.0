@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Hormigaflash
   Description: 
-  Artwork: {fileID: 21300000, guid: 90d225e1d0ac2f3419f9f747793ce46a, type: 3}
+  Artwork: {fileID: 21300000, guid: 7636c13ddde6606489802cdb449eeefb, type: 3}
   Played: 0
   Damage: 0
   OriginalDamage: 0
   AffectedByClimate: 0
   Increased: 0
   Range: Siege
+  Effect: 9
   Faction: 0
   Type: 4

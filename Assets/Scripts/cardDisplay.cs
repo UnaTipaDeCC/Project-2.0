@@ -22,7 +22,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
         {
             CardsMove.Instance.MoveCard(Card);
             GameManager.gameManager.ChangeTurn();
-            //Card.ActivateEffect();
+            Card.ActivateEffect();
         }    
     }
     // Start is called before the first frame update

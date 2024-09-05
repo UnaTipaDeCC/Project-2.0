@@ -21,5 +21,6 @@ MonoBehaviour:
   AffectedByClimate: 0
   Increased: 0
   Range: Melee
+  Effect: 7
   Faction: 0
   Type: 0

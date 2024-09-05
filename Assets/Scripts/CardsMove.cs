@@ -47,6 +47,7 @@ public class CardsMove : MonoBehaviour
             break;
         }
         Move(zone,card,owner);
+        card.Played = true;
         
         Debug.Log("Moviendo la carta: " + card.Name);
     }

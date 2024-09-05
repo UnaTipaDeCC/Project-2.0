@@ -26,7 +26,11 @@ public class CardGame : ScriptableObject
         RemoveGreatestPowerCardFromOpponent,
         EqualizeCardPowerToAverageOfOwnFieldCards,
         WeatherEffect,
-        ClearListWithLeastCards
+        ClearListWithLeastCards,
+        MultiplyCardPowerByCount,
+        IncreasEffect,
+        BravasLiderEffect,
+        LocasLiderEffect, 
 
     }
     public List<EffectAction> EffectsList;//REVISAR DESPUES ESTE TEMA
@@ -43,7 +47,8 @@ public class CardGame : ScriptableObject
         Plata,
         Lider,
         Clima,
-        Aumento
+        Aumento,
+        Despeje
     }
     public int Owner
     {
