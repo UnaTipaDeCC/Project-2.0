@@ -40,20 +40,20 @@ public class InterpreterInput : MonoBehaviour
             {
                 foreach (CompilingError error in errors)
                 {
-                    messageText.text += error.ToString() + "\n"; // Mostrar errores en la UI
+                    messageText.text += error.ToString() + "\n"; // Mostrar errores
                 }
                 messageText.text += "Debe solucionar los errores para continuar";
             }
             else
             {
-                messageText.text = "No hay errores de análisis."; // Mensaje de éxito
+                messageText.text = "No hay errores de análisis." + "\n"; // Mensaje de éxito
                 ElementalProgram program = parse.Parser();
                 
                 if (errors.Count > 0)
                 {
                     foreach (var error in errors)
                     {
-                        messageText.text += error.ToString() + "\n"; // Mostrar errores en la UI
+                        messageText.text += error.ToString() + "\n"; // Mostrar errores
                     }
                     messageText.text += "Hubo errores de parseo, debe solucionarlos para continuar con el chequeo semantico";
                 }

@@ -26,7 +26,7 @@ public struct CodeLocation
     public int Column;
     public override string ToString()
     {
-        return String.Format("Line: {0}, Column: {1}",Line,Column);
+        return String.Format("Line: {0}",Line);
     }
 }
 

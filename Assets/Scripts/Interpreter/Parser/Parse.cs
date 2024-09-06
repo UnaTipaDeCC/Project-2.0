@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 //using System.Reflection.Metadata;
 
 public class Parse 
@@ -186,19 +187,32 @@ public class Parse
         if (Stream.Match(TokenValues.OpenBracket)) 
         { 
             Expression expr = Expression();
-            if( Stream.Match(TokenValues.ClosedBracket))
+            if( !Stream.Match(TokenValues.ClosedBracket)) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "Missing ) in the primary expression)");
+            if(Stream.Match(TokenValues.Lambda))
+            {
+                expr = Predicate(expr);
+                return expr;
+            }
+            return new Grouping(expr,Stream.Previous().Location);
+            /*if( Stream.Match(TokenValues.ClosedBracket))
             {
                 Grouping exp = new Grouping(expr,expr.Location);
                 return exp;
             }
             else if(!(expr is Predicate)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "se esperaba ')'");  
-            return expr;
+            return expr;*/
 
         }
         throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "no hay na");     
     }
+    private Expression Predicate(Expression variable)
+    {
+        Expression condition = Expression();
+        return new Predicate(variable,condition,variable.Location);
+    }
     private Expression HandleIdentifier(Token variable)
     {
+        Debug.Log(Stream.LookAhead().Value + "despues del identificador");
     Expression v = new Variable(variable.Value, variable.Location);
     if (!Stream.End && (Stream.Match(TokenValues.Increment) || Stream.Match(TokenValues.Decrement)))
     {
@@ -245,7 +259,7 @@ public class Parse
                 throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ']' after an index");
             }
         }
-        else if(!Stream.End && Stream.Match(TokenValues.ClosedBracket))
+        /*else if(!Stream.End && Stream.Match(TokenValues.ClosedBracket))
         {
             // Aquí manejamos el caso del lambda
             if (!Stream.End && Stream.Match(TokenValues.Lambda))
@@ -253,7 +267,9 @@ public class Parse
                 // Llamar al método predicate
                 v = new Predicate(v,Expression(),Stream.Previous().Location);
             }
-        }
+            //si lo que viene no es un lambda volver al parentesis cerrado y salir del bucle
+            else Stream.MoveBack(); break;
+        }*/
         else
         {
             break; // Salir del bucle si no hay más accesos a propiedades, índices o métodos
@@ -292,13 +308,13 @@ public class Parse
                 {
                     Debug.Log("en le action");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':' after 'Action'");
-                     Debug.Log("dos puntos");
+                    Debug.Log("dos puntos");
                     if(!Stream.Match(TokenValues.OpenBracket)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '(' after 'Action'");
-                     Debug.Log("(");
+                    Debug.Log("(");
                     if(Stream.Match(TokenType.Identifier))
                     { 
                         target = Stream.Previous(); 
-                         Debug.Log("un target");
+                        Debug.Log("un target");
                     }
                     else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing target");
                     if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(location,ErrorCode.Expected, "Missing ',' after target");
@@ -331,6 +347,9 @@ public class Parse
         Debug.Log("fuera del action");
         if(name == null) throw new CompilingError(location,ErrorCode.Invalid, "The name must be declared");
         if(action == null ) throw new CompilingError(location,ErrorCode.Invalid, "An Action must be declared");
+        Debug.Log("termine el effect " + name.ToString());
+        Debug.Log(Stream.LookAhead().Value);
+        Stream.MoveNext();//POR PROBAR
         return new Effect(location, name, action,target,context,paramsType);
     }
     public (Token,Token) Param()
@@ -365,6 +384,7 @@ public class Parse
                 else if(Stream.Match(TokenValues.Range))
                 {
                     Debug.Log("en el range");
+                    CodeLocation rangeLoc = Stream.Previous().Location;
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, " Missing ':' ");
                     
                     if(!Stream.Match(TokenValues.OpenBrace)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad Range declaration, missing '[' ");
@@ -380,48 +400,61 @@ public class Parse
                         
                     }
                     while(!Stream.Match(TokenValues.ClosedBrace));
-                    if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad Range declaration, missing ',' ");
+                    if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(rangeLoc, ErrorCode.Expected, "Bad Range declaration, missing ',' ");
                 }
                 else if(Stream.Match(TokenValues.OnActivation))
                 {
-                    Debug.Log("en   el onActivation");
+                    CodeLocation onActivationLoc = Stream.Previous().Location;
+                    Debug.Log("en el onActivation");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "Missing ':' after OnActivadion declaration");
                     if(Stream.Match(TokenValues.OpenBrace))
                     {
-                        do
+                        while(Stream.Match(TokenValues.OpenCurlyBraces))
+                        {
+                            effects.Add(EffectAssign());
+                            if(!Stream.Match(TokenValues.ClosedBrace))
+                            {
+                                if(!Stream.Match(TokenValues.ValueSeparator))throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad  declaration, missing ',' ");
+                                //Console.WriteLine("si era un , ");
+                            }
+                            else Stream.MoveBack(1);
+                        }
+                        if(!Stream.Match(TokenValues.ClosedBrace)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ']' after an OnActivation declaration");
+                        /*do
                         {
                             effects.Add(EffectAssign());
                             Debug.Log(Stream.LookAhead().Value + " Despues de agregar el effect");
                             Debug.Log(Stream.Position + " Despues de agregar el effect"); 
                             Debug.Log(Stream.End);
+                            //serciorarse de que lo que sigue sea una coma en caso de que no sea un '}'
                             if(!Stream.Match(TokenValues.ClosedBrace))
                             {
-                                if(!Stream.Match(TokenValues.ValueSeparator))throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad Range declaration, missing ',' ");
+                                if(!Stream.Match(TokenValues.ValueSeparator))throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Bad OnActivation declaration, missing ',' ");
                                 //Console.WriteLine("si era un , ");
                             }
                             else Stream.MoveBack(1);   
                             Debug.Log("aqui");
                         }
-                        while(!Stream.End &&  !Stream.Match(TokenValues.ClosedBrace));
+                        while(!Stream.End && !Stream.Match(TokenValues.ClosedBrace));
                         Debug.Log("algo");
                         //Debug.Log(Stream.LookAhead().Value);
-                    }
+                    */}
                     else
                     {
-                        effects.Add(EffectAssign());
+                        throw new CompilingError(onActivationLoc, ErrorCode.Expected, "Missing '[' after onActivation declaration");
+                        /*effects.Add(EffectAssign());
                         if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(location,ErrorCode.Expected,"Missing ',' after de effect ");
-                    }
+                    */}
                 }
-                //else throw new CompilingError(location, ErrorCode.Invalid, "Missing params");
+                else throw new CompilingError(location, ErrorCode.Invalid, "Missing params");
             }
-            catch(CompilingError error)//revisar lo de los errores
+            catch(CompilingError error)
             {
-                Errors.Add(error);
-                break;
+                if(ErrorsControl(error, TokenValues.ValueSeparator)) break;
             }    
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
-        if(power == null || faction == null || type == null || faction == null || name == null || range.Count == 0) throw new CompilingError(location,ErrorCode.Invalid, "No llenaste todo");
+        if(power == null || faction == null || type == null || faction == null || name == null || range.Count == 0) throw new CompilingError(location,ErrorCode.Invalid, "Missing properties in card declaration");
         return new Card(power,type,name,faction,range,effects, location);//agragar lo de los efectos
     }
     private EffectAction EffectAssign()
@@ -432,16 +465,16 @@ public class Parse
         Selector selector = null;
         PostAction postAction = null;
         Debug.Log(Stream.LookAhead().Value + "en el effect");
-        if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '{'");
+        //if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '{'");
         do
         {
             try
             {
-                if(Stream.End) throw new CompilingError(effectLocation,ErrorCode.Invalid, "Unfinished declaration");
+                if(Stream.End) throw new CompilingError(effectLocation,ErrorCode.Invalid, "Unfinished effect declaration, missing '}'");
                 else if(Stream.Match(TokenValues.Effect))
                 {
                     Debug.Log("bien senores y senoras, estamos en el effect");
-                    if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':'");
+                    if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':' after de Effect");
                     if(Stream.Match(TokenValues.OpenCurlyBraces)) EffectStatement(ref name,ref parameters);
                     else name = Expression();
                     if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ', '");
@@ -472,8 +505,9 @@ public class Parse
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
+        //se verifica que el nombre no sea nulo, los demas parametros si pueden serlo y se verifica en el chequeo 
         if(name == null) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect name cant be null");
-        if(selector is null) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect selector cant be null");
+        //if(selector is null) throw new CompilingError(effectLocation,ErrorCode.Invalid,"The effect selector cant be null"); 
         Debug.Log("bue, to ok");
         Debug.Log(Stream.LookAhead().Value);
         return new EffectAction(name,selector,parameters,postAction,effectLocation);        
@@ -489,11 +523,10 @@ public class Parse
                 else if(Stream.Match(TokenValues.Name)) name = Assign();
                 else if(Stream.Match(TokenType.Identifier)) paramsValue.Add((Stream.Previous(),Assign()));
                 else throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid, "Invalid effect assignation");
-                //falta la manera de manejar el post action
             }
             catch (CompilingError error)
             {
-                if(ErrorsControl(error,TokenValues.ValueSeparator))
+                if(ErrorsControl(error,TokenValues.ValueSeparator)) 
                 break;
             }
         }
@@ -511,14 +544,15 @@ public class Parse
         {
             try
             {
-                if(Stream.Match(TokenValues.Source)) source = Assign();
+                if(Stream.End) throw new CompilingError(Stream.Previous().Location, ErrorCode.Invalid, "Selector declaration unfinished, missing '}'");
+                else if(Stream.Match(TokenValues.Source)) source = Assign();
                 else if(Stream.Match(TokenValues.Single)) single = Assign();
                 else if(Stream.Match(TokenValues.Predicate)) predicate = Assign();
                 else throw new CompilingError(location, ErrorCode.Expected, "Missing source and predicate");
             }
             catch(CompilingError error)
             {
-                    if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
+                if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
@@ -546,7 +580,8 @@ public class Parse
         Statement? body = null;
         if(!Stream.Match(TokenValues.OpenBracket)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing '(' ");
         Expression? codition = Expression();
-        if(!Stream.Match(TokenValues.ClosedBracket)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ') in while declaration' ");
+        Debug.Log(Stream.LookAhead().Value + " despues del while");
+        if(!Stream.Match(TokenValues.ClosedBracket)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ')' in while declaration' ");
         if(Stream.Match(TokenValues.OpenCurlyBraces)) body = Statements();
         else body  = SimpleStatements();
         return new While(codition,body,location);
@@ -585,6 +620,7 @@ public class Parse
             }
             catch(CompilingError error)
             {
+                ErrorsControl(error,TokenValues.StatementSeparator);
                 Errors.Add(error);//Console.WriteLine(error);
                 
             }
@@ -601,8 +637,16 @@ public class Parse
         Debug.Log(Stream.LookAhead().Value);
         if(Stream.Match(TokenType.Identifier)) 
         {
+            CodeLocation location = Stream.Previous().Location;
+            Stream.MoveBack();
+            Expression variable = Expression();
+            statement = new StmtExpression(variable, variable.Location);
             Debug.Log("voy a mandar a declarar");
-            statement = Declaration();
+            if(Stream.Match(TokenValues.Assign,TokenValues.AdditionAssignment,TokenValues.SubtractionAssignment))
+            {
+                statement = Declaration(variable);
+            }
+            else throw new CompilingError(location, ErrorCode.Invalid, "Invalid expression or invalid statement");
         }
         else if(Stream.Match(TokenValues.print))
         {
@@ -613,21 +657,12 @@ public class Parse
         if(!Stream.Match(TokenValues.StatementSeparator)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ';' after a simple statement ");
         return statement;    
     }
-    private Statement Declaration()
+    private Statement Declaration(Expression variable)
     {
-        Stream.MoveBack();
         Debug.Log("Estoy declarando");
-        Expression variable = Expression();
-        Expression expr = null;
-        Token operatorToken = null; 
-        if(Stream.Match(TokenValues.Assign,TokenValues.AdditionAssignment,TokenValues.SubtractionAssignment))
-        {
-            operatorToken = Stream.Previous();
-            expr = Expression(); 
-            return new Declaration(variable, variable.Location, operatorToken,expr);
-        }
-        Debug.Log("es aqui");
-        throw new CompilingError(variable.Location, ErrorCode.Invalid,"Bad declaration of the variable " + variable.Value);
+        Token operatorToken = Stream.Previous();
+        Expression expr = Expression(); 
+        return new Declaration(variable, variable.Location, operatorToken,expr);
     }
     private bool ErrorsControl(CompilingError error, string Value = TokenValues.ClosedCurlyBraces)
     {
