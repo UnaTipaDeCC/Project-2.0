@@ -20,6 +20,13 @@ public class Zones : MonoBehaviour
         {
             CreateCardInstance(card, layoutGroup);
         }
+        
+        // Actualizar puntos en el Player
+        Player player = GetComponentInParent<Player>();
+        if (player != null)
+        {
+            player.UpdatePoints();
+        }
     }
 
     private void DestroyCurrentCards(GridLayoutGroup layoutGroup)
@@ -50,4 +57,14 @@ public class Zones : MonoBehaviour
             Debug.LogError("No se pudo cargar el prefab de la carta.");
         }
     }
+    public int GetPoints()
+    {   
+        int totalPoints = 0;
+        foreach (CardGame card in CardsInZone)
+        {
+            totalPoints += card.Damage; // Asumiendo que CardGame tiene una propiedad Points
+        }
+        return totalPoints;
+    }
 }
+

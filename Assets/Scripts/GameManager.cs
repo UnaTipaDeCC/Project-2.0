@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,7 +24,9 @@ public class GameManager : MonoBehaviour
     private Player LocasPlayer;
     public void ChangeTurn()
     {
-        CurrentPlayer = !CurrentPlayer;
+        //se verifica que el otro jugador no se haya pasado para cambiar el turno
+        if(!GameContext.Instance.OtherPlayer.Passed)
+            CurrentPlayer = !CurrentPlayer;
     }
    
     public bool CurrentPlayer = true; // true: player 1 (Hormigas Bravas) and false: player 2 (Hormigas Locas)
@@ -70,9 +75,100 @@ public class GameManager : MonoBehaviour
     public void EndRound()
     {
         //Comprueba que ambos jugadores se hayan pasado
-        if(GameContext.Instance.LocasPlayer.GetComponent<Player>().Passed && GameContext.Instance.BravasPlayer.GetComponent<Player>().Passed)
+        if(LocasPlayer.Passed && BravasPlayer.Passed)
         {
-            //revisar lo de las cartas lideres
+            //se verifica el ganador
+            if(LocasPlayer.Points < BravasPlayer.Points)
+            {
+                BravasPlayer.WonRounds ++;
+                CurrentPlayer = true;
+            }
+            else if(LocasPlayer.Points > BravasPlayer.Points)
+            {
+                LocasPlayer.WonRounds ++;
+                CurrentPlayer = false;
+            }
+            else 
+            {
+                LocasPlayer.WonRounds ++;
+                BravasPlayer.WonRounds ++;
+            }
+            //actualozar los valores y el tablero
+            ClearField();
+            LocasPlayer.Points = 0;
+            BravasPlayer.Points = 0;
+            //robar las cartas de inicio de una nueva ronda
+            BravasPlayer.Stole(CheckHowManyCardsToDraw(BravasPlayer));
+            LocasPlayer.Stole(CheckHowManyCardsToDraw(LocasPlayer));
         }
     }
+    public void EndGame()
+    {
+        //comprobar que se haya acabado el juego
+        if((BravasPlayer.WonRounds >= 2 || LocasPlayer.WonRounds >= 2) && BravasPlayer.WonRounds != LocasPlayer.WonRounds)
+        {
+            if(BravasPlayer.WonRounds > LocasPlayer.WonRounds)
+            {
+                SceneManager.LoadScene("BravasWins");
+            }
+            else if(BravasPlayer.WonRounds < LocasPlayer.WonRounds)
+            {
+                SceneManager.LoadScene("LocasWins");
+            }
+        }
+    }
+    void ClearField()
+    {
+        //se limpia cada una de las filas de de los jugadores
+        ClearList(BravasPlayer, BravasPlayer.Melee);
+        ClearList(BravasPlayer, BravasPlayer.Ranged);
+        ClearList(BravasPlayer, BravasPlayer.Siege);
+        ClearList(BravasPlayer, BravasPlayer.MeleeIncrement);
+        ClearList(BravasPlayer, BravasPlayer.SiegeIncrement);
+        ClearList(BravasPlayer, BravasPlayer.RangedIncrement);
+        ClearList(LocasPlayer, LocasPlayer.Melee);
+        ClearList(LocasPlayer, LocasPlayer.Ranged);
+        ClearList(LocasPlayer, LocasPlayer.Siege);
+        ClearList(LocasPlayer, LocasPlayer.MeleeIncrement);
+        ClearList(LocasPlayer, LocasPlayer.SiegeIncrement);
+        ClearList(LocasPlayer, LocasPlayer.RangedIncrement);
+        ClearList(LocasPlayer, GameContext.Instance.WeatherZone, true);
+    }
+    void ClearList(Player player, GameObject zone, bool isWeatherZone = false) // optimizar despues
+    {
+        // Obtener el jugador
+        //Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        // Obtener la zona con menos cartas
+        //GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Ranged.GetComponent<Zones>().CardsInZone);
+        // Obtener la lista de cartas en la zona seleccionada
+        List<CardGame> cardsInZone = zone.GetComponent<Zones>().CardsInZone;
+         
+        // Iterar a través de las cartas en la zona
+        for (int i = cardsInZone.Count - 1; i >= 0; i--) // Iterar hacia atrás para evitar modificar la lista mientras se itera
+        {
+            CardGame card = cardsInZone[i];
+            //si es una lista normal
+            if(!isWeatherZone)
+            {
+                // Agregar la carta al cementerio del jugador que se pasa como parametro
+                player.Cementery.Add(card);
+            }
+            else
+            {
+                //se accede al jugador al que pertenece la carta y se agrega al cementerio del mismo
+                GameContext.Instance.ReturnPlayer(card.Owner).Cementery.Add(card);
+            }
+            // Eliminar la carta de la zona actual
+            cardsInZone.RemoveAt(i);  
+        }
+        // Actualizar la zona después de las modificaciones
+        zone.GetComponent<Zones>().RefreshZone();
+    }
+    int CheckHowManyCardsToDraw(Player player)
+    {
+        List<CardGame> cardsInHand = new List<CardGame>();
+        if(cardsInHand.Count == 10) return 0;
+        else if(cardsInHand.Count == 9) return 1;
+        else return 2;
+    } 
 }

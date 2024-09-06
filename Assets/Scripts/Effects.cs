@@ -21,6 +21,13 @@ public class Effects : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    public Player BravasPlayer;
+    private Player LocasPlayer;
+    void Start()
+    {
+        BravasPlayer = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        LocasPlayer = GameContext.Instance.LocasPlayer.GetComponent<Player>();
+    }
     public void ExecuteEffect(CardGame card)
     {
         switch (card.Effect)
@@ -41,7 +48,7 @@ public class Effects : MonoBehaviour
         EqualizeCardPowerToAverageOfOwnFieldCards();
         break;
         case CardGame.effects.ClearListWithLeastCards:
-        ClearListWithLeastCards();
+        ClearListWithLeastCards(BravasPlayer, GetZoneWithLeastCards(BravasPlayer, BravasPlayer.Melee.GetComponent<Zones>().CardsInZone, BravasPlayer.Siege.GetComponent<Zones>().CardsInZone, BravasPlayer.Ranged.GetComponent<Zones>().CardsInZone));
         break;
         case CardGame.effects.None:
         break;
@@ -132,13 +139,13 @@ public class Effects : MonoBehaviour
             player.Cementery.Add(card);
         }
         zone.GetComponent<Zones>().RefreshZone();
-    }*/
-    private void ClearListWithLeastCards()
+    }*/ 
+    private void ClearListWithLeastCards(Player player, GameObject zone)
     {
         // Obtener el jugador
-        Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        //Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         // Obtener la zona con menos cartas
-        GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Melee.GetComponent<Zones>().CardsInZone);
+        //GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Ranged.GetComponent<Zones>().CardsInZone);
         // Obtener la lista de cartas en la zona seleccionada
         List<CardGame> cardsInZone = zone.GetComponent<Zones>().CardsInZone;
         
