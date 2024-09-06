@@ -430,8 +430,7 @@ public class Parse
         Expression name = null;
         List<(Token, Expression)> parameters = new List<(Token, Expression)>();
         Selector selector = null;
-        EffectAction postAction = null;
-        Effect effect = null;
+        PostAction postAction = null;
         Debug.Log(Stream.LookAhead().Value + "en el effect");
         if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '{'");
         do
@@ -456,6 +455,13 @@ public class Parse
                     selector = Selector(selectorLocation);
                     Debug.Log("termine el selector");
                 }
+                else if(Stream.Match(TokenValues.PostAction))
+                {
+                    if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ':' after 'PostAction'");
+                    if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected,"Missing '{' after ':' in a PostAction declaration");
+                    postAction = new PostAction(EffectAssign(),new CodeLocation()); //revisar bien el location
+                }
+                if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected,"Missing ','"); //revisar en la foto donde va la coma
                 //REVISAR EL POST aCTION
                 else throw new CompilingError(effectLocation,ErrorCode.Invalid,"Unfinished OnActivation declaration");
             }
@@ -505,14 +511,14 @@ public class Parse
         {
             try
             {
-            if(Stream.Match(TokenValues.Source)) source = Assign();
-            else if(Stream.Match(TokenValues.Single)) single = Assign();
-            else if(Stream.Match(TokenValues.Predicate)) predicate = Assign();
-            else throw new CompilingError(location, ErrorCode.Expected, "Missing source and predicate");
+                if(Stream.Match(TokenValues.Source)) source = Assign();
+                else if(Stream.Match(TokenValues.Single)) single = Assign();
+                else if(Stream.Match(TokenValues.Predicate)) predicate = Assign();
+                else throw new CompilingError(location, ErrorCode.Expected, "Missing source and predicate");
             }
             catch(CompilingError error)
             {
-                if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
+                    if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));

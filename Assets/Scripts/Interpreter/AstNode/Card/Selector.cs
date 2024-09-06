@@ -8,7 +8,9 @@ public class Selector : Statement
     public Expression Single { get; private set; }
     public Expression Predicate { get; private set; }
     public Selector? Parent { get; private set; }
+    public List<CardGame> FiltredCards{ get; private set; }
     public CodeLocation Location;
+    public bool IsPost {get; set;} // saber si es un action o un post action
     public Scope SelectorScope{ get; private set;}
  
     public Selector(Expression source, Expression single, Expression predicate, CodeLocation location, Selector parent = null) : base(location)
@@ -23,6 +25,7 @@ public class Selector : Statement
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         SelectorScope = scope.CreateChild();
+        //chequear el Single y ponerlo en false en caso de que sea null
         bool checkSingle = true;
         if(Single is null)
         {
@@ -38,6 +41,7 @@ public class Selector : Statement
                 return false;
             }
         }
+        //chequear que sea un predicate y en ese caso chequearlo semanticamente
         if(!(Predicate is Predicate))
         {
             errors.Add(new CompilingError(Predicate.Location, ErrorCode.Invalid, "The 'Predicate' must recive a lamnda expression"));
@@ -49,6 +53,7 @@ public class Selector : Statement
             errors.Add(new CompilingError(Predicate.Location, ErrorCode.Invalid, "The 'Predicate' must be a boolean expression")); 
             return false;
         } 
+        //chequear semanticamente el source, verificar que sea valido
         bool checkSource = Source.CheckSemantic(context, SelectorScope, errors);
         if(Source.Type != ExpressionType.Text)
         {
@@ -97,16 +102,16 @@ public class Selector : Statement
         Single.Evaluate();
         bool single = (bool)Single.Value;
         Predicate predicate = (Predicate)Predicate; // revisar si hay otra forma para acceder a su scope
-        /*foreach(var card in source)
+        foreach(var card in source)
         {
             predicate.Scope.Set("unit", card);
             predicate.Evaluate();
             if((bool)predicate.Value)
             {
-                resultList.Add(card);
+                resultList.Add(card); 
                 if(single) break;
             }
         }
-        //PENSAR como en el effect ACTION ESTA LISTA SE CONVIERTE EN EL TARGET
-    */}
+        FiltredCards = resultList;
+    }
 }

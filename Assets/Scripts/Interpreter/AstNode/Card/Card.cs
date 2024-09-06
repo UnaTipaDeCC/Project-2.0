@@ -5,7 +5,6 @@ using UnityEngine;
 using System;
 public class Card : ASTNode
 {
-    //public string Id {get; set;}
     public Expression Power {get; set;}
     public Expression Type {get;set;}
     public Expression Name {get; set;}
@@ -27,12 +26,14 @@ public class Card : ASTNode
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         Scope Scope = scope.CreateChild();
+        //se chequean las propiedades y se verifica que el tipo sea valido
         bool checkPower = Power.CheckSemantic(context, Scope, errors);
         bool checkType = Type.CheckSemantic(context,Scope,errors);
         bool checkName = Name.CheckSemantic(context,Scope, errors);
         bool checkFaction = Faction.CheckSemantic(context,Scope,errors);
         bool checkEffects = true;
         bool checkRange = true;
+        //Range
         foreach(Expression range in Range)
         {
             checkRange = checkRange && range.CheckSemantic(context,Scope,errors);
@@ -48,29 +49,17 @@ public class Card : ASTNode
                 return false;
             }
         }
+        //power
         if (Power.Type != ExpressionType.Number)
         {
             errors.Add(new CompilingError(Power.Location, ErrorCode.Invalid, "The Power must be numerical"));
             return false;
         }
+        //type
         if(Type.Type != ExpressionType.Text)
         {
             errors.Add(new CompilingError(Type.Location, ErrorCode.Invalid, "The Type must be a text"));
             return false;
-        }
-        if(Faction.Type != ExpressionType.Text)
-        {
-            errors.Add(new CompilingError(Faction.Location, ErrorCode.Invalid, "The Faction must be a text"));
-            return false;
-        }
-        if(Name.Type != ExpressionType.Text)
-        {
-            errors.Add(new CompilingError(Name.Location, ErrorCode.Invalid, "The Name must be a text"));
-            return false;
-        }
-        foreach(var effect in Effects)
-        {
-            checkEffects = checkEffects && effect.CheckSemantic(context,scope,errors);
         }
         Type.Evaluate();
         if(!context.PossiblesTypes.Contains((string)Type.Value))
@@ -78,11 +67,36 @@ public class Card : ASTNode
             errors.Add(new CompilingError(Type.Location, ErrorCode.Invalid, "The Type isnt valid"));
             return false;
         }
+        //Faction
+        if(Faction.Type != ExpressionType.Text)
+        {
+            errors.Add(new CompilingError(Faction.Location, ErrorCode.Invalid, "The Faction must be a text"));
+            return false;
+        }
+        Faction.Evaluate();
+        if(Faction.Value != "Hormigas Bravas" && Faction.Value != "Hormigas Locas")
+        {
+            errors.Add(new CompilingError(Faction.Location, ErrorCode.Invalid, "The Faction must be Hormigas Bravas or Hormigas Locas "));
+            return false;
+        }
+        //Nombre
+        if(Name.Type != ExpressionType.Text)
+        {
+            errors.Add(new CompilingError(Name.Location, ErrorCode.Invalid, "The Name must be a text"));
+            return false;
+        }
+        //Effects
+        foreach(var effect in Effects)
+        {
+            checkEffects = checkEffects && effect.CheckSemantic(context,scope,errors);
+        }
+        
         return checkPower && checkFaction && checkName && checkType && checkRange && checkEffects;
     }
     
     public void Build()
     {
+        //evaluar las propiedades de la carta
         foreach(var a in Range)
         {
             a.Evaluate();
@@ -91,35 +105,37 @@ public class Card : ASTNode
         Type.Evaluate();
         Name.Evaluate();
         Faction.Evaluate();
-        
         string name = (string)Name.Value;
         string type = (string)Type.Value;
         string faction = (string)Faction.Value;
         double power = (double)Power.Value;
         string range = (string)Range[0].Value;
-        Debug.Log(name);
-        Debug.Log(type);
-        Debug.Log(faction);
-        Debug.Log(range);
-        Debug.Log(power);
-
-        //string scriptableObjectPath = $"Assets/ScriptableObjects/{name}.asset";
-        //string cardPath = $"Assets/Prefabs/{name}.prefab";
-
+       
+        //se crea una nueva instancia de cardGame
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
-        card.Name = name;
-        // convertirlo a sus respectivos valores del enum
-        // en el checkSemantick se comprueba que tanto el tipo sea el permitido por lo que no es necesario
-        // manejar esa posibilidad
+        
+        //Se le asignan las propiedades
         card.Type = (CardGame.type)Enum.Parse(typeof(CardGame.type), (string)Type.Value);
         card.Faction = faction == "Hormigas Bravas" ? CardGame.faction.HormigasBravas : CardGame.faction.HormigasLocas;
         card.Damage = Convert.ToInt32(power);
         card.OriginalDamage = Convert.ToInt32(power);
         card.Range = range;
+        card.Name = name;
         card.Description = "Cartica creada por el usuario :)";
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
         card.EffectsList = Effects;
         card.Effect = CardGame.effects.Especial;
+        if(card.EffectsList == null)
+        {
+            card.EffectsList = new List<EffectAction>();
+        }
+        foreach(var effect in Effects)
+        {
+            card.EffectsList.Add(effect);
+        }
+        Debug.Log(card.EffectsList.Count + " estos son los efectos de " + card.Name);
+        
+        //se verifica la faccion y el tipo de la carta para guardarla y posteriormente instanciarla
         if(faction == "Hormigas Locas") 
         {
             if(type == "Lider")
