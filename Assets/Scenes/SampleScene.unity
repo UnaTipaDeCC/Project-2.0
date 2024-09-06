@@ -597,7 +597,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -572.25226, y: -194.04}
+  m_AnchoredPosition: {x: -571.6, y: -205.4}
   m_SizeDelta: {x: 113.4591, y: 153.92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &306812920
@@ -725,6 +725,7 @@ GameObject:
   - component: {fileID: 371276791}
   - component: {fileID: 371276790}
   - component: {fileID: 371276789}
+  - component: {fileID: 371276792}
   m_Layer: 5
   m_Name: RangedIncrement
   m_TagString: Untagged
@@ -813,6 +814,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 371276787}
   m_CullTransparentMesh: 1
+--- !u!114 &371276792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371276787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsInZone: []
 --- !u!1 &376401075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,6 +1875,7 @@ GameObject:
   - component: {fileID: 1006088444}
   - component: {fileID: 1006088443}
   - component: {fileID: 1006088442}
+  - component: {fileID: 1006088445}
   m_Layer: 5
   m_Name: MeleeIncrement
   m_TagString: Untagged
@@ -1949,6 +1964,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006088440}
   m_CullTransparentMesh: 1
+--- !u!114 &1006088445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006088440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsInZone: []
 --- !u!1 &1029491585
 GameObject:
   m_ObjectHideFlags: 0
@@ -2084,6 +2112,7 @@ GameObject:
   - component: {fileID: 1083232759}
   - component: {fileID: 1083232758}
   - component: {fileID: 1083232757}
+  - component: {fileID: 1083232760}
   m_Layer: 5
   m_Name: MeleeIncrement (1)
   m_TagString: Untagged
@@ -2172,6 +2201,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083232755}
   m_CullTransparentMesh: 1
+--- !u!114 &1083232760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083232755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsInZone: []
 --- !u!1 &1147437010
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,6 +2226,7 @@ GameObject:
   - component: {fileID: 1147437014}
   - component: {fileID: 1147437013}
   - component: {fileID: 1147437012}
+  - component: {fileID: 1147437015}
   m_Layer: 5
   m_Name: SiegeIncrement
   m_TagString: Untagged
@@ -2272,6 +2315,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1147437010}
   m_CullTransparentMesh: 1
+--- !u!114 &1147437015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147437010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsInZone: []
 --- !u!1 &1169238978
 GameObject:
   m_ObjectHideFlags: 0
@@ -2927,6 +2983,7 @@ GameObject:
   - component: {fileID: 1358458769}
   - component: {fileID: 1358458768}
   - component: {fileID: 1358458767}
+  - component: {fileID: 1358458770}
   m_Layer: 5
   m_Name: SiegeIncrement (1)
   m_TagString: Untagged
@@ -3015,6 +3072,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358458765}
   m_CullTransparentMesh: 1
+--- !u!114 &1358458770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358458765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsInZone: []
 --- !u!1 &1495497057
 GameObject:
   m_ObjectHideFlags: 0
@@ -3049,7 +3119,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -572, y: 204}
+  m_AnchoredPosition: {x: -572.6, y: 194.4}
   m_SizeDelta: {x: 113.4591, y: 153.92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1495497059
@@ -3102,6 +3172,7 @@ GameObject:
   - component: {fileID: 1573599952}
   - component: {fileID: 1573599951}
   - component: {fileID: 1573599950}
+  - component: {fileID: 1573599953}
   m_Layer: 5
   m_Name: RangedIncrement (1)
   m_TagString: Untagged
@@ -3190,6 +3261,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1573599948}
   m_CullTransparentMesh: 1
+--- !u!114 &1573599953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573599948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c2a77a6379c13541b509f8faf865de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardsInZone: []
 --- !u!1 &1613372620
 GameObject:
   m_ObjectHideFlags: 0
@@ -3584,6 +3668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1739485892}
   - component: {fileID: 1739485893}
+  - component: {fileID: 1739485894}
   m_Layer: 5
   m_Name: GameManager
   m_TagString: Untagged
@@ -3623,6 +3708,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentPlayer: 1
+--- !u!114 &1739485894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739485891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fd136a1bb8649349952750d7a594ad8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1801979731
 GameObject:
   m_ObjectHideFlags: 0
@@ -4463,6 +4560,10 @@ PrefabInstance:
       propertyPath: LocasPlayer
       value: 
       objectReference: {fileID: 1173152013}
+    - target: {fileID: 2009906578240401896, guid: 07c5f7934d4f93f4b9e8b3fb668cb9ca, type: 3}
+      propertyPath: WeatherZone
+      value: 
+      objectReference: {fileID: 230212397}
     - target: {fileID: 2009906578240401896, guid: 07c5f7934d4f93f4b9e8b3fb668cb9ca, type: 3}
       propertyPath: BravasPlayer
       value: 

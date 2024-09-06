@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Bruja
   Description: 
-  Artwork: {fileID: 21300000, guid: cf60f9e3813bc6a45bea43ec743f9d9d, type: 3}
+  Artwork: {fileID: 21300000, guid: 52ec25e945aeef54496c8eb57fc6be9d, type: 3}
   Played: 0
   Damage: 5
   OriginalDamage: 5
   AffectedByClimate: 0
   Increased: 0
   Range: Melee
+  Effect: 0
   Faction: 1
   Type: 1

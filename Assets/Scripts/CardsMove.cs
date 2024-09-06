@@ -40,6 +40,9 @@ public class CardsMove : MonoBehaviour
             case CardGame.type.Clima:
             zone = GameContext.Instance.WeatherZone;
             break;
+            case CardGame.type.Despeje:
+            zone = GameContext.Instance.WeatherZone;
+            break;
             default: 
             if(card.Range == "Melee") zone = owner.Melee;
             else if (card.Range == "Siege") zone = owner.Siege;

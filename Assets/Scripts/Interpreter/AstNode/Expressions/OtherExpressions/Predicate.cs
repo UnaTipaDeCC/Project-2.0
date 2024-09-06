@@ -14,34 +14,41 @@ public class Predicate : Expression
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        Scope = scope.CreateChild();
+        //Scope = scope.CreateChild();
+        //se chequea que la expresion sea una variable
         if(!(Variable is Variable))
         {
             errors.Add(new CompilingError(Variable.Location,ErrorCode.Invalid, $"The expression {Variable} must be a variable.")); 
             Type = ExpressionType.ErrorType;
             return false;
         }
-        if(!Scope.types.ContainsKey("unit")) Scope.types.Add("unit",ExpressionType.Card);
-        else//revisar si deberia hacer esto, si pincha
+        //se chequea que la variable no haya sido previamente definida
+        Variable var = (Variable)Variable;
+        if(scope.Contains(var.Name))
         {
-            errors.Add(new CompilingError(Location,ErrorCode.Invalid,$"The variable {Variable} already exist in this context"));
+            errors.Add(new CompilingError(Location,ErrorCode.Invalid,$"The variable {var} already exist in this context"));
             Type = ExpressionType.ErrorType;
             return false;
         }
-        bool checkVariable = Variable.CheckSemantic(context, Scope,errors);
-        bool checkCondition = Condition.CheckSemantic(context, Scope, errors);
-        /*if(Condition.ExpressionType != ExpressionType.Bool)//revisar esto
+        else scope.SetType(var.Name,ExpressionType.Card);
+        //bool checkVariable = Variable.CheckSemantic(context, scope,errors);
+        //if(!Scope.types.ContainsKey("unit")) Scope.types.Add("unit",ExpressionType.Card);
+        //else//revisar si deberia hacer esto, si pincha
+        //{
+        //}
+        bool checkCondition = Condition.CheckSemantic(context, scope, errors);
+        if(Condition.Type != ExpressionType.Bool)
         {
             errors.Add(new CompilingError(Condition.Location,ErrorCode.Invalid, $"The expression {Condition} must be a boolean expression"));
             Type = ExpressionType.ErrorType;
             return false;
-        }*/
+        }
         Type = ExpressionType.Bool;
-        return checkCondition && checkVariable;
+        return checkCondition; //&& checkVariable;
     }
     public override void Evaluate()
     {
-        Variable.Evaluate();
+       // Variable.Evaluate();
         Condition.Evaluate();
         Value = Condition.Value;
     }

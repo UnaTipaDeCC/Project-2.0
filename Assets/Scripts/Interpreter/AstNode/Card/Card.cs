@@ -103,8 +103,8 @@ public class Card : ASTNode
         Debug.Log(range);
         Debug.Log(power);
 
-        string scriptableObjectPath = $"Assets/ScriptableObjects/{name}.asset";
-        string cardPath = $"Assets/Prefabs/{name}.prefab";
+        //string scriptableObjectPath = $"Assets/ScriptableObjects/{name}.asset";
+        //string cardPath = $"Assets/Prefabs/{name}.prefab";
 
         CardGame card = ScriptableObject.CreateInstance<CardGame>();
         card.Name = name;
@@ -120,8 +120,22 @@ public class Card : ASTNode
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
         card.EffectsList = Effects;
         card.Effect = CardGame.effects.Especial;
-        if(faction == "Hormigas Locas") CreatedCards.LocasCards.Add(card);
-        else {Debug.Log(card.Faction); CreatedCards.BravasCards.Add(card);}
+        if(faction == "Hormigas Locas") 
+        {
+            if(type == "Lider")
+            {
+                CreatedCards.LocasLider = card;
+            }
+            else CreatedCards.LocasCards.Add(card);
+        }
+        else 
+        {
+            if(type == "Lider")
+            {
+                CreatedCards.BravasLider = card;
+            }
+            CreatedCards.BravasCards.Add(card);
+        }
         
        
          

@@ -6,6 +6,8 @@ public static class CreatedCards
 {
     public static List<CardGame> BravasCards = new List<CardGame>();
     public static List<CardGame> LocasCards = new List<CardGame>();
+    public static CardGame BravasLider;
+    public static CardGame LocasLider;
 
     public static void AddToDeck()
     {

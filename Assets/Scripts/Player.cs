@@ -71,12 +71,8 @@ public class Player : MonoBehaviour
             Deck.RemoveAt(0); // Eliminar la primera carta del mazo
         }
     }
-    
-
-    // Start is called before the first frame update
-    void Start()
+    public void LiderCardInstance()
     {
-        #region LiderCardInstance
         // Ruta del prefab de la carta
         string cardPath = "Assets/Prefabs/Card.prefab";
         
@@ -102,7 +98,12 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("No se pudo cargar el prefab de la carta.");
         }
-        #endregion
+    } 
+    
+
+    // Start is called before the first frame update
+    void Start()
+    {
         Cementery = new List<CardGame>();
     }
 

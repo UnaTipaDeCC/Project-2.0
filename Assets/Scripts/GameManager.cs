@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
         Debug.Log(GameContext.Instance); // Verifica si GameContext.Instance es null
         Debug.Log(GameContext.Instance.BravasPlayer); // Verifica si BravasPlayer es null
         Debug.Log(GameContext.Instance.LocasPlayer); // Verifica si LocasPlayer es null
+        if(CreatedCards.LocasLider != null) LocasPlayer.LiderCard = CreatedCards.LocasLider;
+        if(CreatedCards.BravasLider != null) BravasPlayer.LiderCard = CreatedCards.BravasLider;
+        BravasPlayer.LiderCardInstance();
+        LocasPlayer.LiderCardInstance();
         CreatedCards.AddToDeck();
         StartActions();
     }
@@ -47,15 +51,11 @@ public class GameManager : MonoBehaviour
     }
     private void StartActions()
     {
-        
-    //Player bravasPlayer = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-    // Player locasPlayer = GameContext.Instance.LocasPlayer.GetComponent<Player>();
-
-    if (BravasPlayer == null || LocasPlayer == null)
-    {
-        Debug.LogError("Uno de los jugadores no tiene el componente Player asignado o es null.");
-        return; // Salir del método para evitar el NullReferenceException
-    }
+        if (BravasPlayer == null || LocasPlayer == null)
+        {
+            Debug.LogError("Uno de los jugadores no tiene el componente Player asignado o es null.");
+            return; // Salir del método para evitar el NullReferenceException
+        }
         RefreshCards(GameContext.Instance.BravasPlayer.GetComponent<Player>());
         RefreshCards(GameContext.Instance.LocasPlayer.GetComponent<Player>());
         BravasPlayer.WonRounds = 0;

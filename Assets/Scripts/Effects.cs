@@ -65,9 +65,11 @@ public class Effects : MonoBehaviour
     #region  BravasEffects
     private void RemoveLowestPowerCardFromOpponent()
     {
+        Debug.Log("estoy en el efecto de lowest..");
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         CardGame lowestCard = new CardGame();
         GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,lowestCard, true);
+        Debug.Log(lowestCard.name + "es la de menos puntos");
         if(lowestCard.Type == CardGame.type.Plata)
         {
             player.Cementery.Add(lowestCard);
