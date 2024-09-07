@@ -4,25 +4,26 @@ using UnityEngine;
 
 public class PassButtons : MonoBehaviour
 {
-    public GameObject Player;
-    Player player;
-    GameManager gameManager= GameManager.gameManager;
-    GameContext gameContext = GameContext.Instance;
+    GameManager gameManager;
+    GameContext gameContext;
 
     public void OnClick()
     {
-        if(gameContext.TriggerPlayer == player)
+        if(gameManager.CurrentPlayer)
         {
-            player.Passed = true;
-            gameManager.ChangeTurn();
+            gameContext.BravasPlayer.GetComponent<Player>().Passed = true;
+            
         }
+        else gameContext.LocasPlayer.GetComponent<Player>().Passed = true;
+        gameManager.ChangeTurn();
         gameManager.EndRound();
         gameManager.EndGame();
     }
     // Start is called before the first frame update
     void Start()
     {
-        player = Player.GetComponent<Player>();
+        gameManager= GameManager.gameManager;
+        gameContext = GameContext.Instance;
     }
 
     // Update is called once per frame

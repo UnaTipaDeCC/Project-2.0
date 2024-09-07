@@ -32,41 +32,41 @@ public class Effects : MonoBehaviour
     {
         switch (card.Effect)
         { 
-        case CardGame.effects.RemoveLowestPowerCardFromOpponent:
-        RemoveLowestPowerCardFromOpponent();
-        break;
-        case CardGame.effects.RemoveGreatestPowerCardFromOpponent:
-        RemoveGreatestPowerCardFromOpponent();
-        break;
-        case CardGame.effects.Especial:
-        foreach (var effect in card.EffectsList) effect.Execute();
-        break;
-        case CardGame.effects.Stole:
-        GameContext.Instance.ReturnPlayer(card.Owner).Stole(1);
-        break;
-        case CardGame.effects.EqualizeCardPowerToAverageOfOwnFieldCards:
-        EqualizeCardPowerToAverageOfOwnFieldCards();
-        break;
-        case CardGame.effects.ClearListWithLeastCards:
-        ClearListWithLeastCards(BravasPlayer, GetZoneWithLeastCards(BravasPlayer, BravasPlayer.Melee.GetComponent<Zones>().CardsInZone, BravasPlayer.Siege.GetComponent<Zones>().CardsInZone, BravasPlayer.Ranged.GetComponent<Zones>().CardsInZone));
-        break;
-        case CardGame.effects.None:
-        break;
-        case CardGame.effects.MultiplyCardPowerByCount:
-        MultiplyCardPowerByCount(card);
-        break;
-        case CardGame.effects.WeatherEffect:
-        WeatherEffect(card.Range); 
-        break;
-        case CardGame.effects.IncreasEffect:
-        IncreasEffect(card);
-        break;
-        case CardGame.effects.BravasLiderEffect:
-        BravasLiderEffect();
-        break;
-        case CardGame.effects.LocasLiderEffect:
-        LocasLiderEffect();
-        break;
+            case CardGame.effects.RemoveLowestPowerCardFromOpponent:
+            RemoveLowestPowerCardFromOpponent();
+            break;
+            case CardGame.effects.RemoveGreatestPowerCardFromOpponent:
+            RemoveGreatestPowerCardFromOpponent();
+            break;
+            case CardGame.effects.Especial:
+            foreach (var effect in card.EffectsList) effect.Execute();
+            break;
+            case CardGame.effects.Stole:
+            GameContext.Instance.ReturnPlayer(card.Owner).Stole(1);
+            break;
+            case CardGame.effects.EqualizeCardPowerToAverageOfOwnFieldCards:
+            EqualizeCardPowerToAverageOfOwnFieldCards();
+            break;
+            case CardGame.effects.ClearListWithLeastCards:
+            ClearListWithLeastCards();
+            break;
+            case CardGame.effects.None:
+            break;
+            case CardGame.effects.MultiplyCardPowerByCount:
+            MultiplyCardPowerByCount(card);
+            break;
+            case CardGame.effects.WeatherEffect:
+            WeatherEffect(card.Range); 
+            break;
+            case CardGame.effects.IncreasEffect:
+            IncreasEffect(card);
+            break;
+            case CardGame.effects.BravasLiderEffect:
+            BravasLiderEffect();
+            break;
+            case CardGame.effects.LocasLiderEffect:
+            LocasLiderEffect();
+            break;
         }
     }
     #region  BravasEffects
@@ -75,7 +75,7 @@ public class Effects : MonoBehaviour
         Debug.Log("estoy en el efecto de lowest..");
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         CardGame lowestCard = new CardGame();
-        GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,lowestCard, true);
+        GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,ref lowestCard, true);
         Debug.Log(lowestCard.name + "es la de menos puntos");
         if(lowestCard.Type == CardGame.type.Plata)
         {
@@ -88,7 +88,7 @@ public class Effects : MonoBehaviour
     {
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         CardGame greatestCard = new CardGame();
-        GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone,greatestCard, false);
+        GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone, ref greatestCard, false);
         {
             player.Cementery.Add(greatestCard);
             zone.GetComponent<Zones>().CardsInZone.Remove(greatestCard);
@@ -121,31 +121,21 @@ public class Effects : MonoBehaviour
     {
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         int averagePower = CalculateAveragePower(player.Melee.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone);
+        //actualizar los puntos de las cartas de cada zona
         SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true,false);
         SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true,false);
         SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true,false);
+        //actualizar los puntos de las zonas
         player.Melee.GetComponent<Zones>().RefreshZone();
         player.Ranged.GetComponent<Zones>().RefreshZone();
         player.Siege.GetComponent<Zones>().RefreshZone();
-    }
-   /* private void ClearListWithLeastCards()
-    {
-        Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        GameObject zone = GetZoneWithLeastCards(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone);
-        foreach(CardGame card in zone.GetComponent<Zones>().CardsInZone) 
-        {
-            if(card.Type == CardGame.type.Plata)
-            {}
-            player.Cementery.Add(card);
-        }
-        zone.GetComponent<Zones>().RefreshZone();
-    }*/ 
-    private void ClearListWithLeastCards(Player player, GameObject zone)
+    } 
+    private void ClearListWithLeastCards()
     {
         // Obtener el jugador
-        //Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         // Obtener la zona con menos cartas
-        //GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Ranged.GetComponent<Zones>().CardsInZone);
+        GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Ranged.GetComponent<Zones>().CardsInZone);
         // Obtener la lista de cartas en la zona seleccionada
         List<CardGame> cardsInZone = zone.GetComponent<Zones>().CardsInZone;
         
@@ -185,11 +175,11 @@ public class Effects : MonoBehaviour
     #region CommonEffects
     public void IncreasEffect(CardGame cardGame)
     {
-        Player player = GameContext.Instance.ReturnPlayer(cardGame.Owner);
-        GameObject zone = new GameObject();
+        /*Player player = GameContext.Instance.ReturnPlayer(cardGame.Owner);
+        GameObject zone;
         DetermineZone(cardGame.Range, zone, player);
         SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false,true);
-    }
+    */}
     private void WeatherEffect(string zone)
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
@@ -219,7 +209,7 @@ public class Effects : MonoBehaviour
             default: throw new ArgumentException("Invalid range");
         }
     }
-    private GameObject GetCard(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList, CardGame card, bool isLowest)
+    private GameObject GetCard(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList,ref CardGame card, bool isLowest)
     {
         GameObject Zone;
         // Crear una lista para almacenar todas las cartas

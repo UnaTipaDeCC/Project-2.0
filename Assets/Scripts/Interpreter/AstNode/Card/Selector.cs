@@ -7,19 +7,17 @@ public class Selector : Statement
     public Expression Source { get; private set; }
     public Expression Single { get; private set; }
     public Expression Predicate { get; private set; }
-    public Selector? Parent { get; private set; }
     public List<CardGame> FiltredCards{ get; private set; }
     public CodeLocation Location;
     public bool IsPost {get; set;} // saber si es un action o un post action
     public Scope SelectorScope{ get; private set;}
  
-    public Selector(Expression source, Expression single, Expression predicate, CodeLocation location, Selector parent = null) : base(location)
+    public Selector(Expression source, Expression single, Expression predicate, CodeLocation location) : base(location)
     {
         this.Source = source;
         this.Single = single;
         this.Predicate = predicate;
         this.Location = location;
-        this.Parent = parent;
     }
 
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
@@ -37,7 +35,7 @@ public class Selector : Statement
             checkSingle = Single.CheckSemantic(context, SelectorScope, errors);
             if(ExpressionType.Bool != Single.Type)
             {
-                errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The 'Single' must be boolean expression"));
+                errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The 'Single' must be a boolean expression"));
                 return false;
             }
         }
@@ -61,11 +59,23 @@ public class Selector : Statement
             return false;
         }
         Source.Evaluate();
-        if(!context.ContainsSource((string)Source.Value))
+        if(!IsPost)
         {
-            errors.Add(new CompilingError(Single.Location,ErrorCode.Invalid,"The 'Source' isnt a possible expression"));
-            return false;
+            if(!context.ContainsSource((string)Source.Value))
+            {
+                errors.Add(new CompilingError(Source.Location,ErrorCode.Invalid,"The 'Source' isnt a possible expression"));
+                return false;
+            }
         }
+        else
+        {
+            if(!context.ContainsSource((string)Source.Value) && (string)Source.Value != "parent")
+            {
+                errors.Add(new CompilingError(Source.Location,ErrorCode.Invalid,"The postAction 'Source' isnt a possible expression"));
+                return false;
+            }
+        }
+        
         return checkSource && checkSingle && checkPredicate; 
     }
 
@@ -104,7 +114,9 @@ public class Selector : Statement
         Predicate predicate = (Predicate)Predicate; // revisar si hay otra forma para acceder a su scope
         foreach(var card in source)
         {
-            predicate.Scope.Set("unit", card);
+            //revisar esta parte
+            Variable a = (Variable)predicate.Variable;
+            predicate.Scope.Set(a.Name, card);
             predicate.Evaluate();
             if((bool)predicate.Value)
             {

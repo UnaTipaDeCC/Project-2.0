@@ -1181,7 +1181,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -477, y: 203}
+  m_AnchoredPosition: {x: -472, y: 202}
   m_SizeDelta: {x: 61.1552, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &493097138
@@ -1238,8 +1238,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1407,7 +1407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -472, y: -205}
+  m_AnchoredPosition: {x: -471, y: -198}
   m_SizeDelta: {x: 61.1552, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &859399971
@@ -1464,8 +1464,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1616,6 +1616,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2097558788}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Counter
+      value: 
+      objectReference: {fileID: 859399971}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: LiderCard
       value: 
       objectReference: {fileID: 11400000, guid: b74c85f24b40eec4683d0e78630d4092, type: 2}
@@ -1623,6 +1627,10 @@ PrefabInstance:
       propertyPath: LiderZone
       value: 
       objectReference: {fileID: 306812918}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: RoundsCounter
+      value: 
+      objectReference: {fileID: 1169238980}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: MeleeIncrement
       value: 
@@ -2362,7 +2370,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -679, y: -207}
+  m_AnchoredPosition: {x: -674, y: -196}
   m_SizeDelta: {x: 61.1552, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1169238980
@@ -2419,8 +2427,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -2571,6 +2579,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1958608358}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Counter
+      value: 
+      objectReference: {fileID: 493097138}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: LiderCard
       value: 
       objectReference: {fileID: 11400000, guid: 385eea21e77e3a5448239d421db4c043, type: 2}
@@ -2578,6 +2590,10 @@ PrefabInstance:
       propertyPath: LiderZone
       value: 
       objectReference: {fileID: 1495497057}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: RoundsCounter
+      value: 
+      objectReference: {fileID: 1978346767}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: MeleeIncrement
       value: 
@@ -2957,7 +2973,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c4d64025a45b94489f989648149ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
 --- !u!1 &1278867124
 GameObject:
   m_ObjectHideFlags: 0
@@ -4331,7 +4346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -677, y: 203}
+  m_AnchoredPosition: {x: -672, y: 201}
   m_SizeDelta: {x: 61.1552, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1978346767
@@ -4388,8 +4403,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

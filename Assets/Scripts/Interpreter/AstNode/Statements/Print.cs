@@ -14,7 +14,6 @@ public class Print : Statement
     {
         Value.Evaluate();
         //Console.WriteLine(Value.Value);
-        //Console.WriteLine(Value.Value);
     }
 
     public override bool CheckSemantic(Context context,Scope scope, List<CompilingError> errors)

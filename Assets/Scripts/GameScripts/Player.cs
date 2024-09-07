@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -9,17 +10,21 @@ public class Player : MonoBehaviour
     public int Points = 0;
     public bool Passed = false;
     public CardGame LiderCard;
-    public GameObject LiderZone;
-    public GameObject Hand;
+    public List<CardGame> Cementery;
     public List<CardGame> Deck;
+    public int Id{get; private set;}
+   
+    //referencia a las zonas del tablero
     public GameObject Melee;
     public GameObject Siege;
     public GameObject Ranged;
     public GameObject MeleeIncrement;
     public GameObject SiegeIncrement;
     public GameObject RangedIncrement;
-    public List<CardGame> Cementery;
-    public int Id{get; private set;}
+    public GameObject LiderZone;
+    public GameObject Hand;
+    public TMP_Text Counter;   //contador de la escena
+    public TMP_Text RoundsCounter;  //contador de rondas ganadas de la escena
     public List<CardGame> Field{get {return GetField();}}
     private List<CardGame> GetField()
     {
@@ -97,6 +102,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Counter.text = Points.ToString();
+        RoundsCounter.text = WonRounds.ToString();
     }
 }

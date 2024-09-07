@@ -97,6 +97,8 @@ public class GameManager : MonoBehaviour
             ClearField();
             LocasPlayer.Points = 0;
             BravasPlayer.Points = 0;
+            LocasPlayer.Passed = false;
+            BravasPlayer.Passed = false;
             //robar las cartas de inicio de una nueva ronda
             BravasPlayer.Stole(CheckHowManyCardsToDraw(BravasPlayer));
             LocasPlayer.Stole(CheckHowManyCardsToDraw(LocasPlayer));
@@ -166,7 +168,8 @@ public class GameManager : MonoBehaviour
     }
     int CheckHowManyCardsToDraw(Player player)
     {
-        List<CardGame> cardsInHand = new List<CardGame>();
+        List<CardGame> cardsInHand = player.Hand.GetComponent<Zones>().CardsInZone;
+
         if(cardsInHand.Count == 10) return 0;
         else if(cardsInHand.Count == 9) return 1;
         else return 2;

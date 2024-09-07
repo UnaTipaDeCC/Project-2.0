@@ -31,11 +31,7 @@ public class Predicate : Expression
             return false;
         }
         else scope.SetType(var.Name,ExpressionType.Card);
-        //bool checkVariable = Variable.CheckSemantic(context, scope,errors);
-        //if(!Scope.types.ContainsKey("unit")) Scope.types.Add("unit",ExpressionType.Card);
-        //else//revisar si deberia hacer esto, si pincha
-        //{
-        //}
+        //se chequea la condicion
         bool checkCondition = Condition.CheckSemantic(context, scope, errors);
         if(Condition.Type != ExpressionType.Bool)
         {
