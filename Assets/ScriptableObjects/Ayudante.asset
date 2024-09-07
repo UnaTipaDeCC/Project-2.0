@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ayudante
   m_EditorClassIdentifier: 
   Name: Ayudante
-  Description: 
+  Description: Roba una carta
   Artwork: {fileID: 21300000, guid: 8ed3cc440b517e34a8894cf6177f38f5, type: 3}
   Played: 0
   Damage: 1

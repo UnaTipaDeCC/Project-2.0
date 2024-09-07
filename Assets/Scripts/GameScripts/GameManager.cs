@@ -20,8 +20,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }  
-    private Player BravasPlayer;
-    private Player LocasPlayer;
+    private Player bravasPlayer;
+    private Player locasPlayer;
+    private MessageDisplay message;
     public void ChangeTurn()
     {
         //se verifica que el otro jugador no se haya pasado para cambiar el turno
@@ -32,15 +33,13 @@ public class GameManager : MonoBehaviour
     public bool CurrentPlayer = true; // true: player 1 (Hormigas Bravas) and false: player 2 (Hormigas Locas)
     private void Start()
     {
-        BravasPlayer = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        LocasPlayer = GameContext.Instance.LocasPlayer.GetComponent<Player>();
-        Debug.Log(GameContext.Instance); // Verifica si GameContext.Instance es null
-        Debug.Log(GameContext.Instance.BravasPlayer); // Verifica si BravasPlayer es null
-        Debug.Log(GameContext.Instance.LocasPlayer); // Verifica si LocasPlayer es null
-        if(CreatedCards.LocasLider != null) LocasPlayer.LiderCard = CreatedCards.LocasLider;
-        if(CreatedCards.BravasLider != null) BravasPlayer.LiderCard = CreatedCards.BravasLider;
-        BravasPlayer.LiderCardInstance();
-        LocasPlayer.LiderCardInstance();
+        message = MessageDisplay.Instance;
+        bravasPlayer = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        locasPlayer = GameContext.Instance.LocasPlayer.GetComponent<Player>();
+        if(CreatedCards.LocasLider != null) locasPlayer.LiderCard = CreatedCards.LocasLider;
+        if(CreatedCards.BravasLider != null) bravasPlayer.LiderCard = CreatedCards.BravasLider;
+        bravasPlayer.LiderCardInstance();
+        locasPlayer.LiderCardInstance();
         CreatedCards.AddToDeck();
         StartActions();
     }
@@ -54,66 +53,71 @@ public class GameManager : MonoBehaviour
             card.Increased = false;
         }
     }
+    //Actualizar los 
     private void StartActions()
     {
-        if (BravasPlayer == null || LocasPlayer == null)
+        if (bravasPlayer == null || locasPlayer == null)
         {
             Debug.LogError("Uno de los jugadores no tiene el componente Player asignado o es null.");
             return; // Salir del método para evitar el NullReferenceException
         }
         RefreshCards(GameContext.Instance.BravasPlayer.GetComponent<Player>());
         RefreshCards(GameContext.Instance.LocasPlayer.GetComponent<Player>());
-        BravasPlayer.WonRounds = 0;
-        LocasPlayer.WonRounds = 0;
-        BravasPlayer.Points = 0;
-        LocasPlayer.Points = 0;
-        BravasPlayer.Passed = false;
-        LocasPlayer.Passed = false;
-        BravasPlayer.Stole(10);
-        LocasPlayer.Stole(10);
+        bravasPlayer.WonRounds = 0;
+        locasPlayer.WonRounds = 0;
+        bravasPlayer.Points = 0;
+        locasPlayer.Points = 0;
+        bravasPlayer.Passed = false;
+        locasPlayer.Passed = false;
+        bravasPlayer.Stole(10);
+        locasPlayer.Stole(10);
     }
     public void EndRound()
     {
         //Comprueba que ambos jugadores se hayan pasado
-        if(LocasPlayer.Passed && BravasPlayer.Passed)
+        if(locasPlayer.Passed && bravasPlayer.Passed)
         {
+            message.ShowMessage("Fin de la ronda");
             //se verifica el ganador
-            if(LocasPlayer.Points < BravasPlayer.Points)
+            if(locasPlayer.Points < bravasPlayer.Points)
             {
-                BravasPlayer.WonRounds ++;
+                message.ShowMessage("Jugador 1 gana esta ronda");
+                bravasPlayer.WonRounds ++;
                 CurrentPlayer = true;
             }
-            else if(LocasPlayer.Points > BravasPlayer.Points)
+            else if(locasPlayer.Points > bravasPlayer.Points)
             {
-                LocasPlayer.WonRounds ++;
+                message.ShowMessage("Jugador 2 gana esta ronda");
+                locasPlayer.WonRounds ++;
                 CurrentPlayer = false;
             }
             else 
             {
-                LocasPlayer.WonRounds ++;
-                BravasPlayer.WonRounds ++;
+                message.ShowMessage("Empate!!");
+                locasPlayer.WonRounds ++;
+                bravasPlayer.WonRounds ++;
             }
             //actualozar los valores y el tablero
             ClearField();
-            LocasPlayer.Points = 0;
-            BravasPlayer.Points = 0;
-            LocasPlayer.Passed = false;
-            BravasPlayer.Passed = false;
+            locasPlayer.Points = 0;
+            bravasPlayer.Points = 0;
+            locasPlayer.Passed = false;
+            bravasPlayer.Passed = false;
             //robar las cartas de inicio de una nueva ronda
-            BravasPlayer.Stole(CheckHowManyCardsToDraw(BravasPlayer));
-            LocasPlayer.Stole(CheckHowManyCardsToDraw(LocasPlayer));
+            bravasPlayer.Stole(CheckHowManyCardsToDraw(bravasPlayer));
+            locasPlayer.Stole(CheckHowManyCardsToDraw(locasPlayer));
         }
     }
     public void EndGame()
     {
         //comprobar que se haya acabado el juego
-        if((BravasPlayer.WonRounds >= 2 || LocasPlayer.WonRounds >= 2) && BravasPlayer.WonRounds != LocasPlayer.WonRounds)
+        if((bravasPlayer.WonRounds >= 2 || locasPlayer.WonRounds >= 2) && bravasPlayer.WonRounds != locasPlayer.WonRounds)
         {
-            if(BravasPlayer.WonRounds > LocasPlayer.WonRounds)
+            if(bravasPlayer.WonRounds > locasPlayer.WonRounds)
             {
                 SceneManager.LoadScene("BravasWins");
             }
-            else if(BravasPlayer.WonRounds < LocasPlayer.WonRounds)
+            else if(bravasPlayer.WonRounds < locasPlayer.WonRounds)
             {
                 SceneManager.LoadScene("LocasWins");
             }
@@ -122,27 +126,23 @@ public class GameManager : MonoBehaviour
     void ClearField()
     {
         //se limpia cada una de las filas de de los jugadores
-        ClearList(BravasPlayer, BravasPlayer.Melee);
-        ClearList(BravasPlayer, BravasPlayer.Ranged);
-        ClearList(BravasPlayer, BravasPlayer.Siege);
-        ClearList(BravasPlayer, BravasPlayer.MeleeIncrement);
-        ClearList(BravasPlayer, BravasPlayer.SiegeIncrement);
-        ClearList(BravasPlayer, BravasPlayer.RangedIncrement);
-        ClearList(LocasPlayer, LocasPlayer.Melee);
-        ClearList(LocasPlayer, LocasPlayer.Ranged);
-        ClearList(LocasPlayer, LocasPlayer.Siege);
-        ClearList(LocasPlayer, LocasPlayer.MeleeIncrement);
-        ClearList(LocasPlayer, LocasPlayer.SiegeIncrement);
-        ClearList(LocasPlayer, LocasPlayer.RangedIncrement);
-        ClearList(LocasPlayer, GameContext.Instance.WeatherZone, true);
+        ClearList(bravasPlayer, bravasPlayer.Melee);
+        ClearList(bravasPlayer, bravasPlayer.Ranged);
+        ClearList(bravasPlayer, bravasPlayer.Siege);
+        ClearList(bravasPlayer, bravasPlayer.MeleeIncrement);
+        ClearList(bravasPlayer, bravasPlayer.SiegeIncrement);
+        ClearList(bravasPlayer, bravasPlayer.RangedIncrement);
+        ClearList(locasPlayer, locasPlayer.Melee);
+        ClearList(locasPlayer, locasPlayer.Ranged);
+        ClearList(locasPlayer, locasPlayer.Siege);
+        ClearList(locasPlayer, locasPlayer.MeleeIncrement);
+        ClearList(locasPlayer, locasPlayer.SiegeIncrement);
+        ClearList(locasPlayer, locasPlayer.RangedIncrement);
+        ClearList(locasPlayer, GameContext.Instance.WeatherZone, true);
     }
     void ClearList(Player player, GameObject zone, bool isWeatherZone = false) // optimizar despues
     {
-        // Obtener el jugador
-        //Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        // Obtener la zona con menos cartas
-        //GameObject zone = GetZoneWithLeastCards(player, player.Melee.GetComponent<Zones>().CardsInZone, player.Siege.GetComponent<Zones>().CardsInZone, player.Ranged.GetComponent<Zones>().CardsInZone);
-        // Obtener la lista de cartas en la zona seleccionada
+         // Obtener la lista de cartas en la zona seleccionada
         List<CardGame> cardsInZone = zone.GetComponent<Zones>().CardsInZone;
          
         // Iterar a través de las cartas en la zona

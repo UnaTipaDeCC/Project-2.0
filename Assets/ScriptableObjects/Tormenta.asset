@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tormenta
   m_EditorClassIdentifier: 
   Name: Tormenta
-  Description: 
+  Description: Disminuye en 1 el poder de las cartas plata de Melee
   Artwork: {fileID: 21300000, guid: dad07a187acc67e4d965ac7042991f4f, type: 3}
   Played: 0
   Damage: 0

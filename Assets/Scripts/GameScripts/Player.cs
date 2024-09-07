@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public List<CardGame> Cementery;
     public List<CardGame> Deck;
     public int Id{get; private set;}
+    public bool CanChange = true; //indica que no se ha jugado ningana carta 
+    public int ChandedCards = 0;
    
     //referencia a las zonas del tablero
     public GameObject Melee;
@@ -87,8 +89,20 @@ public class Player : MonoBehaviour
     {
         Points = Melee.GetComponent<Zones>().GetPoints() + Siege.GetComponent<Zones>().GetPoints() + Ranged.GetComponent<Zones>().GetPoints();
     }
-    
 
+    public void ChangeCard(CardGame card)
+    {
+        //verificar que pueda cambiar carta
+        if(CanChange && ChandedCards < 2)
+        {
+            Hand.GetComponent<Zones>().CardsInZone.Remove(card);
+            Cementery.Add(card);
+            Stole(1);
+            ChandedCards ++;
+        }
+        
+    }
+    
     // Start is called before the first frame update
     void Start()
     {

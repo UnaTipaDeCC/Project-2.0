@@ -21,13 +21,19 @@ public class Effects : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public Player BravasPlayer;
-    private Player LocasPlayer;
+    
+    Player BravasPlayer;
+    Player LocasPlayer;
+    MessageDisplay messages;
+    
     void Start()
     {
         BravasPlayer = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         LocasPlayer = GameContext.Instance.LocasPlayer.GetComponent<Player>();
+        messages = MessageDisplay.Instance;
     }
+
+    #region Effect Execute
     public void ExecuteEffect(CardGame card)
     {
         switch (card.Effect)
@@ -67,8 +73,19 @@ public class Effects : MonoBehaviour
             case CardGame.effects.LocasLiderEffect:
             LocasLiderEffect();
             break;
+            case CardGame.effects.Clear:
+            ClearEffect();
+            break;
+            case CardGame.effects.SetEncreasCard:
+            SetEncreasCard(card);
+            break;
+            case CardGame.effects.SetWeatherCard:
+            SetWeatherCard(card);
+            break;
         }
     }
+    #endregion
+
     #region  BravasEffects
     private void RemoveLowestPowerCardFromOpponent()
     {
@@ -89,16 +106,18 @@ public class Effects : MonoBehaviour
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         CardGame greatestCard = new CardGame();
         GameObject zone = GetCard(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Melee.GetComponent<Zones>().CardsInZone, ref greatestCard, false);
+        Debug.Log(greatestCard.name + "es la de menos puntos");
+        if(greatestCard.Type == CardGame.type.Plata)
         {
             player.Cementery.Add(greatestCard);
             zone.GetComponent<Zones>().CardsInZone.Remove(greatestCard);
             zone.GetComponent<Zones>().RefreshZone();
-        }
+        } 
     }
     private void MultiplyCardPowerByCount(CardGame card)
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        int contador = 0; // cero o uno
+        int contador = 0; 
         foreach(CardGame cardGame in player.Ranged.GetComponent<Zones>().CardsInZone)
         {
             if(cardGame.Name == "Hormigatrix")
@@ -106,9 +125,19 @@ public class Effects : MonoBehaviour
                 contador++;
             }
         } 
-        card.Damage *= contador;   
+        card.Damage *= contador; 
+        player.Ranged.GetComponent<Zones>().RefreshZone();
     }
-    private void BravasLiderEffect() //amuenta en tres el dano de las cartas de plata de la zona del jugador propio que menos cartas tiene
+    private void SetEncreasCard(CardGame card)
+    {
+        CardGame encreasCard = FindCard(CardGame.type.Aumento,BravasPlayer);
+        if(encreasCard != null)
+        {
+            CardsMove.Instance.MoveCard(encreasCard);
+        }
+        else messages.ShowMessage("No hay cartas 'aumento' en el deck"); 
+    }
+    private void BravasLiderEffect() //amuenta en 3 el dano de las cartas de plata de la zona del jugador propio que menos cartas tiene
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         GameObject zone = GetZoneWithLeastCards(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone);
@@ -157,44 +186,85 @@ public class Effects : MonoBehaviour
         // Actualizar la zona después de las modificaciones
         zone.GetComponent<Zones>().RefreshZone();
     }
+
+    private void SetWeatherCard(CardGame card)
+    {
+        CardGame weatherCard = FindCard(CardGame.type.Clima,BravasPlayer);
+        if(weatherCard != null)
+        {
+            CardsMove.Instance.MoveCard(weatherCard);
+        }
+        else messages.ShowMessage("No hay cartas 'clima' en el deck"); 
+    }
+
     private void LocasLiderEffect()//aumenta en uno el dano de todas las cartas de plata del campo del jugador
     {
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         GameObject melee = player.Melee;
         GameObject siege = player.Siege;
         GameObject ranged = player.Ranged;
+        //Actualizar los puntos en cada carta
         SetCardPowerToValue(melee.GetComponent<Zones>().CardsInZone,1,false,true);
         SetCardPowerToValue(siege.GetComponent<Zones>().CardsInZone,1,false,true);
         SetCardPowerToValue(ranged.GetComponent<Zones>().CardsInZone,1,false,true);
-        //ACTUALIZAR LOS PUNTOS DE CADA ZONA
+        //Actualizar los puntos de cada zona
         melee.GetComponent<Zones>().RefreshZone();
         siege.GetComponent<Zones>().RefreshZone();
         ranged.GetComponent<Zones>().RefreshZone();
     }
     #endregion
+
     #region CommonEffects
-    public void IncreasEffect(CardGame cardGame)
+    private void IncreasEffect(CardGame cardGame)
     {
-        /*Player player = GameContext.Instance.ReturnPlayer(cardGame.Owner);
-        GameObject zone;
-        DetermineZone(cardGame.Range, zone, player);
+        Player player = GameContext.Instance.ReturnPlayer(cardGame.Owner);
+        GameObject zone = DetermineZone(cardGame.Range, player);
+        
+        //Actualizar puntos de las cartas
         SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false,true);
-    */}
+
+        //Actualizar puntos en la zona
+        zone.GetComponent<Zones>().RefreshZone();
+    }
+
+    private void ClearEffect()
+    {
+        //Acceder a la weatherZone desde el GameContext, obtener el componete Zones de la zona y la lista de cartas
+        List<CardGame> weatherList = GameContext.Instance.WeatherZone.GetComponent<Zones>().CardsInZone;
+        foreach(CardGame card in weatherList)
+        {
+            //Comprobar que sea una carta clima
+            if(card.Type == CardGame.type.Clima)
+            {
+                GameContext.Instance.ReturnPlayer(card.Owner).Cementery.Add(card);
+            }
+        }
+        GameContext.Instance.WeatherZone.GetComponent<Zones>().RefreshZone();
+    }
+
     private void WeatherEffect(string zone)
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         Player player1 = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        GameObject zone1 = new GameObject();
-        GameObject zone2 = new GameObject();
-        DetermineZone(zone,zone1,player);
-        DetermineZone(zone,zone2, player1);
-        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,1,false,false);
-        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,1,false,false);
+        
+        //Asignar las zonas segun el jugador
+        GameObject zone1 = DetermineZone(zone, player);
+        GameObject zone2 = DetermineZone(zone, player1);
+
+        //Actualizar los puntos de las cartas
+        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,-1,false,false);
+        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,-1,false,false);
+
+        //Actualizar puntos de las zonas
+        zone1.GetComponent<Zones>().RefreshZone();
+        zone2.GetComponent<Zones>().RefreshZone();
     }
     #endregion
+
     #region Utils
-    private void DetermineZone(string zoneName, GameObject zone, Player player)
+    private GameObject DetermineZone(string zoneName, Player player)
     {
+        GameObject zone;
         switch(zoneName)
         {
             case "Melee":
@@ -208,7 +278,9 @@ public class Effects : MonoBehaviour
             break;
             default: throw new ArgumentException("Invalid range");
         }
+        return zone;
     }
+
     private GameObject GetCard(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList,ref CardGame card, bool isLowest)
     {
         GameObject Zone;
@@ -241,6 +313,7 @@ public class Effects : MonoBehaviour
         }
         throw new Exception("Card not found");
     }
+
     private void SetCardPowerToValue(List<CardGame> cards, int powerValue, bool igualate, bool increas)
     {
         if(!igualate) //significa que debe ser tratada como un efecto de clima
@@ -267,6 +340,7 @@ public class Effects : MonoBehaviour
             }
         } 
     }
+
     private int CalculateAveragePower(List<CardGame> meleeCards, List<CardGame> rangedCards, List<CardGame> siegeCards)
     {
         // Crear una lista que contenga todas las cartas
@@ -282,6 +356,7 @@ public class Effects : MonoBehaviour
         int averagePower = totalCards > 0 ? totalPower / totalCards : 0;
         return averagePower;
     }
+
     private GameObject GetZoneWithLeastCards(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList)
     {
         // Determinar cuál lista tiene menos cartas
@@ -309,6 +384,19 @@ public class Effects : MonoBehaviour
             return player.Siege;
         }
         throw new Exception("No se encontró ninguna zona válida.");
+    }
+
+    private CardGame FindCard(CardGame.type type, Player player)
+    {
+        foreach (CardGame cardGame in player.Deck)
+        {
+            if(cardGame.Type  == type)
+            {
+                return cardGame;
+            }
+        }
+        return null;
+        //enviar mensaje de no tiene carta de ese tipo en el deck por lo que el efecto no hace nada 
     }
     #endregion
 }

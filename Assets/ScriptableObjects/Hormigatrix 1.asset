@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Hormigatrix 1
   m_EditorClassIdentifier: 
   Name: Hormigatrix
-  Description: 
+  Description: Multiplica su poder a la ctdad de cartas iguales a ella
   Artwork: {fileID: 21300000, guid: 1d8fe7d9578cabf40b46eb3655752877, type: 3}
   Played: 0
   Damage: 4

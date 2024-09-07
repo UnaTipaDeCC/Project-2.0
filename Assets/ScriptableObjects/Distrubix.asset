@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Distrubix
   m_EditorClassIdentifier: 
   Name: Distrubix
-  Description: 
+  Description: Elimina la carta con mas poder del enemigo
   Artwork: {fileID: 21300000, guid: e5ba9d19052e3844aa55c1fcea132e14, type: 3}
   Played: 0
   Damage: 2

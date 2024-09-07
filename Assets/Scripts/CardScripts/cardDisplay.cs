@@ -14,20 +14,33 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
     public Image ArtworkImage;
     public TMP_Text DamageText;
     public TMP_Text Type;
+    public MessageDisplay messages;
     
     public void OnPointerClick(PointerEventData eventData)
     {
-        //Verificar que sea el turno correcto y la carta no haya sido jugada
-        if(GameContext.Instance.TriggerPlayer == GameContext.Instance.ReturnPlayer(Card.Owner) && !Card.Played)
+        if(eventData.button == PointerEventData.InputButton.Left)
         {
-            CardsMove.Instance.MoveCard(Card);
-            GameManager.gameManager.ChangeTurn();
-            Card.ActivateEffect();
-        }    
+            //Verificar que sea el turno correcto y la carta no haya sido jugada
+            if(GameContext.Instance.TriggerPlayer == GameContext.Instance.ReturnPlayer(Card.Owner) && !Card.Played)
+            {
+                //una vez jugada una carta ya no puede hacer el cambio de cartas
+                GameContext.Instance.ReturnPlayer(Card.Owner).CanChange = false;
+                //revisar si llamar al efecto primero y al move despues sea una buena idea
+                CardsMove.Instance.MoveCard(Card);
+                GameManager.gameManager.ChangeTurn();
+                Card.ActivateEffect();
+            } 
+            else messages.ShowMessage("No es su turno o ya esta carta se jugo",2.0f);  
+        }
+        else if(eventData.button == PointerEventData.InputButton.Right)
+        {
+            GameContext.Instance.ReturnPlayer(Card.Owner).ChangeCard(Card);
+        }
     }
     // Start is called before the first frame update
     void Start()
     {
+        messages = MessageDisplay.Instance;
         nameText.text = Card.name;
         DescriptionText.text = Card.Description;
         ArtworkImage.sprite = Card.Artwork;

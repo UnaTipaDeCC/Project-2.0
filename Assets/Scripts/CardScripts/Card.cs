@@ -31,7 +31,9 @@ public class CardGame : ScriptableObject
         IncreasEffect,
         BravasLiderEffect,
         LocasLiderEffect, 
-
+        SetWeatherCard,
+        SetEncreasCard,
+        Clear
     }
     public List<EffectAction> EffectsList;//REVISAR DESPUES ESTE TEMA
     public faction Faction;
