@@ -18,59 +18,73 @@ public class Declaration : Statement
     }
     public override void Execute()
     {
-        try
+        value.Evaluate();
+        if(variable is Variable)
         {
-            value.Evaluate();
-            if(variable is Variable)
+            switch(operatorToken.Value)
             {
-                switch(operatorToken.Value)
-                {
-                    case TokenValues.Assign:
-                    DeclarationScope.Set(variable.ToString(),value.Value);
-                    break;
-                    case TokenValues.SubtractionAssignment:
-                    DeclarationScope.Set(variable.ToString(),(double)value.Value + (double)DeclarationScope.Get(variable.ToString()));
-                    break;
-                    case TokenValues.AdditionAssignment:
-                    DeclarationScope.Set(variable.ToString(),(double)DeclarationScope.Get(variable.ToString()) - (double)value.Value);
-                    break;
-                }   
+                case TokenValues.Assign:
+                DeclarationScope.Set(variable.ToString(),value.Value);
+                break;
+                case TokenValues.SubtractionAssignment:
+                DeclarationScope.Set(variable.ToString(),(double)value.Value + (double)DeclarationScope.Get(variable.ToString()));
+                break;
+                case TokenValues.AdditionAssignment:
+                DeclarationScope.Set(variable.ToString(),(double)DeclarationScope.Get(variable.ToString()) - (double)value.Value);
+                break;
+            }   
+        }  
+        if(variable is Property)      
+        {
+            variable.Evaluate();
+            Property property = (Property)variable;
+            CardGame cardGame = (CardGame)property.Caller.Value;
+            switch(operatorToken.Value)
+            {
+                case TokenValues.Assign:
+                cardGame.Damage = (int)value.Value;
+                break;
+                case TokenValues.AdditionAssignment:
+                cardGame.Damage = (int)value.Value + (int)variable.Value;
+                break;
+                case TokenValues.SubtractionAssignment:
+                cardGame.Damage = (int)variable.Value - (int)value.Value;
+                break;
             }
-        }
-        catch(CompilingError){//Console.WriteLine("algo anda mal en lo de la declaracion");}
         }
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        bool checkValue = value.CheckSemantic(context,scope,errors);
         DeclarationScope = scope;
+        //chequear semanticamente el valor de la variable
+        bool checkValue = value.CheckSemantic(context,scope,errors);
+        
         if(variable is Variable)
         {
-            //Console.WriteLine("ENEFECTO ERA UNA VARIABLE");
             if(operatorToken.Value == TokenValues.Assign)
             {
-                //Console.WriteLine("EN EFECTO ERA UN =");
-                DeclarationScope.SetType(variable.ToString(),this.value.Type); 
+                DeclarationScope.SetType(variable.ToString(),value.Type); 
             }
             else if(operatorToken.Value == TokenValues.SubtractionAssignment || operatorToken.Value == TokenValues.AdditionAssignment)
             {
                 if(DeclarationScope.GetType(variable.ToString()) != ExpressionType.Number || value.Type != ExpressionType.Number)
                 {
-                    errors.Add(new CompilingError(variable.Location,ErrorCode.Invalid,"The variable and the value must be a numbers for this operation ('+=' || '-=')"));
+                    errors.Add(new CompilingError(variable.Location,ErrorCode.Invalid,"The variable and the value must be numbers for this operation ('+=' || '-=')"));
                     return false;
                 }
             }
         }
-        else if(variable is Predicate)
+        else if(variable is Property)
         {
-            if(variable.Type != ExpressionType.Number)
+            variable.CheckSemantic(context,DeclarationScope,errors);
+            if(variable.Type != ExpressionType.Number || value.Type != ExpressionType.Number)
             {
-                errors.Add(new CompilingError(location,ErrorCode.Invalid,"The propierty must be 'power'"));
+                errors.Add(new CompilingError(location,ErrorCode.Invalid,"The propierty must be 'power' and the value a number"));
                 return false;
             }
         }
-        bool checVariable = variable.CheckSemantic(context, scope, errors);
-        return checVariable && checkValue;
+        //bool checVariable = variable.CheckSemantic(context, scope, errors);
+        return checkValue;
         
     }
     public override string ToString()

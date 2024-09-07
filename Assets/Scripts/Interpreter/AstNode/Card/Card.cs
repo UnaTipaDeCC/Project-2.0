@@ -74,7 +74,7 @@ public class Card : ASTNode
             return false;
         }
         Faction.Evaluate();
-        if(Faction.Value != "Hormigas Bravas" && Faction.Value != "Hormigas Locas")
+        if((string)Faction.Value != "Hormigas Bravas" && (string)Faction.Value != "Hormigas Locas")
         {
             errors.Add(new CompilingError(Faction.Location, ErrorCode.Invalid, "The Faction must be Hormigas Bravas or Hormigas Locas "));
             return false;

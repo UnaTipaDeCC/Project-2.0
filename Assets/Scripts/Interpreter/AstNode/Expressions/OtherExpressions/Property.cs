@@ -2,39 +2,39 @@ using System.Collections.Generic;
 using System;
 class Property : Expression
 {
-    Expression caller;
-    Token name;
+    public Expression Caller{get; private set;}
+    public Token Name{get; private set;}
     CodeLocation location;
     public Property(Token name, Expression caller, CodeLocation location) : base(location)
     {
-        this.caller = caller;
-        this.name = name;
+        this.Caller = caller;
+        this.Name = name;
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        bool checkCaller = caller.CheckSemantic(context, scope,errors);
-        if(!context.Contains(name.Value))
+        bool checkCaller = Caller.CheckSemantic(context, scope,errors);
+        if(!context.Contains(Name.Value))
         {
-            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The property " + name.Value + " is not valid"));
+            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The property " + Name.Value + " is not valid"));
             Type = ExpressionType.ErrorType;
             return false;
         }
-        if(caller.Type != context.GetCallerType(name.Value))
+        if(Caller.Type != context.GetCallerType(Name.Value))
         {
-            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The property " + name.Value + " cant be called by an expression of that type"));
+            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The property " + Name.Value + " cant be called by an expression of that type"));
             Type = ExpressionType.ErrorType;
             return false;
         }
-        Type = context.GetType(name.Value);
+        Type = context.GetType(Name.Value);
         return checkCaller;
     }
     public override void Evaluate()
     {
-        caller.Evaluate(); 
-        if (caller.Value is CardGame card)
+        Caller.Evaluate(); 
+        if (Caller.Value is CardGame card)
         {
             //CardGame card = (CardGame)caller.Value;
-            switch(name.Value)
+            switch(Name.Value)
             {
                 case "Power":
                 Value = card.Damage;
@@ -54,11 +54,11 @@ class Property : Expression
                 case "Owner":
                 Value = card.Owner;
                 break;
-                default: throw new Exception("Invalid property: " + name.Value);
+                default: throw new Exception("Invalid property: " + Name.Value);
             }  
         }
-        else if (caller.Value is GameContext context){
-            switch(name.Value)
+        else if (Caller.Value is GameContext context){
+            switch(Name.Value)
             {
                 case "TriggerPlayer":
                 Value = context.TriggerPlayer.Id;
@@ -78,7 +78,7 @@ class Property : Expression
                 case "Field":
                 Value = context.Graveryard;
                 break;
-                default: throw new Exception("Invalid property: " + name.Value);
+                default: throw new Exception("Invalid property: " + Name.Value);
             }
         }
     }
@@ -86,6 +86,6 @@ class Property : Expression
     public override object? Value { get; set;}
     public override string ToString()
     {
-        return String.Format("{0}.{1}",caller,name);
+        return String.Format("{0}.{1}",Caller,Name);
     }
 }

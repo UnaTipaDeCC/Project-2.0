@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+//using System.Diagnostics;
+using UnityEngine;
 public class Variable : AtomExpression
 {
     public string Name;
@@ -19,17 +21,19 @@ public class Variable : AtomExpression
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         VariableScope = scope;
-        if(VariableScope.GetType(Name) == ExpressionType.ErrorType)
+        Debug.Log("en el coso desto de la variable" + VariableScope.Contains(Name));
+        if(!VariableScope.Contains(Name))
         {
-            Console.WriteLine(Name);
+            Debug.Log(Name);
             errors.Add(new CompilingError(Location,ErrorCode.Invalid,"la variable: " + Name + " no esta definida (estoy en el check de la variable)"));
             Type = ExpressionType.Identifier;
             return false;
         }
         else
         {
-            Type = scope.GetType(Name);
-            Console.WriteLine("en la variable despues de ponerle un tipo, todo ok: + " + Name);
+            Type = VariableScope.GetType(Name);
+            Debug.Log("en la variable despues de ponerle un tipo, todo ok: + " + Name);
+            Debug.Log("el type de la variable es " + Type);
             return true;
         }
         

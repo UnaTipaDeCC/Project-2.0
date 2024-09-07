@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class StmtExpression : Statement
 {
-    public Expression expression {get; set;}
+    Expression expression;
     public Scope Scope{ get; set; }
     public StmtExpression(Expression expression, CodeLocation location) : base(location)
     {

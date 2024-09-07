@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using Unity.VisualScripting;
 public class While : Statement
 {
     Expression condition;
@@ -22,7 +23,7 @@ public class While : Statement
             errors.Add(new CompilingError(condition.Location,ErrorCode.Invalid, "In a while statement, the expression within the parentheses must be a bool."));
             return false;
         }
-        bool checkBody = body.CheckSemantic(context,scope,errors);
+        bool checkBody = body.CheckSemantic(context,this.scope,errors);
         return checkCondition && checkBody;
     }
     public override void Execute()
@@ -36,6 +37,6 @@ public class While : Statement
     }
     public override string ToString()
     {
-        return String.Format("While({0}) {1}",condition,body);
+        return String.Format("While({0}) {{1}}",condition,body);
     }
 }

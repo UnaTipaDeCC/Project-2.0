@@ -19,10 +19,9 @@ public class Print : Statement
 
     public override bool CheckSemantic(Context context,Scope scope, List<CompilingError> errors)
     {
-        this.PrintScope = scope;
+        PrintScope = scope;
         bool a = Value.CheckSemantic(context,PrintScope,errors);
-        //Console.WriteLine("chequeando el print: " + a);
-        return true;
+        return a;
     }
     public override string ToString()
     {

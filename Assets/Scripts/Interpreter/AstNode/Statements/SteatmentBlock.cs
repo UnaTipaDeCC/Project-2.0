@@ -1,24 +1,27 @@
 using System.Collections.Generic;
 using System;
+//using System.Diagnostics;
+using UnityEngine;
+using UnityEditor;
 
 public class StatementBlock : Statement
 {
-    List<Statement> statements;
+    public List<Statement> Statements{get;}
     Scope Scope;
     public StatementBlock(List<Statement> statements, CodeLocation location) : base(location)
     {
-        this.statements = statements;
+        Statements = statements;
     }
 
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-
-        foreach (var statement in statements)
+        Scope = scope;
+        Debug.Log(scope.Contains("target"));
+        foreach (var statement in Statements)
         {
-            Console.WriteLine("hola");
-            if(!statement.CheckSemantic(context,scope,errors)) 
+            if(!statement.CheckSemantic(context,Scope,errors)) 
             {
-                Console.WriteLine("algo fue mal en la evaluccion del statement: " + statement);
+                //Console.WriteLine("algo fue mal en la evaluccion del statement: " + statement);
                 return false;
             }
         }
@@ -26,17 +29,15 @@ public class StatementBlock : Statement
     }
     public override void Execute()
     {
-        Console.WriteLine("ejecutanding");
-        foreach (var statement in statements)
+        foreach (var statement in Statements)
         {
-            //Console.WriteLine("hola estoy examinando: " + statement);
             statement.Execute();
         }
     }
     public override string ToString()
     {
         string a = "";
-        foreach(var statement in statements)
+        foreach(var statement in Statements)
         {
             a = "\n\t" + statement.ToString();
         }

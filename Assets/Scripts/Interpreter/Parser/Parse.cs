@@ -226,20 +226,30 @@ public class Parse
             {
                 Token property = Stream.Previous();
                 // Verificar si el keyword está seguido de un paréntesis de apertura
+                Debug.Log("AFTER " + property.Value + "lo que hay es un " + Stream.LookAhead().Value);
                 if (!Stream.End && Stream.Match(TokenValues.OpenBracket))
                 {
+                    Debug.Log("entre xq habia un (");
                     Expression argument = null;
                     if (!Stream.End && !Stream.Match(TokenValues.ClosedBracket))
                     {
                         argument = Expression();
+                        if(!Stream.Match(TokenValues.ClosedBracket)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ')' after method argument");
+                        v = new Method(property,v,property.Location,argument);
                     }
+                    else 
+                    {
+                        Debug.Log("lo q habia era un )");
+                        v = new Method(property,v,property.Location);
+                    }
+                    /*Debug.Log(Stream.LookAhead().Value);
                     // Verificar si se cierra el paréntesis
                     if (!Stream.End && Stream.Match(TokenValues.ClosedBracket))
                     {
                         v = new Method(property, v, property.Location, argument);
                     }
                     else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ')' after method arguments");
-                }
+                */}
                 else v = new Property(property, v, property.Location);
             }
             else
@@ -327,7 +337,7 @@ public class Parse
                     {
                         action = Statements(); 
                         Debug.Log("ya tengo el body"); 
-                        Stream.MoveBack();
+                        Stream.MoveBack();//revisar
                         Debug.Log(Stream.LookAhead().Value);
                     }
                     else action = SimpleStatements();
@@ -477,31 +487,32 @@ public class Parse
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':' after de Effect");
                     if(Stream.Match(TokenValues.OpenCurlyBraces)) EffectStatement(ref name,ref parameters);
                     else name = Expression();
-                    if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ', '");
+                    //if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ',' after the  '");
                 }
                 else if(Stream.Match(TokenValues.Selector))
                 {
                     Debug.Log("en el selector");
                     CodeLocation selectorLocation = Stream.Previous().Location;
-                    if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':'");
+                    if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing ':' after Selector");
                     if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Expected, "Missing '{'");
                     selector = Selector(selectorLocation);
                     Debug.Log("termine el selector");
+                    Debug.Log(Stream.LookAhead().Value + "EN EL Q ESTOY DESPUES DEL SELECTOR" + Stream.LookAhead(1).Value + "el q sigue");
                 }
                 else if(Stream.Match(TokenValues.PostAction))
                 {
+                    Debug.Log("en el postAction");
                     if(!Stream.Match(TokenValues.DoublePoint)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ':' after 'PostAction'");
                     if(!Stream.Match(TokenValues.OpenCurlyBraces)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected,"Missing '{' after ':' in a PostAction declaration");
                     postAction = new PostAction(EffectAssign(),new CodeLocation()); //revisar bien el location
                 }
-                if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected,"Missing ','"); //revisar en la foto donde va la coma
-                //REVISAR EL POST aCTION
                 else throw new CompilingError(effectLocation,ErrorCode.Invalid,"Unfinished OnActivation declaration");
+                if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected,"Missing ','");
+                
             }
             catch(CompilingError error)
             {
-                if(ErrorsControl(error,TokenValues.ValueSeparator))
-                break;
+                if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
@@ -520,18 +531,17 @@ public class Parse
             try
             {
                 if(Stream.Check(TokenType.End)) throw new CompilingError(Stream.Previous().Location,ErrorCode.Invalid,"Unfinished effect declaration");
-                else if(Stream.Match(TokenValues.Name)) name = Assign();
+                else if(Stream.Match(TokenValues.Name)){ name = Assign(); Debug.Log("terminado el nombre del efecto en la carta");}
                 else if(Stream.Match(TokenType.Identifier)) paramsValue.Add((Stream.Previous(),Assign()));
                 else throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Invalid, "Invalid effect assignation");
             }
             catch (CompilingError error)
             {
-                if(ErrorsControl(error,TokenValues.ValueSeparator)) 
-                break;
+                if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
             }
         }
         while(!Stream.Match(TokenValues.ClosedCurlyBraces));
-        Debug.Log("terminamos por aqui");
+        Debug.Log("terminamos por aqui, los params son " + paramsValue.Count);
         Debug.Log(Stream.LookAhead().Value);
     }
    
@@ -554,10 +564,10 @@ public class Parse
             {
                 if(ErrorsControl(error,TokenValues.ValueSeparator)) break;
             }
-        }
-        while(!Stream.Match(TokenValues.ClosedCurlyBraces));
+        }while(!Stream.Match(TokenValues.ClosedCurlyBraces));
+        Debug.Log(source is null || single is null || predicate is null);
         if(source == null) new CompilingError(location, ErrorCode.Invalid, "Missing source");
-        if(predicate == null)  new CompilingError(location, ErrorCode.Expected, "Missing predicate");
+        if(predicate == null)  new CompilingError(location, ErrorCode.Invalid, "Missing predicate");
         return new Selector(source,single,predicate,location);
     }
     private Expression Assign()
@@ -582,7 +592,11 @@ public class Parse
         Expression? codition = Expression();
         Debug.Log(Stream.LookAhead().Value + " despues del while");
         if(!Stream.Match(TokenValues.ClosedBracket)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ')' in while declaration' ");
-        if(Stream.Match(TokenValues.OpenCurlyBraces)) body = Statements();
+        if(Stream.Match(TokenValues.OpenCurlyBraces))
+        {
+            body = Statements();
+            if(Stream.Match(TokenValues.StatementSeparator)) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "missing ';' despues del while");
+        } 
         else body  = SimpleStatements();
         return new While(codition,body,location);
 
@@ -597,10 +611,20 @@ public class Parse
         if(Stream.Match(TokenType.Identifier)) item = Stream.Previous();
         else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing identifier after for");
         if(!Stream.Match(TokenValues.in_)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing keyword 'in' ");
-        colletion = Stream.LookAhead();
-        Debug.Log(colletion.Value);
-        Stream.MoveNext();
-        if(Stream.Match(TokenValues.OpenCurlyBraces)) body = Statements();
+        if(Stream.Check(TokenType.Identifier))
+        {
+            colletion = Stream.LookAhead();
+            Stream.MoveNext();
+        }
+        else throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing identifier 'collection' in for declaration");
+        //colletion = Stream.LookAhead();
+        //Debug.Log(colletion.Value);
+        //Stream.MoveNext();
+        if(Stream.Match(TokenValues.OpenCurlyBraces)) 
+        {
+            body = Statements();
+            if(!Stream.Match(TokenValues.StatementSeparator)) throw new CompilingError(Stream.LookAhead().Location,ErrorCode.Expected, "Missing ';' after an statement block for");
+        }
         else body = SimpleStatements();
         return new For(item,colletion,body,location);//revisar bien
     }
@@ -608,7 +632,7 @@ public class Parse
     {
         List<Statement> stmts = new List<Statement>();
         CodeLocation location = Stream.Previous().Location;
-        StatementBlock block = null;
+        //StatementBlock block = null;
         do
         {
             try
@@ -620,22 +644,25 @@ public class Parse
             }
             catch(CompilingError error)
             {
-                ErrorsControl(error,TokenValues.StatementSeparator);
-                Errors.Add(error);//Console.WriteLine(error);
-                
+                ErrorsControl(error,TokenValues.StatementSeparator); break;
+
             }
         } while(!Stream.Match(TokenValues.ClosedCurlyBraces));
         
-        if(Stream.Match(TokenValues.StatementSeparator)) Debug.Log(Stream.LookAhead().Value + " al salir del state");
-        block = new StatementBlock(stmts,location);
-        return block;
+        //if(Stream.Match(TokenValues.StatementSeparator)) Debug.Log(Stream.LookAhead().Value + " al salir del state");
+        return new StatementBlock(stmts,location);
     }
     private Statement SimpleStatements()
     {
         Statement statement;
         Debug.Log("estoy en siple");
         Debug.Log(Stream.LookAhead().Value);
-        if(Stream.Match(TokenType.Identifier)) 
+        if(Stream.Match(TokenValues.print))
+        {
+            statement = new Print(Expression(),Stream.Previous().Location);
+            Debug.Log(Stream.LookAhead().Value);
+        }
+        else if(Stream.Match(TokenType.Identifier)) 
         {
             CodeLocation location = Stream.Previous().Location;
             Stream.MoveBack();
@@ -646,14 +673,8 @@ public class Parse
             {
                 statement = Declaration(variable);
             }
-            else throw new CompilingError(location, ErrorCode.Invalid, "Invalid expression or invalid statement");
         }
-        else if(Stream.Match(TokenValues.print))
-        {
-            statement = new Print(Expression(),Stream.Previous().Location);
-            Debug.Log(Stream.LookAhead().Value);
-        }
-        else throw new CompilingError(Stream.Previous().Location, ErrorCode.Invalid, "no declara nada"); 
+        else throw new CompilingError(Stream.Previous().Location, ErrorCode.Invalid, "Invalid expression or invalid statement");
         if(!Stream.Match(TokenValues.StatementSeparator)) throw new CompilingError(Stream.LookAhead().Location, ErrorCode.Expected, "Missing ';' after a simple statement ");
         return statement;    
     }
