@@ -8,15 +8,17 @@ class Method : Expression
     Expression? argument;
     Token name;
     CodeLocation location;
+    Scope Scope;
     public Method(Token name, Expression caller, CodeLocation location, Expression argument = null) : base(location)
     {
         this.caller = caller;
         this.argument = argument;
+        this.name = name;
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         bool checkArgument = true;
-        bool checkCaller = CheckSemantic(context, scope, errors);
+        bool checkCaller = caller.CheckSemantic(context, scope, errors);
         
         if(!context.Contains(name.Value))
         {
@@ -33,19 +35,26 @@ class Method : Expression
         if(argument != null)
         {
             checkArgument = argument.CheckSemantic(context, scope, errors);
+            Debug.Log(argument.Type);
             if(!context.ParamsOfMethodsTypes.ContainsKey(name.Value))
             {
+                Debug.Log("EN EL PRIMERO");
                 errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + "doesnt have a param"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }
             if(argument.Type != context.ParamsOfMethodsTypes[name.Value])
             {
+                Debug.Log("EN EL SEGUNDO");
                 errors.Add(new CompilingError(location,ErrorCode.Invalid,"The type of the param of this method is invalid"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }
         }
+        Debug.Log(checkCaller);
+        Debug.Log(checkArgument);
+        Debug.Log("abajo");
+        Debug.Log(checkArgument && checkCaller);
         Type = context.GetType(name.Value);
         return checkArgument && checkCaller;
     }
@@ -89,7 +98,26 @@ class Method : Expression
                 case "Suffle":
                 GameContext.Instance.Shuffle(list); 
                 break;
-                case "Find"://implementar cuando implemente el find del otro lado
+                case "Find":
+                //Filtrar las cartas segun el valor del predicate
+                List<CardGame> filteredCards = new List<CardGame>();
+                Predicate predicate = (Predicate)argument;
+                Variable var = (Variable)predicate.Variable;
+                foreach(CardGame card in (List<CardGame>)caller.Value)
+                {
+                    Scope.Set(var.Name, card);
+                    predicate.Evaluate();
+                    Debug.Log("valor del predicate " + predicate.Value);
+                    if((bool)predicate.Value)
+                    {
+                        filteredCards.Add(card);   
+                    }
+                }
+                Debug.Log(filteredCards.Count);
+                Value = filteredCards;
+                break;
+                case "Remove":
+                GameContext.Instance.Remove(list,(CardGame)argument.Value);
                 break;
                 
             }

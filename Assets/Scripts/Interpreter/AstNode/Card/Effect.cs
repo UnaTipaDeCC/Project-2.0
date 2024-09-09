@@ -62,27 +62,41 @@ public class Effect : Statement
             paramsType.Add(par.Item1.Value,type);
             Scope.SetType(par.Item1.Value,type);
         }
+        Debug.Log(Scope.types.ContainsKey(Targets.Value));
         //chequear que la variable tarjets no este definida y en ese caso, definirla en el scope
-        if(!Scope.Contains(Targets.Value) )
+        Debug.Log("Revisando lo del tarjet " + Scope.GetType(Targets.Value));
+        if(!Scope.types.ContainsKey(Targets.Value))//Scope.GetType(Targets.Value) == ExpressionType.ErrorType)
         {
+            Debug.Log("no lo teniamos y lo agregamos");
             Scope.SetType(Targets.Value,ExpressionType.List);
         }
         else
         {
+            Debug.Log("viendo lo del tarjet");
+            foreach(var i in Scope.types)
+            {
+                Debug.Log(i.Key);
+            }
             errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Targets.Value + " was already declared"));
             return false;
         }
         //chequear que la variable tarjets no este context y en ese caso, definirla en el scope
-        if(!Scope.Contains(Context.Value)) Scope.SetType(Context.Value,ExpressionType.Context);
+        if(!Scope.types.ContainsKey(Context.Value))Scope.SetType(Context.Value,ExpressionType.Context);//(Scope.GetType(Context.Value) == ExpressionType.ErrorType) 
         else
         {
-            errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Context.Value + "was already declared"));
+            foreach(var i in Scope.types)
+            {
+                Debug.Log(i.Key);
+            }
+            errors.Add(new CompilingError(Context.Location,ErrorCode.Invalid, "The name " + Context.Value + "was already declared"));
             return false;
         } 
         //chequear el action del effect
         bool actioncheck = Action.CheckSemantic(context, Scope,errors);
+        Debug.Log("despues de lo del action en el effect" + actioncheck);
         // se chequea que todo este bien y se agrega al contexto
         if(actioncheck && namecheck) context.Effects.Add((string)Name.Value,this);
+        Debug.Log(context.Effects.ContainsKey((string)Name.Value));
         return namecheck && actioncheck;
 
     }

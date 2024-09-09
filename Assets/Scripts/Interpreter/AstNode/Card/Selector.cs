@@ -11,6 +11,7 @@ public class Selector : Statement
     public CodeLocation Location;
     public bool IsPost {get; set;} // saber si es un action o un post action
     public Scope SelectorScope{ get; private set;}
+    Scope Scope; //referencia al scope global
  
     public Selector(Expression source, Expression single, Expression predicate, CodeLocation location) : base(location)
     {
@@ -22,6 +23,7 @@ public class Selector : Statement
 
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
+        Scope = scope;
         SelectorScope = scope.CreateChild();
         //chequear el Single y ponerlo en false en caso de que sea null
         bool checkSingle = true;
@@ -81,6 +83,7 @@ public class Selector : Statement
 
     public override void Execute()
     {
+        Source.Evaluate();
         //obtener la lista de cartas con las que se va a trabajar el efecto
         List<CardGame> source = new List<CardGame>();
         switch ((string)Source.Value)
@@ -104,7 +107,8 @@ public class Selector : Statement
             source = GameContext.Instance.OtherPlayer.Field;
             break;
             case "parent":
-            //manejar esta posibilidad mas adelante
+            //se accede al scope del efecto, 
+            source = Scope.EffectPair.Item1.Selector.FiltredCards;
             break;
             default: throw new ArgumentException("Invalid source");
         }

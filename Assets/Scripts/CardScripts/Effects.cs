@@ -316,7 +316,7 @@ public class Effects : MonoBehaviour
 
     private void SetCardPowerToValue(List<CardGame> cards, int powerValue, bool igualate, bool increas)
     {
-        if(!igualate) //significa que debe ser tratada como un efecto de clima
+        if(!igualate) //significa que debe ser tratada como un efecto de clima o aumento
         {
            foreach (CardGame card in cards)
             {

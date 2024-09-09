@@ -60,6 +60,7 @@ class For : Statement
         }*/
         //se chequea el cuerpo de for semanticamente
         bool checkBody = body.CheckSemantic(context, forScope,errors);
+        Debug.Log(checkBody + "en el for");
         return checkBody;
     }
 }

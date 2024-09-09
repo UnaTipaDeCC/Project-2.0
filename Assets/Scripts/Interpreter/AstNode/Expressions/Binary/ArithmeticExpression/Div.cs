@@ -29,13 +29,13 @@ public class Div: BinaryExpression
             bool left = Left.CheckSemantic(context, scope, errors);
             if (Right.Type != ExpressionType.Number || Left.Type != ExpressionType.Number)
             {
-                errors.Add(new CompilingError(Location, ErrorCode.Invalid, "No son numeros"));
+                errors.Add(new CompilingError(Location, ErrorCode.Invalid, "Should be numbers for this operation"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }
             if((double)Right.Value == 0)
             {
-                errors.Add(new CompilingError(Location,ErrorCode.Invalid, "NO ESTA DEFINIDA LA DIVISION POR CERO"));
+                errors.Add(new CompilingError(Location,ErrorCode.Invalid, "Cant be divided by 0"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }

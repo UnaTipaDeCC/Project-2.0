@@ -13,7 +13,6 @@ public class Declaration : Statement
         this.variable = variable;
         this.operatorToken = Operator;
         this.value = value;
-        this.DeclarationScope = DeclarationScope;
         this.location = location;
     }
     public override void Execute()

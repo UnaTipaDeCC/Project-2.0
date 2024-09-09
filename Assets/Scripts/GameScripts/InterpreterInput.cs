@@ -51,11 +51,12 @@ public class InterpreterInput : MonoBehaviour
                 
                 if (errors.Count > 0)
                 {
+                    messageText.text += "Hubo errores de parseo, debe solucionarlos para continuar con el chequeo semantico";
                     foreach (var error in errors)
                     {
                         messageText.text += error.ToString() + "\n"; // Mostrar errores
                     }
-                    messageText.text += "Hubo errores de parseo, debe solucionarlos para continuar con el chequeo semantico";
+                    
                 }
                 else
                 {

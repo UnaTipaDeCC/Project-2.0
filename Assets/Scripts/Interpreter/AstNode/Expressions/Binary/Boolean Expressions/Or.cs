@@ -14,7 +14,7 @@ public class Or: BinaryExpression
         bool left = Left.CheckSemantic(context,scope,errors);
         if (Right.Type != ExpressionType.Bool || Left.Type != ExpressionType.Bool)
         {
-            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "No retornan un booleano"));
+            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "Should be boolean expressions"));
             Type = ExpressionType.ErrorType;
             return false;
         }

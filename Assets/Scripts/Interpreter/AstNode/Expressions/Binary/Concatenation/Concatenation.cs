@@ -30,7 +30,7 @@ public class Concatenation: BinaryExpression
         bool left = Left.CheckSemantic(context, scope, errors);
         if (Right.Type != ExpressionType.Text || Left.Type != ExpressionType.Text)
         {
-            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "No se pueden concatenar tipos que no sean strings"));
+            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "Should be strings for this operation"));
             Type = ExpressionType.ErrorType;
             return false;
         }

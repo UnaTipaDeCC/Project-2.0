@@ -34,7 +34,7 @@ public class Pow : BinaryExpression
         bool left = Left.CheckSemantic(context, scope, errors);
         if (Right.Type != ExpressionType.Number || Left.Type != ExpressionType.Number)
         {
-            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "No son dos numeros"));
+            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "Should be numbers for this operation"));
             Type = ExpressionType.ErrorType;
             return false;
         }

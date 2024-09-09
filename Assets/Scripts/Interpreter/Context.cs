@@ -26,7 +26,7 @@ public class Context
         CardReturnTypes = new Dictionary<string,ExpressionType>
         {
             {"Type",ExpressionType.Text}, {"Power", ExpressionType.Number}, {"Name",ExpressionType.Text}, {"Faction",ExpressionType.Text},
-            {"Owner", ExpressionType.Text}, {"Range",ExpressionType.List}
+            {"Owner", ExpressionType.Number}, {"Range",ExpressionType.List}
         };
         ListReturnTypes = new Dictionary<string,ExpressionType>
         {

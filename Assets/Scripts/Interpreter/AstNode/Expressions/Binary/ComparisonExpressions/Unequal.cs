@@ -22,7 +22,7 @@ public class Unequal : BinaryExpression
            Type = ExpressionType.Bool;
             return right && left;
         }
-        errors.Add(new CompilingError(Location, ErrorCode.Invalid, "No son del mismo tipo"));
+        errors.Add(new CompilingError(Location, ErrorCode.Invalid, "Must be the same type"));
         Type = ExpressionType.ErrorType;
         return false;
     }

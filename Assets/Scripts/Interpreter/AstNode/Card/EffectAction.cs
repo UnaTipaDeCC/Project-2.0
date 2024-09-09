@@ -38,7 +38,7 @@ public class EffectAction : Statement
         }
         //verificar que los parametros del efecto sean los correctos
         bool checkParams = true;
-        foreach (var param in Params)
+        foreach (var param in Params)//arreglar y revisar la lista del efecto
         {
             checkParams = checkParams && param.Item2.CheckSemantic(context,Scope,errors);
             
@@ -73,6 +73,8 @@ public class EffectAction : Statement
         bool checkPostaction = true;
         if(!(PostAction is null))
         {
+            //se actualiza el scope con el efecto y su postAction
+           // PostAction.effectAction.scope.EffectPair = new (this, PostAction.effectAction);
             if(PostAction.effectAction.Selector == null)
             {
                 PostAction.effectAction.Selector = Selector; //en caso de que el postAction no tenga un selector se le asigna este
@@ -81,6 +83,7 @@ public class EffectAction : Statement
             PostAction.effectAction.Selector.IsPost = true;
             //se chequea el postAction
             checkPostaction = PostAction.CheckSemantic(context,Scope,errors);
+            
         }
         
         return checkPostaction && checkSelector && checkName;
@@ -95,7 +98,7 @@ public class EffectAction : Statement
         Effect.Execute();
         //se corre el postAction
         if(PostAction != null) PostAction.Execute();
-    }
+    } 
 }
 public class PostAction: Statement
 {
@@ -140,7 +143,7 @@ public class PostAction: Statement
                 return false;
             }
         }
-         //chequea que la cantidad de params sea la correcta
+        //chequea que la cantidad de params sea la correcta
         if(effectAction.Params.Count != effectAction.Effect.paramsType.Count)
         {
             errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The params are invalid"));

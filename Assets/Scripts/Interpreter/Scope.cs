@@ -6,6 +6,7 @@ public class Scope
     public Scope? Parent;
     public Dictionary<string,object> variables;
     public Dictionary<string, ExpressionType> types;
+    public EffectPair EffectPair{get; set;} //referencia al efecto y su postAction necesaria luego en el selector
     public Scope()
     {
         variables = new Dictionary<string, object>();  
@@ -96,5 +97,16 @@ public class Scope
     public bool Contains(string name)
     {
         return variables.ContainsKey(name) || (Parent != null && Parent.Contains(name)) || types.ContainsKey(name) ;
+    }
+}
+
+public class EffectPair
+{
+    public EffectAction Item1 {get;set;}
+    public EffectAction Item2 {get;set;}
+    public EffectPair(EffectAction item1, EffectAction item2)
+    {
+        Item1 = item1;
+        Item2 = item2;
     }
 }

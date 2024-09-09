@@ -118,21 +118,22 @@ public class Card : ASTNode
         card.Type = (CardGame.type)Enum.Parse(typeof(CardGame.type), (string)Type.Value);
         card.Faction = faction == "Hormigas Bravas" ? CardGame.faction.HormigasBravas : CardGame.faction.HormigasLocas;
         card.Damage = Convert.ToInt32(power);
-        card.OriginalDamage = Convert.ToInt32(power);
+        card.OriginalDamage = card.Damage;
         card.Range = range;
         card.Name = name;
         card.Description = "Cartica creada por el usuario :)";
         card.Artwork = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Pictures/default.jpg");
-        card.EffectsList = Effects;
+        //card.EffectsList = Effects;
         card.Effect = CardGame.effects.Especial;
         if(card.EffectsList == null)
         {
             card.EffectsList = new List<EffectAction>();
         }
-        foreach(var effect in Effects)
+        /*foreach(var effect in Effects)
         {
             card.EffectsList.Add(effect);
-        }
+        }*/
+        card.EffectsList.AddRange(Effects);
         Debug.Log(card.EffectsList.Count + " estos son los efectos de " + card.Name);
         
         //se verifica la faccion y el tipo de la carta para guardarla y posteriormente instanciarla
@@ -152,9 +153,6 @@ public class Card : ASTNode
             }
             CreatedCards.BravasCards.Add(card);
         }
-        
-       
-         
         //AssetDatabase.CreateAsset(card, scriptableObjectPath);
         //AssetDatabase.SaveAssets();
         //AssetDatabase.Refresh();

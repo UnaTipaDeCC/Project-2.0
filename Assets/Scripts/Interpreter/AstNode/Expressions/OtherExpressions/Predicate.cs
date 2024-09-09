@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+//using System.Diagnostics;
+using UnityEngine;
 public class Predicate : Expression
 {
     public Expression Variable {get; private set;}
@@ -24,7 +26,8 @@ public class Predicate : Expression
         }
         //se chequea que la variable no haya sido previamente definida
         Variable var = (Variable)Variable;
-        if(scope.Contains(var.Name))
+        Debug.Log(var.Type);
+        if(var.Type != ExpressionType.Anytype)
         {
             errors.Add(new CompilingError(Location,ErrorCode.Invalid,$"The variable {var} already exist in this context"));
             Type = ExpressionType.ErrorType;

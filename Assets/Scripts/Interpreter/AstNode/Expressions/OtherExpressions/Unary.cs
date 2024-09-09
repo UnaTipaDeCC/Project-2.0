@@ -21,7 +21,7 @@ public class Unary : Expression
             Value = -(double)Right.Value;
             break;
             case TokenValues.Decrement:
-            Value = (double)Right.Value -1;
+            Value = (double)Right.Value - 1;
             break;
             case TokenValues.Increment:
             Value = (double)Right.Value + 1;
@@ -35,11 +35,27 @@ public class Unary : Expression
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        if((Operator.Value == TokenValues.Increment ||Operator.Value == TokenValues.Decrement) && !(Right is Variable))
+        if(Operator.Value == TokenValues.Increment ||Operator.Value == TokenValues.Decrement)
         {
-            errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The expression before the '" + Operator.Value + "' must be a variable"));
-            Type = ExpressionType.ErrorType;
-            return false;
+            if(!(Right is Variable))
+            {
+                errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The expression before the '" + Operator.Value + "' must be a variable"));
+                Type = ExpressionType.ErrorType;
+                return false;
+            }
+            else
+            {
+                Variable var = (Variable)Right;
+                if(scope.GetType(var.Name) != ExpressionType.Number)
+                {
+                    errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The expression before the '" + Operator.Value + "' must be a number variable"));
+                    Type = ExpressionType.ErrorType;
+                    return false;
+                }
+                else Type = ExpressionType.Number;
+            }
+
+            
         }
         bool right = Right.CheckSemantic(context, scope,errors);
         if(Operator.Value == TokenValues.Negation)

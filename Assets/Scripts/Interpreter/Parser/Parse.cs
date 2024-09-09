@@ -337,7 +337,7 @@ public class Parse
                     {
                         action = Statements(); 
                         Debug.Log("ya tengo el body"); 
-                        Stream.MoveBack();//revisar
+                        //Stream.MoveBack();//revisar 
                         Debug.Log(Stream.LookAhead().Value);
                     }
                     else action = SimpleStatements();
@@ -359,7 +359,7 @@ public class Parse
         if(action == null ) throw new CompilingError(location,ErrorCode.Invalid, "An Action must be declared");
         Debug.Log("termine el effect " + name.ToString());
         Debug.Log(Stream.LookAhead().Value);
-        Stream.MoveNext();//POR PROBAR
+         //Stream.MoveNext();//POR PROBAR
         return new Effect(location, name, action,target,context,paramsType);
     }
     public (Token,Token) Param()
