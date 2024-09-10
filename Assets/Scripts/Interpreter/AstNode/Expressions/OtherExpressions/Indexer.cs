@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 public class Indexer : Expression
 {
     Expression exp;
@@ -20,6 +21,7 @@ public class Indexer : Expression
             Type = ExpressionType.ErrorType;
             return false;
         }
+        Debug.Log(index.Type);
         if(index.Type != ExpressionType.Number)
         {
             errors.Add(new CompilingError(exp.Location,ErrorCode.Invalid, "Index must be a number"));
@@ -27,12 +29,13 @@ public class Indexer : Expression
             return false;
         }
         index.Evaluate();
-        if(!(index.Value is int))
+
+        /*if(!(index.Value is int))
         {
             errors.Add(new CompilingError(exp.Location,ErrorCode.Invalid, "Index must be an int number"));
             Type = ExpressionType.ErrorType;
             return false;
-        }
+        }*/
         Type = ExpressionType.Card;
         return checkExp && checkIndex;
     }

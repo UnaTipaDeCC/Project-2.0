@@ -75,6 +75,41 @@ public class GameContext : MonoBehaviour
             gameObjects[j] = temp;
         } 
     }
+    public void RemoveCard(List<CardGame> list, CardGame card)
+    {
+        //Comprobar si la lista es un field o board 
+        //if(CheckList(list,BravasPlayer.GetComponent<Player>().Field) || CheckList(list,LocasPlayer.GetComponent<Player>().Field) || CheckList(list,Board))
+        //{
+            //Comprobar de que jugador es y a que zona pertenece
+            Player player = ReturnPlayer(card.Owner);
+            if(player.Melee.GetComponent<Zones>().CardsInZone.Contains(card))
+            {
+                player.Melee.GetComponent<Zones>().CardsInZone.Remove(card);
+                player.Melee.GetComponent<Zones>().RefreshZone();
+            }
+            else if(player.Ranged.GetComponent<Zones>().CardsInZone.Contains(card))
+            {
+                player.Ranged.GetComponent<Zones>().CardsInZone.Remove(card);
+                player.Ranged.GetComponent<Zones>().RefreshZone();
+            }
+            else if(player.Siege.GetComponent<Zones>().CardsInZone.Contains(card))
+            {
+                player.Siege.GetComponent<Zones>().CardsInZone.Remove(card);
+                player.Siege.GetComponent<Zones>().RefreshZone();
+            }
+            else if(WeatherZone.GetComponent<Zones>().CardsInZone.Contains(card))
+            {
+                WeatherZone.GetComponent<Zones>().CardsInZone.Remove(card);
+                WeatherZone.GetComponent<Zones>().RefreshZone();
+            }
+            else if(player.Hand.GetComponent<Zones>().CardsInZone.Contains(card))
+            {
+                player.Hand.GetComponent<Zones>().CardsInZone.Remove(card);
+                player.Hand.GetComponent<Zones>().RefreshZone();
+            }
+        //}
+        //else Remove(list,card);//si no
+    }
     public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
     public CardGame Pop(List<CardGame> gameObjects)
     {
@@ -122,5 +157,20 @@ public class GameContext : MonoBehaviour
             ReturnPlayer(game.Owner).Cementery.Add(game);
         }
         WeatherZone.GetComponent<Zones>().RefreshZone();
+    }
+    private bool CheckList(List<CardGame> list1, List<CardGame> list2)
+    {
+        if(list1.Count == list2.Count)
+        {
+            for(int i = 0;i< list1.Count;i++)
+            {
+                if(list1[i] != list2[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else return false;
     }
 }

@@ -19,7 +19,7 @@ public class EffectAction : Statement
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        Scope = scope.CreateChild();
+        this.Scope = scope.CreateChild();
         //chequea semanticamente el nombre y verifica que sea del tipo valido
         bool checkName = Name.CheckSemantic(context, Scope, errors);
         if(Name.Type != ExpressionType.Text)
@@ -27,6 +27,7 @@ public class EffectAction : Statement
             errors.Add(new CompilingError(Name.Location,ErrorCode.Expected, "The 'name' must be a text"));
             return false;
         }
+
         //verificar que el effecto haya sido previamente definido y de ser asi, se le asigna
         Name.Evaluate();
         string effectName = (string)Name.Value;
@@ -36,9 +37,17 @@ public class EffectAction : Statement
             errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The effect must be previously declared"));
             return false;
         }
+
+        //chequea que la cantidad de params sea la correcta
+        if(Params.Count != Effect.paramsType.Count)
+        {
+            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The params are invalid"));
+            return false;
+        }
+
         //verificar que los parametros del efecto sean los correctos
         bool checkParams = true;
-        foreach (var param in Params)//arreglar y revisar la lista del efecto
+        foreach (var param in Params)
         {
             checkParams = checkParams && param.Item2.CheckSemantic(context,Scope,errors);
             
@@ -52,18 +61,20 @@ public class EffectAction : Statement
                 errors.Add(new CompilingError(Location,ErrorCode.Invalid,"The type of the param " + param.Item1.Value + " must be " + Effect.paramsType[param.Item1.Value]));
                 return false;
             }
+            else
+            {
+                param.Item2.Evaluate();
+                Effect.Scope.Set(param.Item1.Value,param.Item2.Value);
+            } 
         }
-        //chequea que la cantidad de params sea la correcta
-        if(Params.Count != Effect.paramsType.Count)
-        {
-            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The params are invalid"));
-            return false;
-        }
+        
         bool checkSelector;
+
         if (!(Selector is null))
         {  
-            checkSelector = Selector.CheckSemantic(context,Scope,errors);
             Selector.IsPost = false;
+            checkSelector = Selector.CheckSemantic(context,Scope,errors);
+            
         }
         else 
         {
@@ -73,19 +84,19 @@ public class EffectAction : Statement
         bool checkPostaction = true;
         if(!(PostAction is null))
         {
-            //se actualiza el scope con el efecto y su postAction
-           // PostAction.effectAction.scope.EffectPair = new (this, PostAction.effectAction);
+            //en caso de que el postAction no tenga un selector se le asigna este
             if(PostAction.effectAction.Selector == null)
             {
-                PostAction.effectAction.Selector = Selector; //en caso de que el postAction no tenga un selector se le asigna este
+                PostAction.effectAction.Selector = Selector; 
             }
             //actualiza el selector para que sepa que es un postAction
             PostAction.effectAction.Selector.IsPost = true;
             //se chequea el postAction
             checkPostaction = PostAction.CheckSemantic(context,Scope,errors);
+            //se actualiza el scope con el efecto y su postAction
+            PostAction.Scope.EffectPair = new EffectPair(this, PostAction.effectAction);
             
         }
-        
         return checkPostaction && checkSelector && checkName;
     }
     public override void Execute()
@@ -110,7 +121,8 @@ public class PostAction: Statement
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        Scope = scope.CreateChild();
+        this.Scope = scope.CreateChild();
+       
         //verificar el nombre y que el tipo sea valido
         bool checkName = effectAction.Name.CheckSemantic(context, Scope, errors);
         if(effectAction.Name.Type != ExpressionType.Text)
@@ -118,6 +130,7 @@ public class PostAction: Statement
             errors.Add(new CompilingError(effectAction.Name.Location,ErrorCode.Expected, "The 'name' must be a text"));
             return false;
         }
+
         //verificar que el effecto haya sido previamente definido y de ser asi, se le asigna
         effectAction.Name.Evaluate();
         string effectName = (string)effectAction.Name.Value;
@@ -127,6 +140,14 @@ public class PostAction: Statement
             errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The effect must be previously declared"));
             return false;
         }
+
+        //chequea que la cantidad de params sea la correcta
+        if(effectAction.Params.Count != effectAction.Effect.paramsType.Count)
+        {
+            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The params are invalid"));
+            return false;
+        }
+        
         //verificar que los parametros del efecto sean los correctos
         bool checkParams = true;
         foreach (var param in effectAction.Params)
@@ -143,21 +164,16 @@ public class PostAction: Statement
                 return false;
             }
         }
-        //chequea que la cantidad de params sea la correcta
-        if(effectAction.Params.Count != effectAction.Effect.paramsType.Count)
-        {
-            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The params are invalid"));
-            return false;
-        }
+        
         //chequea el selector
         bool checkSelector = effectAction.Selector.CheckSemantic(context,Scope,errors);
-        //chequea el efecto si tiene
+        
+        //chequea el postAction si tiene
         bool checkPostAction = true;
         if(!(effectAction.PostAction is null))
         {
             effectAction.PostAction.effectAction.Selector.IsPost = true;
             checkPostAction = effectAction.PostAction.CheckSemantic(context,Scope,errors);
-
         }
         return checkParams && checkSelector && checkPostAction && checkName;
     }

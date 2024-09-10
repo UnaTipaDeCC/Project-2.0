@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Solazo
   m_EditorClassIdentifier: 
   Name: Solazo
-  Description: Disminuye en 1 el poder de las cartas plata de Siege
+  Description: Disminuye en 2 el poder de las cartas plata de Siege
   Artwork: {fileID: 21300000, guid: 9b087f470d636fb4a8463c5678409fd2, type: 3}
-  Played: 0
+  Played: 1
   Damage: 0
   OriginalDamage: 0
   AffectedByClimate: 0

@@ -26,6 +26,7 @@ public class Card : ASTNode
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         Scope Scope = scope.CreateChild();
+        
         //se chequean las propiedades y se verifica que el tipo sea valido
         bool checkPower = Power.CheckSemantic(context, Scope, errors);
         bool checkType = Type.CheckSemantic(context,Scope,errors);
@@ -43,18 +44,21 @@ public class Card : ASTNode
                 errors.Add(new CompilingError(range.Location, ErrorCode.Invalid, "All Range  must be a text"));
                 return false;
             }
+            //erificar que sea valido el range
             if((string)range.Value != "Melee" && (string)range.Value != "Siege" && (string)range.Value != "Ranged")
             {
                 errors.Add(new CompilingError(range.Location, ErrorCode.Invalid, "Invalid range, zones must be: Melee, Ranged or Siege"));
                 return false;
             }
         }
+        
         //power
         if (Power.Type != ExpressionType.Number)
         {
             errors.Add(new CompilingError(Power.Location, ErrorCode.Invalid, "The Power must be numerical"));
             return false;
         }
+        
         //type
         if(Type.Type != ExpressionType.Text)
         {
@@ -67,6 +71,7 @@ public class Card : ASTNode
             errors.Add(new CompilingError(Type.Location, ErrorCode.Invalid, "The Type isnt valid"));
             return false;
         }
+        
         //Faction
         if(Faction.Type != ExpressionType.Text)
         {
@@ -88,7 +93,7 @@ public class Card : ASTNode
         //Effects
         foreach(var effect in Effects)
         {
-            checkEffects = checkEffects && effect.CheckSemantic(context,scope,errors);
+            checkEffects = checkEffects && effect.CheckSemantic(context,Scope,errors);
         }
         
         return checkPower && checkFaction && checkName && checkType && checkRange && checkEffects;

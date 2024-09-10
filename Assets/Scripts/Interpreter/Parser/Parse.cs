@@ -456,7 +456,7 @@ public class Parse
                         if(!Stream.Match(TokenValues.ValueSeparator)) throw new CompilingError(location,ErrorCode.Expected,"Missing ',' after de effect ");
                     */}
                 }
-                else throw new CompilingError(location, ErrorCode.Invalid, "Missing params");
+                else throw new CompilingError(location, ErrorCode.Invalid, "Missing params in the card");
             }
             catch(CompilingError error)
             {

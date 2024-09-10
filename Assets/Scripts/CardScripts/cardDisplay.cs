@@ -27,8 +27,8 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
                 GameContext.Instance.ReturnPlayer(Card.Owner).CanChange = false;
                 //revisar si llamar al efecto primero y al move despues sea una buena idea
                 CardsMove.Instance.MoveCard(Card);
-                GameManager.gameManager.ChangeTurn();
                 Card.ActivateEffect();
+                GameManager.gameManager.ChangeTurn();
             } 
             else messages.ShowMessage("No es su turno o ya esta carta se jugo",2.0f);  
         }
@@ -41,7 +41,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         messages = MessageDisplay.Instance;
-        nameText.text = Card.name;
+        nameText.text = Card.Name;
         DescriptionText.text = Card.Description;
         ArtworkImage.sprite = Card.Artwork;
         DamageText.text = Card.Damage.ToString();

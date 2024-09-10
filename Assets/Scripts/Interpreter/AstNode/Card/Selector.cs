@@ -100,11 +100,14 @@ public class Selector : Statement
             case "OtherDeck":
             source = GameContext.Instance.OtherPlayer.Deck;
             break;
-            case "field":
+            case "field": 
             source = GameContext.Instance.TriggerPlayer.Field;
             break;
-            case "otherFiled":
+            case "otherField":
             source = GameContext.Instance.OtherPlayer.Field;
+            break;
+            case "board":
+            source = GameContext.Instance.Board;
             break;
             case "parent":
             //se accede al scope del efecto, 
@@ -116,13 +119,17 @@ public class Selector : Statement
         Single.Evaluate();
         bool single = (bool)Single.Value;
         Predicate predicate = (Predicate)Predicate; // revisar si hay otra forma para acceder a su scope
+        Debug.Log(source.Count);
         foreach(var card in source)
         {
             //revisar esta parte
             Variable a = (Variable)predicate.Variable;
-            predicate.Scope.Set(a.Name, card);
+            Debug.Log(a.Name);
+            Debug.Log(card.Name);
+            SelectorScope.Set(a.Name, card); 
             predicate.Evaluate();
-            if((bool)predicate.Value)
+            Debug.Log(predicate.Value);
+            if((bool)predicate.Value) 
             {
                 resultList.Add(card); 
                 if(single) break;

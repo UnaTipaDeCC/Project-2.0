@@ -34,9 +34,10 @@ class For : Statement
     {
         forScope = scope.CreateChild();
         //se chequea que el item no haya sido declarado previamente
-        if(forScope.Contains(item.Value))
+        if(forScope.types.ContainsKey(item.Value))
         {
-            errors.Add(new CompilingError(location, ErrorCode.Invalid, "The variable " + item.Value + "already exist"));
+            Debug.Log(forScope.types.ContainsKey(item.Value) + " en el for");
+            errors.Add(new CompilingError(location, ErrorCode.Invalid, "The variable " + item.Value + " already exist"));
             return false;
         }
         //se define en el scope
@@ -59,6 +60,7 @@ class For : Statement
             return false;
         }*/
         //se chequea el cuerpo de for semanticamente
+        Debug.Log(forScope.GetType("context"));
         bool checkBody = body.CheckSemantic(context, forScope,errors);
         Debug.Log(checkBody + "en el for");
         return checkBody;

@@ -60,49 +60,6 @@ public class CardsMove : MonoBehaviour
         zone.GetComponent<Zones>().RefreshZone();
         owner.Hand.GetComponent<Zones>().CardsInZone.Remove(cardGame);
         owner.Hand.GetComponent<Zones>().RefreshZone();
-
-        //update zonde 
-        
-        
-        //card.ExecuteEffect();
-        //ContextGame.contextGame.UpdateFront();
-        /*zone.GetComponent<Zones>().CardsInZone.Add(cardGame);
-        hand.GetComponent<Zones>().CardsInZone.Remove(cardGame);
-        zone.GetComponent<Zones>().RefreshZone();
-        //InstantiateCard(zone,cardGame);
-        //deberia actualizar las listas de los players
-
-
-        /*cardGame.transform.SetParent(zone.transform, false);//mover el gameObject a la zona que le  corresponde
-        cardGame.transform.position = zone.transform.position;
-        cardGame.Card.Played = true; */
     }
-    /*public void InstantiateCard(GameObject zone, CardGame cardGame)
-    {
-        Debug.Log("estoy en el instatiate");
-        if (cardGame == null)
-{
-    Debug.LogError("El objeto CardGame proporcionado es null.");
-    return;
-}
-if (zone == null)
-{
-    Debug.LogError("El objeto GameObject de la zona proporcionado es null.");
-    return;
-}
-        string cardPath = "Assets/Prefabs/Card.prefab";
-        GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(cardPath);
-        if (cardPrefab != null && cardGame != null)
-        {
-            // Crear una instancia del prefab
-            GameObject cardInstance = Instantiate(cardPrefab, zone.transform.position, Quaternion.identity);
-            // Asignar el Scriptable Object al componente de visualización de la carta
-            cardInstance.GetComponent<CardDisplay>().Card = cardGame;
-            Debug.Log("Carta instanciada: " + cardGame.Name);
-        }
-        else
-        {
-            Debug.LogError("No se pudo cargar el prefab o el Scriptable Object.");
-        }
-    }*/
+   
 }

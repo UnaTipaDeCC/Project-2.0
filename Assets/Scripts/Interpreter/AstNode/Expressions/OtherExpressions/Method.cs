@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Unity.VisualScripting;
 class Method : Expression
 {
     Expression caller;
@@ -22,13 +23,13 @@ class Method : Expression
         
         if(!context.Contains(name.Value))
         {
-            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + "is not valid"));
+            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + " is not valid"));
             Type = ExpressionType.ErrorType;
             return false;
         }
         if(caller.Type != context.GetCallerType(name.Value))
         {
-            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + "cant be called by an expression of that type"));
+            errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + " cant be called by an expression of that type"));
             Type = ExpressionType.ErrorType;
             return false;
         }
@@ -61,9 +62,12 @@ class Method : Expression
     public override void Evaluate()
     {
         caller.Evaluate();
-        if(argument != null) argument.Evaluate();
-        if(caller.Value is GameContext)//no se si me pueden poner eso asi
+        if(argument != null && name.Value != "Find") argument.Evaluate();
+        
+        if(caller.Value is GameContext)
         {
+            
+            Debug.Log(argument.Value);
             Player player = GameContext.Instance.ReturnPlayer((int)argument.Value);
             switch (name.Value)
             {
@@ -105,7 +109,10 @@ class Method : Expression
                 Variable var = (Variable)predicate.Variable;
                 foreach(CardGame card in (List<CardGame>)caller.Value)
                 {
+                    Debug.Log(var.Name);
                     Scope.Set(var.Name, card);
+                    CardGame c = (CardGame)Scope.Get(var.Name);
+                    Debug.Log(c.Name);
                     predicate.Evaluate();
                     Debug.Log("valor del predicate " + predicate.Value);
                     if((bool)predicate.Value)
@@ -117,12 +124,13 @@ class Method : Expression
                 Value = filteredCards;
                 break;
                 case "Remove":
-                GameContext.Instance.Remove(list,(CardGame)argument.Value);
+                GameContext.Instance.RemoveCard(list,(CardGame)argument.Value);
                 break;
                 
             }
            
         }
+        Debug.Log("el resultado de " + name.Value + " es " + Value);
     }
     public override ExpressionType Type { get; set;}
     public override object? Value { get; set;}

@@ -24,7 +24,8 @@ public class Effect : Statement
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        Scope = scope.CreateChild();
+        this.Scope = scope.CreateChild();
+
         //chequear el nombre y el tipo del mismo
         bool namecheck = Name.CheckSemantic(context, Scope, errors);
         if(Name.Type != ExpressionType.Text)
@@ -32,6 +33,7 @@ public class Effect : Statement
             errors.Add(new CompilingError(Name.Location,ErrorCode.Invalid,"The effects name must be a text"));
             return false;
         }
+
         //Chequear que no haya sido declarado previamente otro efecto con ese nombre
         Name.Evaluate();
         if(context.Effects.ContainsKey((string)Name.Value))
@@ -39,6 +41,7 @@ public class Effect : Statement
             errors.Add(new CompilingError(location,ErrorCode.Invalid,$"An effect with the name {(string)Name.Value} was already declared"));
             return false;
         }
+        
         //chequear que los parametros que se le pasan al efecto sean los permitidos
         //y se agregan al diccionario y se actualiza el type
         foreach(var par in list)
@@ -62,10 +65,10 @@ public class Effect : Statement
             paramsType.Add(par.Item1.Value,type);
             Scope.SetType(par.Item1.Value,type);
         }
-        Debug.Log(Scope.types.ContainsKey(Targets.Value));
+        Debug.Log(Scope.types.ContainsKey(Targets.Value) + " revisando si el scope la tiene");
         //chequear que la variable tarjets no este definida y en ese caso, definirla en el scope
         Debug.Log("Revisando lo del tarjet " + Scope.GetType(Targets.Value));
-        if(!Scope.types.ContainsKey(Targets.Value))//Scope.GetType(Targets.Value) == ExpressionType.ErrorType)
+        if( Scope.GetType(Targets.Value) == ExpressionType.ErrorType)//(!Scope.types.ContainsKey(Targets.Value))
         {
             Debug.Log("no lo teniamos y lo agregamos");
             Scope.SetType(Targets.Value,ExpressionType.List);
@@ -73,21 +76,17 @@ public class Effect : Statement
         else
         {
             Debug.Log("viendo lo del tarjet");
-            foreach(var i in Scope.types)
-            {
-                Debug.Log(i.Key);
-            }
+            Debug.Log(Scope.GetType(Targets.Value));
             errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Targets.Value + " was already declared"));
             return false;
         }
+
         //chequear que la variable tarjets no este context y en ese caso, definirla en el scope
-        if(!Scope.types.ContainsKey(Context.Value))Scope.SetType(Context.Value,ExpressionType.Context);//(Scope.GetType(Context.Value) == ExpressionType.ErrorType) 
+        if(Scope.GetType(Context.Value) == ExpressionType.ErrorType) Scope.SetType(Context.Value,ExpressionType.Context);
         else
         {
-            foreach(var i in Scope.types)
-            {
-                Debug.Log(i.Key);
-            }
+            Debug.Log("estoy en el action y la variable context no esta definida");
+            Debug.Log(Scope.GetType(Context.Value));
             errors.Add(new CompilingError(Context.Location,ErrorCode.Invalid, "The name " + Context.Value + "was already declared"));
             return false;
         } 

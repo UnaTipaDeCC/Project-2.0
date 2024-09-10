@@ -12,7 +12,7 @@ public class StmtExpression : Statement
     {
         Scope= scope;
         bool checkExp = expression.CheckSemantic(context, scope, errors);
-        if(expression is Method)
+        if(!(expression is Method))
         {
             errors.Add(new CompilingError(expression.Location,ErrorCode.Invalid,"should be a method"));
             return false;

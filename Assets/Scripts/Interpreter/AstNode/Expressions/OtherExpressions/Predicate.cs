@@ -7,7 +7,7 @@ public class Predicate : Expression
     public Expression Variable {get; private set;}
     public Expression Condition{get; private set;}
     public CodeLocation Location{get; private set;}
-    public Scope Scope{get; private set;}
+    public Scope Scope{get; set;}
     public Predicate(Expression variable, Expression condition,CodeLocation location) : base(location)
     {
         this.Variable = variable;

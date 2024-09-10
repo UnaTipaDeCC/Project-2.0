@@ -43,13 +43,13 @@ class Property : Expression
                 Value = card.Name;
                 break;
                 case "Faction":
-                Value = card.Faction;
+                Value = card.Faction.ToString();
                 break;
                 case "Range":
                 Value = card.Range;
                 break;
                 case "Type":
-                Value = card.Type;
+                Value = card.Type.ToString();
                 break;
                 case "Owner":
                 Value = card.Owner;

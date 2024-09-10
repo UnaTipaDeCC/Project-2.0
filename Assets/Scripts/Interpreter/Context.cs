@@ -21,7 +21,7 @@ public class Context
         {
             {"Board",ExpressionType.List},{"HandOfPlayer",ExpressionType.List},{"GraveyardOfPlayer",ExpressionType.List},
             {"FieldOfPlayer",ExpressionType.List},{"DeckOfPlayer",ExpressionType.List}, {"Hand",ExpressionType.List},
-            {"Deck", ExpressionType.List}, {"Field",ExpressionType.List}, {"Graveryard", ExpressionType.List}
+            {"Deck", ExpressionType.List}, {"Field",ExpressionType.List}, {"Graveryard", ExpressionType.List}, {"TriggerPlayer",ExpressionType.Number}
         };
         CardReturnTypes = new Dictionary<string,ExpressionType>
         {
@@ -42,7 +42,7 @@ public class Context
         {
             {"HandOfPlayer", ExpressionType.Number}, {"FieldOfPlayer",ExpressionType.Number}, {"DeckOfPlayer",ExpressionType.Number},
             {"GraveyardOfPlayer",ExpressionType.Number}, {"Push",ExpressionType.Card}, {"Remove",ExpressionType.Card},
-            {"SendBottom",ExpressionType.Card} // agregar el find
+            {"SendBottom",ExpressionType.Card}, {"Find",ExpressionType.Bool}
 
         };
     }

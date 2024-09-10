@@ -1,6 +1,7 @@
-//using System.Reflection.Metadata;
 using System.Collections.Generic;
 using System;
+//using System.Diagnostics;
+using UnityEngine;
 public class Scope
 {
     public Scope? Parent;
@@ -9,6 +10,7 @@ public class Scope
     public EffectPair EffectPair{get; set;} //referencia al efecto y su postAction necesaria luego en el selector
     public Scope()
     {
+        Parent = null;
         variables = new Dictionary<string, object>();  
         types = new Dictionary<string, ExpressionType>(); 
     }
@@ -20,13 +22,11 @@ public class Scope
     }
     public void Set(string variable, object value)
     {
-        //string name = variable.Value;
-        //if(value == null) throw new CompilingError(new CodeLocation(), ErrorCode.Expected, "Value missing mi loco");
         if (variables.ContainsKey(variable))
         {
             Console.WriteLine("estoy en el set, si la tiene");
             variables[variable] = value;
-            //types[name] = value.Type;  
+
         }
         else if (Parent != null)
         {
@@ -46,11 +46,15 @@ public class Scope
         {
             Console.WriteLine("estoy en el settype, si la tiene");
             types[name] = value;
-            //types[name] = value.Type;  
         }
         else if (Parent != null)
         {
-            Parent.SetType(name, value);
+            if(AssignType(name,value))
+            {
+                return;
+            }
+            else types.Add(name, value);
+            //Parent.SetType(name, value);
         }
         else
         {
@@ -75,13 +79,24 @@ public class Scope
             throw new KeyNotFoundException($"Variable '{name}' not found.");
         }
     }
+    private bool AssignType(string name, ExpressionType value)
+    {
+        if(types.ContainsKey(name))
+        {
+            types[name] = value;
+            return true;
+        }
+        if(Parent != null)
+        {
+            return Parent.AssignType(name, value);
+        }
+        return false;
+    }
     public ExpressionType GetType(string name)
     {
-        Console.WriteLine("vamo a ver q hay");
-        foreach(var v in variables) Console.WriteLine(v.Key);
         if (types.ContainsKey(name))
         {
-            Console.WriteLine(types[name] + "es el tipo de " + name);
+            Debug.Log(types[name] + "es el tipo de " + name);
             return types[name];
         }
         else if (Parent != null)
@@ -90,7 +105,7 @@ public class Scope
         }
         else
         {
-            Console.WriteLine("no tenia guardada  la variable");
+            Debug.Log("no tenia guardada  la variable");
             return ExpressionType.ErrorType;
         }
     }

@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     private List<CardGame> GetField()
     {
         List<CardGame> list = new List<CardGame>();
-        list.AddRange(Hand.GetComponent<Zones>().CardsInZone); 
+        //list.AddRange(Hand.GetComponent<Zones>().CardsInZone); 
         list.AddRange(Melee.GetComponent<Zones>().CardsInZone);
         list.AddRange(Siege.GetComponent<Zones>().CardsInZone);
         list.AddRange(MeleeIncrement.GetComponent<Zones>().CardsInZone);
@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         Cementery = new List<CardGame>();
-        //establecer las zonas como hijas del player
+        //establecer las zonas como hijos del player
         Melee.transform.SetParent(this.transform, false);
         Ranged.transform.SetParent(this.transform,false);
         Siege.transform.SetParent(this.transform,false);

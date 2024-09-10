@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Neblina Intensa
   m_EditorClassIdentifier: 
   Name: Neblina Intensa
-  Description: Disminuye en 1 el poder de las cartas plata de Ranged
+  Description: Disminuye en 2 el poder de las cartas plata de Ranged
   Artwork: {fileID: 21300000, guid: fd17a2f965c44014ab304996a392e8eb, type: 3}
-  Played: 0
+  Played: 1
   Damage: 0
   OriginalDamage: 0
   AffectedByClimate: 0

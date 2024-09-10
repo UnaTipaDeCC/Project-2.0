@@ -36,7 +36,6 @@ public class Zones : MonoBehaviour
         for (int i = childs - 1; i >= 0; i--) // Iterar en reversa para evitar problemas al destruir
         {
             GameObject child = layoutGroup.transform.GetChild(i).gameObject;
-            Debug.Log("Destruyendo: " + child.name);
             DestroyImmediate(child);
         }
     }
@@ -50,7 +49,6 @@ public class Zones : MonoBehaviour
             GameObject cardInstance = GameObject.Instantiate(cardPrefab);
             cardInstance.GetComponent<CardDisplay>().Card = card; // Asignar la carta al componente
             cardInstance.transform.SetParent(layoutGroup.transform, false); // Establecer el padre
-            Debug.Log("Carta instanciada: " + card.Name);
         }
         else
         {
