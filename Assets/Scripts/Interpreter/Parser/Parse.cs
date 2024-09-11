@@ -595,7 +595,8 @@ public class Parse
         if(Stream.Match(TokenValues.OpenCurlyBraces))
         {
             body = Statements();
-            if(Stream.Match(TokenValues.StatementSeparator)) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "missing ';' despues del while");
+            Debug.Log(Stream.LookAhead().Value + " despues del body lo qu hay es eso");
+            if(!Stream.Match(TokenValues.StatementSeparator)) throw new CompilingError(Stream.Previous().Location, ErrorCode.Expected, "missing ';' despues del while");
         } 
         else body  = SimpleStatements();
         return new While(codition,body,location);
@@ -648,7 +649,7 @@ public class Parse
 
             }
         } while(!Stream.Match(TokenValues.ClosedCurlyBraces));
-        
+        Debug.Log("despues del statetment lo que hay es " + Stream.LookAhead().Value);
         //if(Stream.Match(TokenValues.StatementSeparator)) Debug.Log(Stream.LookAhead().Value + " al salir del state");
         return new StatementBlock(stmts,location);
     }

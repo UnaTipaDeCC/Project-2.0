@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+//using System.Diagnostics;
+using UnityEngine;
+using System;
 public class Unary : Expression
 {
     public override ExpressionType Type {get; set;}
     public override object? Value {get; set;}
     public Token Operator;
     public Expression Right;
+    public Scope Scope;
     public CodeLocation Location;
     public Unary(Token Operator, Expression right, CodeLocation location) : base(location)
     {
@@ -14,32 +18,43 @@ public class Unary : Expression
     }
     public override void Evaluate()
     {
-        Right.Evaluate() ;
-        switch(Operator.Value)
+        if(Operator.Value == TokenValues.Sub || Operator.Value == TokenValues.Negation)
         {
-            case TokenValues.Sub:
-            Value = -(double)Right.Value;
-            break;
-            case TokenValues.Decrement:
-            Value = (double)Right.Value - 1;
-            break;
-            case TokenValues.Increment:
-            Value = (double)Right.Value + 1;
-            break;
-            case TokenValues.Negation:
-            Value = Value = !(bool)Right.Value;
-            break;
+            Right.Evaluate();
+            Value = Operator.Value == TokenValues.Sub ? -(double)Right.Value : !(bool)Right.Value;
         }
-        /*if(Operator.Value == TokenValues.Sub) Value = -(double)Right.Value;
-        else if (Operator.Value == TokenValues.Negation) Value = !(bool)Right.Value; */
+        else
+        {
+            UpdateVariable();
+        }
+    }
+    private void UpdateVariable()
+    {
+        Variable var = (Variable)Right;
+        double currentValue = (double)Scope.Get(var.Name);
+        switch (Operator.Value)
+        {
+            case TokenValues.Decrement:
+                Scope.Set(var.Name, currentValue - 1);
+                break;
+            case TokenValues.Increment:
+                Scope.Set(var.Name, currentValue + 1);
+                break;
+            default:
+                throw new InvalidOperationException("Unsupported operator for variable update.");
+        }
+        Value = Scope.Get(var.Name);
+        Debug.Log($"The value of variable {var.Name} after increment/decrement is {Value}");
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
+        Scope = scope;
         if(Operator.Value == TokenValues.Increment ||Operator.Value == TokenValues.Decrement)
         {
+            //si es una variable fue previamente definida
             if(!(Right is Variable))
             {
-                errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The expression before the '" + Operator.Value + "' must be a variable"));
+                errors.Add(new CompilingError(Location,ErrorCode.Invalid, $"The expression before the '{Operator.Value}' must be a variable"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }
@@ -48,7 +63,7 @@ public class Unary : Expression
                 Variable var = (Variable)Right;
                 if(scope.GetType(var.Name) != ExpressionType.Number)
                 {
-                    errors.Add(new CompilingError(Location,ErrorCode.Invalid, "The expression before the '" + Operator.Value + "' must be a number variable"));
+                    errors.Add(new CompilingError(Location,ErrorCode.Invalid, $"The expression before the '{Operator.Value} ' must be a number variable"));
                     Type = ExpressionType.ErrorType;
                     return false;
                 }
