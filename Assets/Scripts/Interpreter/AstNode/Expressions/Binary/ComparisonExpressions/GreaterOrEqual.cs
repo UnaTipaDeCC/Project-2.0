@@ -22,7 +22,7 @@ public class GreaterOrEqual: BinaryExpression
             return false;
         }
 
-        Type = ExpressionType.Bool;//duda
+        Type = ExpressionType.Bool;
         return right && left;    
     }
     public override void Evaluate()

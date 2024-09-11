@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System;
-//using System.Diagnostics;
 using UnityEngine;
 using UnityEditor;
 
@@ -21,7 +20,6 @@ public class StatementBlock : Statement
         {
             if(!statement.CheckSemantic(context,Scope,errors)) 
             {
-                //Console.WriteLine("algo fue mal en la evaluccion del statement: " + statement);
                 return false;
             }
         }

@@ -5,7 +5,6 @@ public class EffectAction : Statement
     public Effect Effect {get; set;}
     public PostAction PostAction {get;private set;}
     public Selector Selector{get;private set;}
-    //public Dictionary<Token,ExpressionType> ParamsType {get;private set;}
     public List<(Token,Expression)> Params {get;private set;}
     public CodeLocation Location{get;private set;}
     public Scope Scope{get;private set;}
@@ -63,6 +62,7 @@ public class EffectAction : Statement
             }
             else
             {
+                //
                 param.Item2.Evaluate();
                 Effect.Scope.Set(param.Item1.Value,param.Item2.Value);
             } 
@@ -72,13 +72,14 @@ public class EffectAction : Statement
 
         if (!(Selector is null))
         {  
+            //hacer saber al selector que no es un postAction
             Selector.IsPost = false;
             checkSelector = Selector.CheckSemantic(context,Scope,errors);
             
         }
         else 
         {
-            errors.Add(new CompilingError(Selector.Location, ErrorCode.Invalid, "The selection must be declared if the effect isnt a postAction"));
+            errors.Add(new CompilingError(Location, ErrorCode.Invalid, "The selector must be declared if the effect isnt a postAction"));
             return false;
         }
         bool checkPostaction = true;

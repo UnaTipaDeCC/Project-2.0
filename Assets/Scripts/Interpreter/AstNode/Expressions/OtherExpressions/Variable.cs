@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System;
-//using System.Diagnostics;
 using UnityEngine;
 public class Variable : AtomExpression
 {
@@ -10,7 +9,6 @@ public class Variable : AtomExpression
     public Variable(string name, CodeLocation location) : base(location)
     {
         this.Name = name;
-        //this.scope = scope;
         this.Location = location;
     }
     public override string ToString()
@@ -22,10 +20,11 @@ public class Variable : AtomExpression
     {
         VariableScope = scope;
         Debug.Log("en el coso desto de la variable" + VariableScope.Contains(Name));
+        //verificar que la variable fue previamente definida
         if(!VariableScope.Contains(Name))
         {
             Debug.Log(Name);
-            errors.Add(new CompilingError(Location,ErrorCode.Invalid,"la variable: " + Name + " no esta definida (estoy en el check de la variable)"));
+            errors.Add(new CompilingError(Location,ErrorCode.Invalid,"the variable: " + Name + "havent been previously declared"));
             Type = ExpressionType.Identifier;
             return false;
         }

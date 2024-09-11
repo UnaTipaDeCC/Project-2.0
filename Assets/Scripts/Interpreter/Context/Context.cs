@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using System.Collections.Generic;
 using System.Linq;
 public class Context
@@ -17,17 +16,20 @@ public class Context
         Effects = new Dictionary<string,Effect>();
         Elements = new List<string>();
         Cards = new List<string>();
+        //el tipo de retorno de los metodos y propiedades del contexto
         ContextReturnTypes = new Dictionary<string,ExpressionType>
         {
             {"Board",ExpressionType.List},{"HandOfPlayer",ExpressionType.List},{"GraveyardOfPlayer",ExpressionType.List},
             {"FieldOfPlayer",ExpressionType.List},{"DeckOfPlayer",ExpressionType.List}, {"Hand",ExpressionType.List},
             {"Deck", ExpressionType.List}, {"Field",ExpressionType.List}, {"Graveryard", ExpressionType.List}, {"TriggerPlayer",ExpressionType.Number}
         };
+        //el tipo de retorno de las propiedades de las cartas
         CardReturnTypes = new Dictionary<string,ExpressionType>
         {
             {"Type",ExpressionType.Text}, {"Power", ExpressionType.Number}, {"Name",ExpressionType.Text}, {"Faction",ExpressionType.Text},
             {"Owner", ExpressionType.Number}, {"Range",ExpressionType.List}
         };
+        //el tipo de retorno de los metodos de las listas
         ListReturnTypes = new Dictionary<string,ExpressionType>
         {
             {"Find",ExpressionType.List},{"Push",ExpressionType.Void}, {"SendBottom",ExpressionType.Void},
@@ -37,7 +39,8 @@ public class Context
         {
             "board","hand", "otherHand", "deck", "otherDeck","field", "otherField","parent"
         };
-        PossiblesTypes = new string[] {"Oro", "Plata", "Clima" , "Aumento", "Lider", "Líder"};
+        PossiblesTypes = new string[] {"Oro", "Plata", "Clima" , "Aumento", "Lider"};
+        //los tipos que tienen los parametros de los metodos
         ParamsOfMethodsTypes = new Dictionary<string, ExpressionType>
         {
             {"HandOfPlayer", ExpressionType.Number}, {"FieldOfPlayer",ExpressionType.Number}, {"DeckOfPlayer",ExpressionType.Number},

@@ -8,11 +8,11 @@ public class Grouping : Expression
     }
     public override object? Value {get; set;}
     public Expression expression{get; set;}
-    public CodeLocation location{ get; set;}
+    public CodeLocation Location{ get; set;}
     public Grouping(Expression expression, CodeLocation location) : base(location)
     {
         this.expression = expression;
-        this.location = expression.Location; 
+        Location = expression.Location; 
     }
     public override void Evaluate()
     {

@@ -6,13 +6,11 @@ public class Div: BinaryExpression
         Expression? Right{get; set;}
         Expression? Left{get; set;}
         Token Operator{get; set;}
-        //CodeLocation location{get; set;}
         public Div(Expression? left,Token Operator,Expression? right,CodeLocation location) : base(location)
         {
             this.Left = left;
             this.Right = right;
             this.Operator = Operator;
-            location = Operator.Location;
         }
 
         public override void Evaluate()

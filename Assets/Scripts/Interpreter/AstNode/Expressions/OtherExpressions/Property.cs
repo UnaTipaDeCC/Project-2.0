@@ -32,10 +32,10 @@ class Property : Expression
     }
     public override void Evaluate()
     {
+        //evaluar la expresion que llama a la propiedad y llamar a  la propiedad del juego correspondiente
         Caller.Evaluate(); 
         if (Caller.Value is CardGame card)
         {
-            //CardGame card = (CardGame)caller.Value;
             switch(Name.Value)
             {
                 case "Power":
@@ -84,7 +84,7 @@ class Property : Expression
                 Value = context.Graveryard;
                 break;
                 case "Field":
-                Value = context.Graveryard;
+                Value = context.Field;
                 break;
                 default: throw new Exception("Invalid property: " + Name.Value);
             }

@@ -17,6 +17,7 @@ public class While : Statement
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
         this.scope = scope.CreateChild();
+        //chequear que la condicion del while sea una expresion booleana
         bool checkCondition = condition.CheckSemantic(context,scope,errors);
         if(condition.Type != ExpressionType.Bool)
         {

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-//using System.Diagnostics;
 using UnityEngine;
 using System;
 public class Unary : Expression
@@ -25,6 +24,7 @@ public class Unary : Expression
         }
         else
         {
+            //es una variable con ++ o --
             UpdateVariable();
         }
     }
@@ -34,6 +34,7 @@ public class Unary : Expression
         double currentValue = (double)Scope.Get(var.Name);
         switch (Operator.Value)
         {
+            //actualizar el valor de la variable en el scope
             case TokenValues.Decrement:
                 Scope.Set(var.Name, currentValue - 1);
                 break;
@@ -43,6 +44,7 @@ public class Unary : Expression
             default:
                 throw new InvalidOperationException("Unsupported operator for variable update.");
         }
+        //actualizar el valor de la expresion
         Value = Scope.Get(var.Name);
         Debug.Log($"The value of variable {var.Name} after increment/decrement is {Value}");
     }
@@ -51,7 +53,7 @@ public class Unary : Expression
         Scope = scope;
         if(Operator.Value == TokenValues.Increment ||Operator.Value == TokenValues.Decrement)
         {
-            //si es una variable fue previamente definida
+            //verificar que sea una variable, en cuyo caso tuvo que ser previamente definida
             if(!(Right is Variable))
             {
                 errors.Add(new CompilingError(Location,ErrorCode.Invalid, $"The expression before the '{Operator.Value}' must be a variable"));
@@ -61,6 +63,7 @@ public class Unary : Expression
             else
             {
                 Variable var = (Variable)Right;
+                //verificar que el valor de la variable sea un numero
                 if(scope.GetType(var.Name) != ExpressionType.Number)
                 {
                     errors.Add(new CompilingError(Location,ErrorCode.Invalid, $"The expression before the '{Operator.Value} ' must be a number variable"));
@@ -77,7 +80,7 @@ public class Unary : Expression
         {
             if(Right.Type != ExpressionType.Bool)
             {
-                errors.Add(new CompilingError(Location,ErrorCode.Invalid,"The expression must be a boolean")); 
+                errors.Add(new CompilingError(Location,ErrorCode.Invalid,"The expression must be a boolean for '!' ")); 
                 Type = ExpressionType.ErrorType; 
                 return false;
             }

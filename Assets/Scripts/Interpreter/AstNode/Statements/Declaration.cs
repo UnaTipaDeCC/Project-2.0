@@ -83,7 +83,6 @@ public class Declaration : Statement
                 return false;
             }
         }
-        //bool checVariable = variable.CheckSemantic(context, scope, errors);
         return checkValue;
         
     }
@@ -91,7 +90,4 @@ public class Declaration : Statement
     {
         return $"variable: {variable.Value}, Valor: {value}";
     }
-    
-
-
 }

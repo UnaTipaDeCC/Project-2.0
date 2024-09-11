@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 public class StmtExpression : Statement
 {
+    //maneja el caso en el que se llamen a metodos
     Expression expression;
     public Scope Scope{ get; set; }
     public StmtExpression(Expression expression, CodeLocation location) : base(location)

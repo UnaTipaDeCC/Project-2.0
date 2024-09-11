@@ -17,6 +17,7 @@ public class Equal : BinaryExpression
     {
         bool right = Right.CheckSemantic(context, scope, errors);
         bool left = Left.CheckSemantic(context,scope, errors);
+        //comprobar que sean del mismo tipo
         if((Right.Type == ExpressionType.Number && Left.Type == ExpressionType.Number) || (Right.Type == ExpressionType.Text && Left.Type == ExpressionType.Text) || (Right.Type == ExpressionType.Bool && Left.Type == ExpressionType.Bool))
         {
             Type = ExpressionType.Bool;
@@ -32,6 +33,7 @@ public class Equal : BinaryExpression
     {
         Right.Evaluate();
         Left.Evaluate();
+
         if(Right.Type == ExpressionType.Number && Left.Type == ExpressionType.Number)
         {
             Value = (double)Left.Value == (double)Right.Value;
@@ -44,7 +46,6 @@ public class Equal : BinaryExpression
         {
             Value = (bool)Right.Value == (bool)Left.Value;
         }
-        //Console.WriteLine("el valor de equal : " +Value);
     }
     public override string ToString()
     {

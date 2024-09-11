@@ -17,6 +17,7 @@ public class Unequal : BinaryExpression
     {
         bool right = Right.CheckSemantic(context, scope, errors);
         bool left = Left.CheckSemantic(context,scope, errors);
+        //comprobar que sean del mismo tipo
         if((Right.Type == ExpressionType.Number && Left.Type == ExpressionType.Number) || (Right.Type == ExpressionType.Text && Left.Type == ExpressionType.Text))
         {
            Type = ExpressionType.Bool;

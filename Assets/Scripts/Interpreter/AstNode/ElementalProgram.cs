@@ -14,12 +14,13 @@ public class ElementalProgram : ASTNode
     {
         bool checkCards = true;
         bool checkEffects = true;
+        //chequear semanticamente todos los efectos
         foreach(Effect effect in Effects)
         {
             effect.Name.Evaluate();
-            //Console.WriteLine(effect.name.Value);
             checkEffects = checkEffects && effect.CheckSemantic(context, scope, errors);
         }
+        //chequear semanticamente todas las cartas
         foreach(var card in Cards)
         {
             checkCards = checkCards && card.CheckSemantic(context, scope,errors);

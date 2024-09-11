@@ -20,8 +20,8 @@ public class Concatenation: BinaryExpression
     {
         Right.Evaluate();
         Left.Evaluate();
-        if(Operator.Value == TokenValues.ConcatenationWithoutSpace) Value = (string)Left.Value + (string)Right.Value;
-        else Value = (string)Left.Value + " " +  (string)Right.Value;
+        Value = (Operator.Value == TokenValues.ConcatenationWithoutSpace) ? (string)Left.Value + (string)Right.Value 
+        : (string)Left.Value + " " + (string)Right.Value;
     }
 
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)

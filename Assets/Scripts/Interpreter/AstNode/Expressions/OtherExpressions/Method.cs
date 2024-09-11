@@ -21,7 +21,7 @@ class Method : Expression
         Scope = scope;
         bool checkArgument = true;
         bool checkCaller = caller.CheckSemantic(context, scope, errors);
-        Debug.Log(name.Value);
+        //verificar en el context que sea un metodo valido y que la expresion que lo llama sea de un tipo valido
         if(!context.Contains(name.Value))
         {
             errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + " is not valid"));
@@ -34,10 +34,10 @@ class Method : Expression
             Type = ExpressionType.ErrorType;
             return false;
         }
+        //en caso de que tenga un parametro el metodo, chequearlo semanticamente y verificar que sea un parametro valido para este metodo
         if(argument != null)
         {
             checkArgument = argument.CheckSemantic(context, scope, errors);
-            Debug.Log(argument.Type);
             if(!context.ParamsOfMethodsTypes.ContainsKey(name.Value))
             {
                 errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + "doesnt have a param"));
@@ -51,18 +51,19 @@ class Method : Expression
                 return false;
             }
         }
+        //acceder al context y asociar el tipo
         Type = context.GetType(name.Value);
         return checkArgument && checkCaller;
     }
     public override void Evaluate()
     {
         caller.Evaluate();
+        //se evalua el parametro de existir a menos que sea un find, en ese caso se evalua segun sea necesario
         if(argument != null && name.Value != "Find") argument.Evaluate();
         
+        //determinar de que tipo es la expresion que llama al metodo y en funcion de eso, asignar el valor o llamar al metodo correspondiente
         if(caller.Value is GameContext)
-        {
-            
-            Debug.Log(argument.Value);
+        {   
             Player player = GameContext.Instance.ReturnPlayer((int)argument.Value);
             switch (name.Value)
             {
@@ -99,7 +100,6 @@ class Method : Expression
                 GameContext.Instance.Shuffle(list); 
                 break;
                 case "Find":
-                Debug.Log("era un find");
                 List<CardGame> cardGames = (List<CardGame>)caller.Value;
                 Debug.Log("antes de entrar al foreach el count de la lista es: " + cardGames.Count);
                 //Filtrar las cartas segun el valor del predicate
@@ -109,9 +109,12 @@ class Method : Expression
                 foreach(CardGame card in (List<CardGame>)caller.Value)
                 {
                     Debug.Log("la variable es: " + var.Name);
+                    //actualizar el valor de la variable del predicate
                     Scope.Set(var.Name, card);
+                    
                     CardGame c = (CardGame)Scope.Get(var.Name);
                     Debug.Log(c.Name);
+                    //evaluar el predicate y en funcion de eso se agrega a la lista
                     predicate.Evaluate();
                     Debug.Log("valor del predicate " + predicate.Value);
                     if((bool)predicate.Value)
@@ -126,15 +129,14 @@ class Method : Expression
                 GameContext.Instance.RemoveCard(list,(CardGame)argument.Value);
                 break;
                 
-            }
-           
+            } 
         }
-        Debug.Log("el resultado de " + name.Value + " es " + Value);
     }
     public override ExpressionType Type { get; set;}
     public override object? Value { get; set;}
     public override string ToString()
     {
-        return $"{caller.Value}.{name.Value}({argument.Value})";
+        if(argument is null) return $"{caller.Value}.{name.Value}()";
+        else return $"{caller.Value}.{name.Value}({argument.Value})";
     }
 }

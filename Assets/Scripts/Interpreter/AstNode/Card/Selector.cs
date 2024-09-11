@@ -57,27 +57,32 @@ public class Selector : Statement
         bool checkSource = Source.CheckSemantic(context, SelectorScope, errors);
         if(Source.Type != ExpressionType.Text)
         {
-            errors.Add(new CompilingError(Single.Location,ErrorCode.Invalid,"The 'Source' must be boolean expression"));
+            errors.Add(new CompilingError(Single.Location,ErrorCode.Invalid,"The 'Source' must be a text"));
             return false;
         }
         Source.Evaluate();
         if(!IsPost)
         {
+            //revisar que sea una fuente valido
             if(!context.ContainsSource((string)Source.Value))
             {
                 errors.Add(new CompilingError(Source.Location,ErrorCode.Invalid,"The 'Source' isnt a possible expression"));
                 return false;
             }
+            else if((string)Source.Value == "parent")
+            {
+                errors.Add(new CompilingError(Source.Location,ErrorCode.Invalid,"The 'Source' cant be 'parent' if the effect isnt a postAction"));
+                return false;
+            }
         }
         else
         {
-            if(!context.ContainsSource((string)Source.Value) && (string)Source.Value != "parent")
+            if(!context.ContainsSource((string)Source.Value))
             {
                 errors.Add(new CompilingError(Source.Location,ErrorCode.Invalid,"The postAction 'Source' isnt a possible expression"));
                 return false;
             }
         }
-        
         return checkSource && checkSingle && checkPredicate; 
     }
 
@@ -110,7 +115,7 @@ public class Selector : Statement
             source = GameContext.Instance.Board;
             break;
             case "parent":
-            //se accede al scope del efecto, 
+            //se accede al scope del efecto, al par(action,postAction) y se le asigna la lista filtrada del action
             source = Scope.EffectPair.Item1.Selector.FiltredCards;
             break;
             default: throw new ArgumentException("Invalid source");
@@ -118,21 +123,23 @@ public class Selector : Statement
         List<CardGame> resultList = new List<CardGame>();
         Single.Evaluate();
         bool single = (bool)Single.Value;
-        Predicate predicate = (Predicate)Predicate; // revisar si hay otra forma para acceder a su scope
+        Predicate predicate = (Predicate)Predicate;
         Debug.Log("estoy en el selector y lo del source es:" + source.Count);
         foreach(var card in source)
         {
-            //revisar esta parte
             Variable a = (Variable)predicate.Variable;
+         
             Debug.Log(a.Name);
             Debug.Log(card.Name);
+          
+            //actualizar el valor de la variable del predicate
             SelectorScope.Set(a.Name, card); 
             predicate.Evaluate();
             Debug.Log("el valor del predicate " + predicate.Value);
             if((bool)predicate.Value) 
             {
                 resultList.Add(card); 
-                if(single) break;
+                if(single) break; //una vez se encuentra la primera salir
             }
         }
         Debug.Log("despues de filtrar las cartas en el source: " + resultList.Count);

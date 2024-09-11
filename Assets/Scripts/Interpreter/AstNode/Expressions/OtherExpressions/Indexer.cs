@@ -29,13 +29,6 @@ public class Indexer : Expression
             return false;
         }
         index.Evaluate();
-
-        /*if(!(index.Value is int))
-        {
-            errors.Add(new CompilingError(exp.Location,ErrorCode.Invalid, "Index must be an int number"));
-            Type = ExpressionType.ErrorType;
-            return false;
-        }*/
         Type = ExpressionType.Card;
         return checkExp && checkIndex;
     }
@@ -45,7 +38,7 @@ public class Indexer : Expression
         exp.Evaluate();
         double a = (double)index.Value; 
         List<CardGame> lista = (List<CardGame>)exp.Value;
-        Value = lista[(int)a];//[(int)index.Value];;
+        Value = lista[(int)a];
     }
     public override ExpressionType Type { get; set; }
     public override object? Value { get; set; }
