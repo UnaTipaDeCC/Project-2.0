@@ -77,49 +77,49 @@ public class GameContext : MonoBehaviour
     }
     public void RemoveCard(List<CardGame> list, CardGame card)
     {
-        //Comprobar si la lista es un field o board 
-        //if(CheckList(list,BravasPlayer.GetComponent<Player>().Field) || CheckList(list,LocasPlayer.GetComponent<Player>().Field) || CheckList(list,Board))
-        //{
-            //Comprobar de que jugador es y a que zona pertenece
-            Player player = ReturnPlayer(card.Owner);
-            if(player.Melee.GetComponent<Zones>().CardsInZone.Contains(card))
-            {
-                player.Melee.GetComponent<Zones>().CardsInZone.Remove(card);
-                player.Melee.GetComponent<Zones>().RefreshZone();
-            }
-            else if(player.Ranged.GetComponent<Zones>().CardsInZone.Contains(card))
-            {
-                player.Ranged.GetComponent<Zones>().CardsInZone.Remove(card);
-                player.Ranged.GetComponent<Zones>().RefreshZone();
-            }
-            else if(player.Siege.GetComponent<Zones>().CardsInZone.Contains(card))
-            {
-                player.Siege.GetComponent<Zones>().CardsInZone.Remove(card);
-                player.Siege.GetComponent<Zones>().RefreshZone();
-            }
-            else if(WeatherZone.GetComponent<Zones>().CardsInZone.Contains(card))
-            {
-                WeatherZone.GetComponent<Zones>().CardsInZone.Remove(card);
-                WeatherZone.GetComponent<Zones>().RefreshZone();
-            }
-            else if(player.Hand.GetComponent<Zones>().CardsInZone.Contains(card))
-            {
-                player.Hand.GetComponent<Zones>().CardsInZone.Remove(card);
-                player.Hand.GetComponent<Zones>().RefreshZone();
-            }
-        //}
-        //else Remove(list,card);//si no
+        //Comprobar de que jugador es y a que zona pertenece
+        Player player = ReturnPlayer(card.Owner);
+        if(player.Melee.GetComponent<Zones>().CardsInZone.Contains(card))
+        {
+            player.Melee.GetComponent<Zones>().CardsInZone.Remove(card);
+            player.Melee.GetComponent<Zones>().RefreshZone();
+        }
+        else if(player.Ranged.GetComponent<Zones>().CardsInZone.Contains(card))
+        {
+            player.Ranged.GetComponent<Zones>().CardsInZone.Remove(card);
+            player.Ranged.GetComponent<Zones>().RefreshZone();
+        }
+        else if(player.Siege.GetComponent<Zones>().CardsInZone.Contains(card))
+        {
+            player.Siege.GetComponent<Zones>().CardsInZone.Remove(card);
+            player.Siege.GetComponent<Zones>().RefreshZone();
+        }
+        else if(WeatherZone.GetComponent<Zones>().CardsInZone.Contains(card))
+        {
+            WeatherZone.GetComponent<Zones>().CardsInZone.Remove(card);
+            WeatherZone.GetComponent<Zones>().RefreshZone();
+        }
+        else if(player.Hand.GetComponent<Zones>().CardsInZone.Contains(card))
+        {
+            player.Hand.GetComponent<Zones>().CardsInZone.Remove(card);
+            player.Hand.GetComponent<Zones>().RefreshZone();
+        }
+        else list.Remove(card); //significa que la carta es del cementerio o del deck
     }
     public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
     public CardGame Pop(List<CardGame> gameObjects)
     {
+        Debug.Log("en el pop el count es: " + gameObjects.Count );
         if (gameObjects.Count == 0)
         {
-            Debug.LogWarning("La lista está vacía. No se puede hacer pop.");
-            return null; // O lanzar una excepción, según tu preferencia
-        }
+            Debug.Log("La lista está vacía. No se puede hacer pop.");
+            return null; 
+        } 
         CardGame topObject = gameObjects[gameObjects.Count - 1];
-        gameObjects.RemoveAt(gameObjects.Count - 1);
+        Debug.Log("en el pop el count es: " + gameObjects.Count ); 
+        Debug.Log("en el pop la carta que va a salir es " + topObject.Name);
+        RemoveCard(gameObjects, topObject);
+        //gameObjects.RemoveAt(gameObjects.Count - 1);
         return topObject;
     }
     public void Push(CardGame obj, List<CardGame> gameObjects) => gameObjects.Add(obj);

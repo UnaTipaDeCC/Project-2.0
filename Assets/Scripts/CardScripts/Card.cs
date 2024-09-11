@@ -35,7 +35,15 @@ public class CardGame : ScriptableObject
         SetEncreasCard,
         Clear
     }
-    public List<EffectAction> EffectsList;//REVISAR DESPUES ESTE TEMA
+    public List<EffectAction> EffectsList;
+    public string GetFaction
+    {
+        get
+        { 
+            return Faction == faction.HormigasLocas? "Hormigas Locas" : "Hormigas Bravas";
+        }
+    }
+    
     public faction Faction;
     public enum faction
     {

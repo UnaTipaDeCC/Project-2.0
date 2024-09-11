@@ -16,7 +16,7 @@ public class Predicate : Expression
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
-        //Scope = scope.CreateChild();
+        Scope = scope;
         //se chequea que la expresion sea una variable
         if(!(Variable is Variable))
         {
@@ -24,9 +24,9 @@ public class Predicate : Expression
             Type = ExpressionType.ErrorType;
             return false;
         }
+
         //se chequea que la variable no haya sido previamente definida
         Variable var = (Variable)Variable;
-        Debug.Log(var.Type);
         if(var.Type != ExpressionType.Anytype)
         {
             errors.Add(new CompilingError(Location,ErrorCode.Invalid,$"The variable {var} already exist in this context"));
@@ -34,6 +34,7 @@ public class Predicate : Expression
             return false;
         }
         else scope.SetType(var.Name,ExpressionType.Card);
+        Debug.Log("en el predicate despues de definir la variable el type es: " + scope.GetType(var.Name));
         //se chequea la condicion
         bool checkCondition = Condition.CheckSemantic(context, scope, errors);
         if(Condition.Type != ExpressionType.Bool)
@@ -47,7 +48,6 @@ public class Predicate : Expression
     }
     public override void Evaluate()
     {
-       // Variable.Evaluate();
         Condition.Evaluate();
         Value = Condition.Value;
     }

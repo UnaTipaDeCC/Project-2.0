@@ -38,16 +38,17 @@ public class Declaration : Statement
             variable.Evaluate();
             Property property = (Property)variable;
             CardGame cardGame = (CardGame)property.Caller.Value;
+            double a = (double)value.Value;
             switch(operatorToken.Value)
             {
                 case TokenValues.Assign:
-                cardGame.Damage = (int)value.Value;
+                cardGame.Damage = (int)a;
                 break;
                 case TokenValues.AdditionAssignment:
-                cardGame.Damage = (int)value.Value + (int)variable.Value;
+                cardGame.Damage = cardGame.Damage + (int)a;
                 break;
                 case TokenValues.SubtractionAssignment:
-                cardGame.Damage = (int)variable.Value - (int)value.Value;
+                cardGame.Damage = cardGame.Damage - (int)a;//(int)value.Value;
                 break;
             }
         }

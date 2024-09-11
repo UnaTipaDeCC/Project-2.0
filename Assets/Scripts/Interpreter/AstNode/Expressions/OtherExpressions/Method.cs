@@ -18,6 +18,7 @@ class Method : Expression
     }
     public override bool CheckSemantic(Context context, Scope scope, List<CompilingError> errors)
     {
+        Scope = scope;
         bool checkArgument = true;
         bool checkCaller = caller.CheckSemantic(context, scope, errors);
         
@@ -88,6 +89,7 @@ class Method : Expression
         }
         else if(caller.Value is List<CardGame> list) 
         {
+            Debug.Log("es una lista lo que llama al metodo +  " + name.Value);
             switch(name.Value)
             {
                 case "Push":
@@ -103,13 +105,16 @@ class Method : Expression
                 GameContext.Instance.Shuffle(list); 
                 break;
                 case "Find":
+                Debug.Log("era un find");
+                List<CardGame> cardGames = (List<CardGame>)caller.Value;
+                Debug.Log("antes de entrar al foreach el count de la lista es: " + cardGames.Count);
                 //Filtrar las cartas segun el valor del predicate
                 List<CardGame> filteredCards = new List<CardGame>();
                 Predicate predicate = (Predicate)argument;
                 Variable var = (Variable)predicate.Variable;
                 foreach(CardGame card in (List<CardGame>)caller.Value)
                 {
-                    Debug.Log(var.Name);
+                    Debug.Log("la variable es: " + var.Name);
                     Scope.Set(var.Name, card);
                     CardGame c = (CardGame)Scope.Get(var.Name);
                     Debug.Log(c.Name);

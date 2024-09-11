@@ -7,7 +7,7 @@ public class Indexer : Expression
     CodeLocation location;
     public Indexer(Expression expression, Expression index, CodeLocation location) : base(location)
     {
-        this.exp = expression;
+        exp = expression;
         this.index = index;
         this.location = location;
     }
@@ -43,7 +43,9 @@ public class Indexer : Expression
     {
         index.Evaluate();
         exp.Evaluate();
-        Value = ((List<CardGame>)exp.Value)[(int)index.Value];;
+        double a = (double)index.Value; 
+        List<CardGame> lista = (List<CardGame>)exp.Value;
+        Value = lista[(int)a];//[(int)index.Value];;
     }
     public override ExpressionType Type { get; set; }
     public override object? Value { get; set; }

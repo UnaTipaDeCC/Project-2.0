@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+//using System.Diagnostics;
+using UnityEngine;
 class Property : Expression
 {
     public Expression Caller{get; private set;}
@@ -38,21 +40,27 @@ class Property : Expression
             {
                 case "Power":
                 Value = card.Damage;
+                Debug.Log("el poder es: " + Value);
                 break;
                 case "Name":
                 Value = card.Name;
+                Debug.Log("el nombre es: " + Value);
                 break;
                 case "Faction":
-                Value = card.Faction.ToString();
+                Value = card.GetFaction;
+                Debug.Log("la faccion es: " + Value);
                 break;
                 case "Range":
                 Value = card.Range;
+                Debug.Log("el range es: " + Value);
                 break;
                 case "Type":
                 Value = card.Type.ToString();
+                Debug.Log("el type es: " + Value);
                 break;
                 case "Owner":
                 Value = card.Owner;
+                Debug.Log("el owner es: " + Value);
                 break;
                 default: throw new Exception("Invalid property: " + Name.Value);
             }  

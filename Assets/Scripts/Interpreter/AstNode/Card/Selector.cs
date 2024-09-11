@@ -119,7 +119,7 @@ public class Selector : Statement
         Single.Evaluate();
         bool single = (bool)Single.Value;
         Predicate predicate = (Predicate)Predicate; // revisar si hay otra forma para acceder a su scope
-        Debug.Log(source.Count);
+        Debug.Log("estoy en el selector y lo del source es:" + source.Count);
         foreach(var card in source)
         {
             //revisar esta parte
@@ -128,13 +128,14 @@ public class Selector : Statement
             Debug.Log(card.Name);
             SelectorScope.Set(a.Name, card); 
             predicate.Evaluate();
-            Debug.Log(predicate.Value);
+            Debug.Log("el valor del predicate " + predicate.Value);
             if((bool)predicate.Value) 
             {
                 resultList.Add(card); 
                 if(single) break;
             }
         }
+        Debug.Log("despues de filtrar las cartas en el source: " + resultList.Count);
         FiltredCards = resultList;
     }
 }

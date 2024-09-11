@@ -6,6 +6,7 @@ using TMPro;
 
 public class Player : MonoBehaviour
 {
+    private MessageDisplay message;  //referencia al script del panel
     public int WonRounds = 0;
     public int Points = 0;
     public bool Passed = false;
@@ -32,11 +33,16 @@ public class Player : MonoBehaviour
     {
         List<CardGame> list = new List<CardGame>();
         //list.AddRange(Hand.GetComponent<Zones>().CardsInZone); 
+        Debug.Log("en melee: " + Melee.GetComponent<Zones>().CardsInZone.Count);
+        Debug.Log("en ranged: " + Ranged.GetComponent<Zones>().CardsInZone.Count);
+        Debug.Log("en siege: " + Siege.GetComponent<Zones>().CardsInZone.Count);
         list.AddRange(Melee.GetComponent<Zones>().CardsInZone);
         list.AddRange(Siege.GetComponent<Zones>().CardsInZone);
+        list.AddRange(Ranged.GetComponent<Zones>().CardsInZone);
         list.AddRange(MeleeIncrement.GetComponent<Zones>().CardsInZone);
         list.AddRange(SiegeIncrement.GetComponent<Zones>().CardsInZone);
         list.AddRange(RangedIncrement.GetComponent<Zones>().CardsInZone);
+        Debug.Log("en lo del field el count es: " + list.Count);
         return list;
     }
     public void Stole(int n) 
@@ -100,6 +106,7 @@ public class Player : MonoBehaviour
             Stole(1);
             ChandedCards ++;
         }
+        else message.ShowMessage("Ya no puede cambiar cartas");
         
     }
     
@@ -107,6 +114,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         Cementery = new List<CardGame>();
+        message = MessageDisplay.Instance;
         //establecer las zonas como hijos del player
         Melee.transform.SetParent(this.transform, false);
         Ranged.transform.SetParent(this.transform,false);
