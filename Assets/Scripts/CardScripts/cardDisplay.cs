@@ -23,10 +23,16 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
             //Verificar que sea el turno correcto y la carta no haya sido jugada
             if(GameContext.Instance.TriggerPlayer == GameContext.Instance.ReturnPlayer(Card.Owner) && !Card.Played)
             {
+                //actualizar la carta como jugada
+                Card.Played = true;
                 //una vez jugada una carta ya no puede hacer el cambio de cartas
                 GameContext.Instance.ReturnPlayer(Card.Owner).CanChange = false;
-                //revisar si llamar al efecto primero y al move despues sea una buena idea
-                CardsMove.Instance.MoveCard(Card);
+                //mover la carta en caso de que no sea una lider
+                if(Card.Type != CardGame.type.Lider)
+                {
+                    CardsMove.Instance.MoveCard(Card);
+                }
+                //activar el efecto
                 Card.ActivateEffect();
                 GameManager.gameManager.ChangeTurn();
             } 

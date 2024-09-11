@@ -39,8 +39,7 @@ public class Greater:BinaryExpression
     {
         Right.Evaluate();
         Left.Evaluate();
-        
-        Value = (double)Left.Value > (double)Right.Value;
+        Value =  (double)Left.Value > (double)Right.Value;
     }
     public override object? Value { get; set; }
     public override ExpressionType Type { get; set; }

@@ -82,7 +82,7 @@ public class Compiling
                 __LexicalProcess.RegisterKeyword("SendBottom",TokenValues.SendBottom);
                 __LexicalProcess.RegisterKeyword("Pop",TokenValues.Pop);
                 __LexicalProcess.RegisterKeyword("Remove",TokenValues.Remove);
-                __LexicalProcess.RegisterKeyword("Shuffle",TokenValues.Suffle);
+                __LexicalProcess.RegisterKeyword("Shuffle",TokenValues.Shuffle);
                 __LexicalProcess.RegisterKeyword("Hand",TokenValues.Hand);
                 __LexicalProcess.RegisterKeyword("Field",TokenValues.Field);
                 __LexicalProcess.RegisterKeyword("Graveyarr",TokenValues.Graveyard);

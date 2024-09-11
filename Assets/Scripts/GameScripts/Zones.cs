@@ -55,9 +55,9 @@ public class Zones : MonoBehaviour
             Debug.LogError("No se pudo cargar el prefab de la carta.");
         }
     }
-    public int GetPoints()
+    public double GetPoints()
     {   
-        int totalPoints = 0;
+        double totalPoints = 0;
         foreach (CardGame card in CardsInZone)
         {
             totalPoints += card.Damage; // Asumiendo que CardGame tiene una propiedad Points

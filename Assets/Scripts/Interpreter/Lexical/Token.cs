@@ -120,7 +120,7 @@ public class TokenValues
     public const string SendBottom = "SendBottom";
     public const string Pop = "Pop";
     public const string Remove = "Remove";
-    public const string Suffle = "Suffle";
+    public const string Shuffle = "Shuffle";
     public const string Hand = "Hand"; 
     public const string Field = "Fiel";
     public const string Graveyard = "Graveyard";

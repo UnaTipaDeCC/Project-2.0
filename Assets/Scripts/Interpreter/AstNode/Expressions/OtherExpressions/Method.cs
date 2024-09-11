@@ -21,7 +21,7 @@ class Method : Expression
         Scope = scope;
         bool checkArgument = true;
         bool checkCaller = caller.CheckSemantic(context, scope, errors);
-        
+        Debug.Log(name.Value);
         if(!context.Contains(name.Value))
         {
             errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + " is not valid"));
@@ -40,23 +40,17 @@ class Method : Expression
             Debug.Log(argument.Type);
             if(!context.ParamsOfMethodsTypes.ContainsKey(name.Value))
             {
-                Debug.Log("EN EL PRIMERO");
                 errors.Add(new CompilingError(location,ErrorCode.Invalid,"The method " + name.Value + "doesnt have a param"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }
             if(argument.Type != context.ParamsOfMethodsTypes[name.Value])
             {
-                Debug.Log("EN EL SEGUNDO");
                 errors.Add(new CompilingError(location,ErrorCode.Invalid,"The type of the param of this method is invalid"));
                 Type = ExpressionType.ErrorType;
                 return false;
             }
         }
-        Debug.Log(checkCaller);
-        Debug.Log(checkArgument);
-        Debug.Log("abajo");
-        Debug.Log(checkArgument && checkCaller);
         Type = context.GetType(name.Value);
         return checkArgument && checkCaller;
     }
@@ -101,7 +95,7 @@ class Method : Expression
                 case "Pop":
                 Value = GameContext.Instance.Pop(list);
                 break;
-                case "Suffle":
+                case "Shuffle":
                 GameContext.Instance.Shuffle(list); 
                 break;
                 case "Find":

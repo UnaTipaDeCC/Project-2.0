@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour
         foreach (CardGame card in player.Deck)
         {
             card.Played = false;
-            card.AffectedByClimate = false;
             card.Damage = card.OriginalDamage;
             card.Increased = false;
         }
@@ -113,6 +112,7 @@ public class GameManager : MonoBehaviour
         //comprobar que se haya acabado el juego
         if((bravasPlayer.WonRounds >= 2 || locasPlayer.WonRounds >= 2) && bravasPlayer.WonRounds != locasPlayer.WonRounds)
         {
+            //comprobar el ganador
             if(bravasPlayer.WonRounds > locasPlayer.WonRounds)
             {
                 SceneManager.LoadScene("BravasWins");

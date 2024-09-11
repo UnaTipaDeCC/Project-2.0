@@ -11,9 +11,8 @@ public class CardGame : ScriptableObject
     public string Description;
     public Sprite Artwork;
     public bool Played = false;
-    public int Damage;
-    public int OriginalDamage;
-    public bool AffectedByClimate = false;
+    public double Damage; 
+    public double OriginalDamage;
     public bool Increased = false;
     public string Range;
     public effects Effect;

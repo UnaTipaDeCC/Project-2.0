@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: AumentoSiege 1
   m_EditorClassIdentifier: 
   Name: Turbo
-  Description: Aumenta en 1 el poder de las cartas de plata
+  Description: Aumenta en 1 el poder de las cartas Ranged
   Artwork: {fileID: 21300000, guid: 90d225e1d0ac2f3419f9f747793ce46a, type: 3}
   Played: 0
   Damage: 0
   OriginalDamage: 0
-  AffectedByClimate: 0
   Increased: 0
   Range: Ranged
   Effect: 9

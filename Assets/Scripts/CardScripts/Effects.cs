@@ -141,7 +141,7 @@ public class Effects : MonoBehaviour
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         GameObject zone = GetZoneWithLeastCards(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone);
-        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,3,false,true);
+        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,3,false);
         zone.GetComponent<Zones>().RefreshZone();
     }
     #endregion
@@ -149,11 +149,11 @@ public class Effects : MonoBehaviour
     private void EqualizeCardPowerToAverageOfOwnFieldCards()
     {
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
-        int averagePower = CalculateAveragePower(player.Melee.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone);
+        double averagePower = CalculateAveragePower(player.Melee.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone);
         //actualizar los puntos de las cartas de cada zona
-        SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true,false);
-        SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true,false);
-        SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true,false);
+        SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true);
+        SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true);
+        SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true);
         //actualizar los puntos de las zonas
         player.Melee.GetComponent<Zones>().RefreshZone();
         player.Ranged.GetComponent<Zones>().RefreshZone();
@@ -204,9 +204,9 @@ public class Effects : MonoBehaviour
         GameObject siege = player.Siege;
         GameObject ranged = player.Ranged;
         //Actualizar los puntos en cada carta
-        SetCardPowerToValue(melee.GetComponent<Zones>().CardsInZone,1,false,true);
-        SetCardPowerToValue(siege.GetComponent<Zones>().CardsInZone,1,false,true);
-        SetCardPowerToValue(ranged.GetComponent<Zones>().CardsInZone,1,false,true);
+        SetCardPowerToValue(melee.GetComponent<Zones>().CardsInZone,1,false);
+        SetCardPowerToValue(siege.GetComponent<Zones>().CardsInZone,1,false);
+        SetCardPowerToValue(ranged.GetComponent<Zones>().CardsInZone,1,false);
         //Actualizar los puntos de cada zona
         melee.GetComponent<Zones>().RefreshZone();
         siege.GetComponent<Zones>().RefreshZone();
@@ -221,7 +221,7 @@ public class Effects : MonoBehaviour
         GameObject zone = DetermineZone(cardGame.Range, player);
         
         //Actualizar puntos de las cartas
-        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false,true);
+        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false);
 
         //Actualizar puntos en la zona
         zone.GetComponent<Zones>().RefreshZone();
@@ -245,15 +245,15 @@ public class Effects : MonoBehaviour
     private void WeatherEffect(string zone)
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        Player player1 = GameContext.Instance.BravasPlayer.GetComponent<Player>();
+        Player player1 = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         
         //Asignar las zonas segun el jugador
         GameObject zone1 = DetermineZone(zone, player);
         GameObject zone2 = DetermineZone(zone, player1);
 
         //Actualizar los puntos de las cartas
-        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,-1,false,false);
-        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,-1,false,false);
+        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,-1,false);
+        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,-1,false);
 
         //Actualizar puntos de las zonas
         zone1.GetComponent<Zones>().RefreshZone();
@@ -283,7 +283,6 @@ public class Effects : MonoBehaviour
 
     private GameObject GetCard(Player player, List<CardGame> meleeList, List<CardGame> siegeList, List<CardGame> rangedList,ref CardGame card, bool isLowest)
     {
-        GameObject Zone;
         // Crear una lista para almacenar todas las cartas
         List<CardGame> AllCards = new List<CardGame>();
 
@@ -314,7 +313,7 @@ public class Effects : MonoBehaviour
         throw new Exception("Card not found");
     }
 
-    private void SetCardPowerToValue(List<CardGame> cards, int powerValue, bool igualate, bool increas)
+    private void SetCardPowerToValue(List<CardGame> cards, double powerValue, bool igualate)
     {
         if(!igualate) //significa que debe ser tratada como un efecto de clima o aumento
         {
@@ -322,16 +321,12 @@ public class Effects : MonoBehaviour
             {
                 if(card.Type == CardGame.type.Plata)
                 {
-                    if(!increas) // verificar que no es un aumento y que por defecto seria un clima
-                    {
-                        if(!card.AffectedByClimate) 
-                        card.Damage += powerValue; // Actualiza el poder de cada carta
-                    }
-                    else card.Damage += powerValue; // Actualiza el poder de cada carta
+                    card.Damage += powerValue; // Actualiza el poder de cada carta  
+
                 }
             }
         }
-        else
+        else 
         {
             foreach (CardGame card in cards)
             {
@@ -341,7 +336,7 @@ public class Effects : MonoBehaviour
         } 
     }
 
-    private int CalculateAveragePower(List<CardGame> meleeCards, List<CardGame> rangedCards, List<CardGame> siegeCards)
+    private double CalculateAveragePower(List<CardGame> meleeCards, List<CardGame> rangedCards, List<CardGame> siegeCards)
     {
         // Crear una lista que contenga todas las cartas
         List<CardGame> allCards = new List<CardGame>();
@@ -349,11 +344,11 @@ public class Effects : MonoBehaviour
         allCards.AddRange(rangedCards);
         allCards.AddRange(siegeCards);
         // Calcular la suma total del poder de todas las cartas
-        int totalPower = allCards.Sum(card => card.Damage);
+        double totalPower = allCards.Sum(card => card.Damage);
         // Calcular el número total de cartas
         int totalCards = allCards.Count;
         // Calcular el promedio del poder
-        int averagePower = totalCards > 0 ? totalPower / totalCards : 0;
+        double averagePower = totalCards > 0 ? totalPower / totalCards : 0;
         return averagePower;
     }
 

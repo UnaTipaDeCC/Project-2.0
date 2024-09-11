@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: AumentoMelee
   m_EditorClassIdentifier: 
   Name: SuperAumento
-  Description: Aumenta en 1 el poder de las cartas de plata
+  Description: Aumenta en 1 el poder de las cartas Melee
   Artwork: {fileID: 21300000, guid: 95ecccf1bda1d2f44b652af2a1d3b340, type: 3}
   Played: 0
   Damage: 0
   OriginalDamage: 0
-  AffectedByClimate: 0
   Increased: 0
   Range: Melee
   Effect: 9

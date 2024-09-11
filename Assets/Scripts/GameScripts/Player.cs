@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 {
     private MessageDisplay message;  //referencia al script del panel
     public int WonRounds = 0;
-    public int Points = 0;
+    public double Points = 0;
     public bool Passed = false;
     public CardGame LiderCard;
     public List<CardGame> Cementery;

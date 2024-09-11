@@ -122,7 +122,7 @@ public class Card : ASTNode
         //Se le asignan las propiedades
         card.Type = (CardGame.type)Enum.Parse(typeof(CardGame.type), (string)Type.Value);
         card.Faction = faction == "Hormigas Bravas" ? CardGame.faction.HormigasBravas : CardGame.faction.HormigasLocas;
-        card.Damage = Convert.ToInt32(power);
+        card.Damage = power;
         card.OriginalDamage = card.Damage;
         card.Range = range;
         card.Name = name;
@@ -134,10 +134,6 @@ public class Card : ASTNode
         {
             card.EffectsList = new List<EffectAction>();
         }
-        /*foreach(var effect in Effects)
-        {
-            card.EffectsList.Add(effect);
-        }*/
         card.EffectsList.AddRange(Effects);
         Debug.Log(card.EffectsList.Count + " estos son los efectos de " + card.Name);
         
@@ -158,20 +154,6 @@ public class Card : ASTNode
             }
             CreatedCards.BravasCards.Add(card);
         }
-        //AssetDatabase.CreateAsset(card, scriptableObjectPath);
-        //AssetDatabase.SaveAssets();
-        //AssetDatabase.Refresh();
-
-       /* GameObject cardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
-        GameObject cardCopy = GameObject.Instantiate(cardPrefab);
-        cardCopy.GetComponent<CardDisplay>().Card = card;
-         if(faction == "Hormigas Locas") CreatedCards.LocasCards.Add(cardCopy);
-        else {Debug.Log(card.Faction); CreatedCards.BravasCards.Add(cardCopy);}
-        
-        //CardDisplay cardDisplay = cardCopy.GetComponent<CardDisplay>();
-        Debug.Log(card.Owner);
-        //PrefabUtility.SaveAsPrefabAsset(cardCopy, cardPath);
-        GameObject.Destroy(cardCopy);//si no eso destroy*/
     }
 
     public override string ToString()

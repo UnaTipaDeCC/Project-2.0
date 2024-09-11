@@ -41,7 +41,7 @@ public class GameContext : MonoBehaviour
     {
         if(id == 1) return BravasPlayer.GetComponent<Player>();
         else if(id == 2) return LocasPlayer.GetComponent<Player>();
-        else throw new Exception("Invalid id of player");
+        else throw new Exception($"Invalid id of player{id}");
 
     }
     public List<CardGame> Board {get {return BoardCardas();}}
@@ -77,6 +77,7 @@ public class GameContext : MonoBehaviour
     }
     public void RemoveCard(List<CardGame> list, CardGame card)
     {
+        Debug.Log("removiendo la carta: " + card.Name);
         //Comprobar de que jugador es y a que zona pertenece
         Player player = ReturnPlayer(card.Owner);
         if(player.Melee.GetComponent<Zones>().CardsInZone.Contains(card))
@@ -106,7 +107,7 @@ public class GameContext : MonoBehaviour
         }
         else list.Remove(card); //significa que la carta es del cementerio o del deck
     }
-    public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
+    //public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
     public CardGame Pop(List<CardGame> gameObjects)
     {
         Debug.Log("en el pop el count es: " + gameObjects.Count );
@@ -122,7 +123,18 @@ public class GameContext : MonoBehaviour
         //gameObjects.RemoveAt(gameObjects.Count - 1);
         return topObject;
     }
-    public void Push(CardGame obj, List<CardGame> gameObjects) => gameObjects.Add(obj);
+    public void Push(CardGame obj, List<CardGame> gameObjects)
+    {
+        Player player = ReturnPlayer(obj.Owner);
+        //en caso de que sea la mano, aparezca
+        if(CheckList(player.Hand.GetComponent<Zones>().CardsInZone, gameObjects))
+        {
+            Debug.Log("era la mano");
+            player.Hand.GetComponent<Zones>().CardsInZone.Add(obj);
+            player.Hand.GetComponent<Zones>().RefreshZone();
+        }
+        else gameObjects.Add(obj);
+    }
     public void SendBottom(CardGame obj, List<CardGame> gameObjects)  => gameObjects.Insert(0, obj);
     public void CleanField()
     {

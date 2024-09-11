@@ -31,7 +31,7 @@ public class Context
         ListReturnTypes = new Dictionary<string,ExpressionType>
         {
             {"Find",ExpressionType.List},{"Push",ExpressionType.Void}, {"SendBottom",ExpressionType.Void},
-            {"Pop",ExpressionType.Card}, {"Remove",ExpressionType.Void}, {"Shuffle",ExpressionType.Void}
+            {"Pop",ExpressionType.Card}, {"Remove",ExpressionType.Void}, {"Shuffle",ExpressionType.Void},
         };
         PossiblesSources = new string[] 
         {
