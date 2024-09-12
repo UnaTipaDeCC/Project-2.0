@@ -68,14 +68,14 @@ public class Effect : Statement
         Debug.Log(Scope.types.ContainsKey(Targets.Value) + " revisando si el scope la tiene");
         //chequear que la variable tarjets no este definida y en ese caso, definirla en el scope
         Debug.Log("Revisando lo del tarjet " + Scope.GetType(Targets.Value));
-        if( Scope.GetType(Targets.Value) == ExpressionType.ErrorType)//(!Scope.types.ContainsKey(Targets.Value))
+        if( Scope.GetType(Targets.Value) == ExpressionType.ErrorType)
         {
             Debug.Log("no lo teniamos y lo agregamos");
             Scope.SetType(Targets.Value,ExpressionType.List);
         }
         else
         {
-            Debug.Log("viendo lo del tarjet");
+            Debug.Log("viendo lo del target");
             Debug.Log(Scope.GetType(Targets.Value));
             errors.Add(new CompilingError(Targets.Location,ErrorCode.Invalid, "The name " + Targets.Value + " was already declared"));
             return false;
@@ -91,7 +91,7 @@ public class Effect : Statement
             return false;
         } 
         //chequear el action del effect
-        bool actioncheck = Action.CheckSemantic(context, Scope,errors);
+        bool actioncheck = Action.CheckSemantic(context, Scope, errors);
         Debug.Log("despues de lo del action en el effect" + actioncheck);
         // se chequea que todo este bien y se agrega al contexto
         if(actioncheck && namecheck) context.Effects.Add((string)Name.Value,this);

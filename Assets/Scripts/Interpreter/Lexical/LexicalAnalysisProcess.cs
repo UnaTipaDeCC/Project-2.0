@@ -162,11 +162,11 @@ public class LexicalAnalyzer
                 }
                 return false;
             }
-            public bool ValidIdCharacter(char c, bool begining)//NO TAN CLARO
+            public bool ValidIdCharacter(char c, bool begining)
             {
                 return c == '_' || (begining ? char.IsLetter(c) : char.IsLetterOrDigit(c));
             }
-             public bool ReadID(out string id)//COMO QUE ID??
+             public bool ReadID(out string id)
             {
                 id = "";
                 while (!EOL && ValidIdCharacter(Peek(), id.Length == 0))
