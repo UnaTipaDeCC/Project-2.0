@@ -1866,7 +1866,7 @@ PrefabInstance:
       objectReference: {fileID: 1147437010}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: Deck.Array.size
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: RangedIncrement
@@ -1960,6 +1960,10 @@ PrefabInstance:
       propertyPath: Deck.Array.data[21]
       value: 
       objectReference: {fileID: 11400000, guid: 9a690157f849f434eac6e88e812d0a82, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[22]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8e6d0100b33a3b0489503f9e32c4ee5b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2829,7 +2833,7 @@ PrefabInstance:
       objectReference: {fileID: 1358458765}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: Deck.Array.size
-      value: 22
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
       propertyPath: RangedIncrement
@@ -2923,6 +2927,10 @@ PrefabInstance:
       propertyPath: Deck.Array.data[21]
       value: 
       objectReference: {fileID: 11400000, guid: d92600fbbd575cb4ea09ec3d2b9d4411, type: 2}
+    - target: {fileID: 7063038709104911993, guid: 08f03039876f0334f9cb66065e49312c, type: 3}
+      propertyPath: Deck.Array.data[22]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b5b6b2ea8369ec43b7086ee5a8a04b6, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

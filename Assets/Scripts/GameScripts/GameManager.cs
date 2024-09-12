@@ -49,10 +49,9 @@ public class GameManager : MonoBehaviour
         {
             card.Played = false;
             card.Damage = card.OriginalDamage;
-            card.Increased = false;
+            card.AfectedByWeather = false; 
         }
     }
-    //Actualizar los 
     private void StartActions()
     {
         if (bravasPlayer == null || locasPlayer == null)

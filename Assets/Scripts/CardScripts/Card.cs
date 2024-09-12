@@ -13,7 +13,7 @@ public class CardGame : ScriptableObject
     public bool Played = false;
     public double Damage; 
     public double OriginalDamage;
-    public bool Increased = false;
+    public bool AfectedByWeather = false;
     public string Range;
     public effects Effect;
     public enum effects

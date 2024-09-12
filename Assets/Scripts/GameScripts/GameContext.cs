@@ -65,15 +65,21 @@ public class GameContext : MonoBehaviour
     
     public void Shuffle(List<CardGame> gameObjects)
     {
-        for (int i = gameObjects.Count - 1; i > 0; i--)
-        {
-            // Selecciona un índice aleatorio entre 0 y i
-            int j = UnityEngine.Random.Range(0, i + 1);
-            // Intercambia gameObjects[i] con el elemento en el índice aleatorio
-            CardGame temp = gameObjects[i];
-            gameObjects[i] = gameObjects[j];
-            gameObjects[j] = temp;
-        } 
+        //comprobar que sea el hand o el deck
+        CardGame card = gameObjects[0];
+        Player player = ReturnPlayer(card.Owner);
+        if(CheckList(gameObjects, player.Deck) || CheckList(gameObjects, player.Hand.GetComponent<Zones>().CardsInZone))
+        {   
+            for (int i = gameObjects.Count - 1; i > 0; i--)
+            {
+                // Selecciona un índice aleatorio entre 0 y i
+                int j = UnityEngine.Random.Range(0, i + 1);
+                // Intercambia gameObjects[i] con el elemento en el índice aleatorio
+                CardGame temp = gameObjects[i];
+                gameObjects[i] = gameObjects[j];
+                gameObjects[j] = temp;
+            } 
+        }
     }
     public void RemoveCard(List<CardGame> list, CardGame card)
     {
@@ -107,10 +113,8 @@ public class GameContext : MonoBehaviour
         }
         else list.Remove(card); //significa que la carta es del cementerio o del deck
     }
-    //public void Remove(List<CardGame> list, CardGame card) => list.Remove(card);
     public CardGame Pop(List<CardGame> gameObjects)
     {
-        Debug.Log("en el pop el count es: " + gameObjects.Count );
         if (gameObjects.Count == 0)
         {
             Debug.Log("La lista está vacía. No se puede hacer pop.");

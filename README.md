@@ -38,8 +38,9 @@ Card: Contiene la información de las cartas.
 Effect: Gestiona los efectos de las cartas.
 3. Interprete
 Contiene todo lo relacionado con el proceso de tokenización, parseo, chequeo semántico y evaluación de las cartas y sus componentes. Está estructurado en un AST (Árbol de Sintaxis Abstracta) que maneja:
-Expresiones en todas sus variantes.
-Declaraciones relacionadas con las cartas y sus efectos.
-Cada nodo del AST realiza su propio chequeo semántico, y el parser recorre una lista de tokens previamente procesada.
-Asimismo contiene el Scope que controla lo relacionado con las variables y sus entornos, Context que maneja y almacena informacion de las propiedades y metodos permitidos, los efectos declarados, entre otros, y el Lexer que contiene lo relacionado al proceso de analisis lexico y los tokens
+-Expresiones en todas sus variantes.
+-Declaraciones relacionadas con las cartas y sus efectos.
+El analisis lexico(lexer), constituye la primera parte del proceso del interprete y consiste en tomar el texto de entrada, analizarlo caracter por caracter y convertirlo en una lista de tokens, posteriormente el Parser toma estos tokens y los organiza en estas estructuras que forman parte del AST, tambien se asegura de que sigan el orden y la estructura correcta. Una vez terminado el proceso de parseo, si no ocurren errores, se realiza el chequeo semantico (cada nodo del AST realiza su propio chequeo semántico), se procede a la evaluacion de las cartas(y por ende todos sus componentes), en el transcurso del juego, segun sea necesario, se evaluan los efectos. (Cada nodo del arbol contiene su propio metodo evaluate.)
+Asimismo, este proyecto contiene el Scope que controla lo relacionado a las variables y sus entornos, Context que maneja y almacena informacion de las propiedades y metodos permitidos, los efectos declarados, entre otros.
 Cada una de estas carpetas contiene otros scripts que controlan aspectos mas generales.
+Respecto al DSL a original, este proyecto contiene un par de modificaciones como son la exigencia de una coma tras la declaracion del "Predicate", cada "Selector" y cada "PostAction".

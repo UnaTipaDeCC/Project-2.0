@@ -117,7 +117,7 @@ public class Effects : MonoBehaviour
     private void MultiplyCardPowerByCount(CardGame card)
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
-        int contador = 0; 
+        int contador = 1; 
         foreach(CardGame cardGame in player.Ranged.GetComponent<Zones>().CardsInZone)
         {
             if(cardGame.Name == "Hormigatrix")
@@ -141,7 +141,7 @@ public class Effects : MonoBehaviour
     {
         Player player = GameContext.Instance.BravasPlayer.GetComponent<Player>();
         GameObject zone = GetZoneWithLeastCards(player,player.Melee.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone);
-        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,3,false);
+        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,3,false, false);
         zone.GetComponent<Zones>().RefreshZone();
     }
     #endregion
@@ -151,9 +151,9 @@ public class Effects : MonoBehaviour
         Player player = GameContext.Instance.LocasPlayer.GetComponent<Player>();
         double averagePower = CalculateAveragePower(player.Melee.GetComponent<Zones>().CardsInZone,player.Ranged.GetComponent<Zones>().CardsInZone,player.Siege.GetComponent<Zones>().CardsInZone);
         //actualizar los puntos de las cartas de cada zona
-        SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true);
-        SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true);
-        SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true);
+        SetCardPowerToValue(player.Melee.GetComponent<Zones>().CardsInZone, averagePower,true,false);
+        SetCardPowerToValue(player.Siege.GetComponent<Zones>().CardsInZone, averagePower,true, false);
+        SetCardPowerToValue(player.Ranged.GetComponent<Zones>().CardsInZone, averagePower,true, false);
         //actualizar los puntos de las zonas
         player.Melee.GetComponent<Zones>().RefreshZone();
         player.Ranged.GetComponent<Zones>().RefreshZone();
@@ -204,9 +204,9 @@ public class Effects : MonoBehaviour
         GameObject siege = player.Siege;
         GameObject ranged = player.Ranged;
         //Actualizar los puntos en cada carta
-        SetCardPowerToValue(melee.GetComponent<Zones>().CardsInZone,1,false);
-        SetCardPowerToValue(siege.GetComponent<Zones>().CardsInZone,1,false);
-        SetCardPowerToValue(ranged.GetComponent<Zones>().CardsInZone,1,false);
+        SetCardPowerToValue(melee.GetComponent<Zones>().CardsInZone,1,false,false);
+        SetCardPowerToValue(siege.GetComponent<Zones>().CardsInZone,1,false,false);
+        SetCardPowerToValue(ranged.GetComponent<Zones>().CardsInZone,1,false,false);
         //Actualizar los puntos de cada zona
         melee.GetComponent<Zones>().RefreshZone();
         siege.GetComponent<Zones>().RefreshZone();
@@ -221,7 +221,7 @@ public class Effects : MonoBehaviour
         GameObject zone = DetermineZone(cardGame.Range, player);
         
         //Actualizar puntos de las cartas
-        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false);
+        SetCardPowerToValue(zone.GetComponent<Zones>().CardsInZone,1,false,false);
 
         //Actualizar puntos en la zona
         zone.GetComponent<Zones>().RefreshZone();
@@ -229,17 +229,47 @@ public class Effects : MonoBehaviour
 
     private void ClearEffect()
     {
+        GameObject zone;
+        GameObject zone1;
         //Acceder a la weatherZone desde el GameContext, obtener el componete Zones de la zona y la lista de cartas
         List<CardGame> weatherList = GameContext.Instance.WeatherZone.GetComponent<Zones>().CardsInZone;
+        List<CardGame> listToRemove = new List<CardGame>();
         foreach(CardGame card in weatherList)
         {
             //Comprobar que sea una carta clima
             if(card.Type == CardGame.type.Clima)
             {
+                //agregar al cementerio y eliminar de la zona
                 GameContext.Instance.ReturnPlayer(card.Owner).Cementery.Add(card);
+                listToRemove.Add(card);
+                //acceder a la zona a la que afecta la carta clima
+                zone = DetermineZone(card.Range,BravasPlayer);
+                zone1 = DetermineZone(card.Range,LocasPlayer);
+                //retaurar los valores de las cartas afectadas por un clima
+                Auxiliar(zone.GetComponent<Zones>().CardsInZone);
+                Auxiliar(zone1.GetComponent<Zones>().CardsInZone);
+                //actualizar las zonas
+                zone.GetComponent<Zones>().RefreshZone();
+                zone1.GetComponent<Zones>().RefreshZone();
             }
         }
+        // Eliminar las cartas de la lista original después de la iteración
+        foreach (CardGame card in listToRemove)
+        {
+            GameContext.Instance.WeatherZone.GetComponent<Zones>().CardsInZone.Remove(card);
+        }
+
         GameContext.Instance.WeatherZone.GetComponent<Zones>().RefreshZone();
+    }
+    private void Auxiliar(List<CardGame> cards) //revertir el efecto del clima
+    {
+        foreach(CardGame card in cards)
+        {
+            if(card.AfectedByWeather)
+            {
+                card.Damage += 1;
+            }
+        }   
     }
 
     private void WeatherEffect(string zone)
@@ -252,8 +282,8 @@ public class Effects : MonoBehaviour
         GameObject zone2 = DetermineZone(zone, player1);
 
         //Actualizar los puntos de las cartas
-        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,-1,false);
-        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,-1,false);
+        SetCardPowerToValue(zone1.GetComponent<Zones>().CardsInZone,-1,false, true);
+        SetCardPowerToValue(zone2.GetComponent<Zones>().CardsInZone,-1,false, true);
 
         //Actualizar puntos de las zonas
         zone1.GetComponent<Zones>().RefreshZone();
@@ -313,7 +343,7 @@ public class Effects : MonoBehaviour
         throw new Exception("Card not found");
     }
 
-    private void SetCardPowerToValue(List<CardGame> cards, double powerValue, bool igualate)
+    private void SetCardPowerToValue(List<CardGame> cards, double powerValue, bool igualate, bool weather)
     {
         if(!igualate) //significa que debe ser tratada como un efecto de clima o aumento
         {
@@ -321,8 +351,16 @@ public class Effects : MonoBehaviour
             {
                 if(card.Type == CardGame.type.Plata)
                 {
-                    card.Damage += powerValue; // Actualiza el poder de cada carta  
-
+                    if(weather)//en caso de que sea un clima revisar que no haya sido afectada la carta por un clima
+                    {
+                        if(!card.AfectedByWeather) 
+                        {
+                            card.Damage += powerValue; // Actualiza el poder de cada carta
+                            card.AfectedByWeather = true;
+                        }
+                    
+                    }
+                    else card.Damage += powerValue; // Actualiza el poder de cada carta  
                 }
             }
         }

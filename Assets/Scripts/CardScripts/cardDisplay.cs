@@ -25,6 +25,8 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
             {
                 //actualizar la carta como jugada
                 Card.Played = true;
+                //activar el efecto
+                Card.ActivateEffect();
                 //una vez jugada una carta ya no puede hacer el cambio de cartas
                 GameContext.Instance.ReturnPlayer(Card.Owner).CanChange = false;
                 //mover la carta en caso de que no sea una lider
@@ -32,8 +34,7 @@ public class CardDisplay : MonoBehaviour, IPointerClickHandler
                 {
                     CardsMove.Instance.MoveCard(Card);
                 }
-                //activar el efecto
-                Card.ActivateEffect();
+                
                 GameManager.gameManager.ChangeTurn();
             } 
             else messages.ShowMessage("No es su turno o ya esta carta se jugo",2.0f);  
